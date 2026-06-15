@@ -26,6 +26,50 @@ const RED = 0xf38ba8;
 
 const VOTE_MS = 60_000; // judge + warcrime voting window
 
+// Random angle injected into Johnny's generator prompts. An identical prompt
+// makes the model keep returning its few "default" answers even at high
+// temperature, so /judge, /warcrime and /whatwouldyoudo would repeat. Seeding a
+// different sub-topic per call changes the input and breaks the repetition.
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+const WAR_ANGLES = [
+  'ancient history (Rome, Greece, the Mongols, etc.)',
+  'the medieval era',
+  'the 1600s or 1700s',
+  'the 1800s — colonial empires or civil wars',
+  'World War I',
+  'World War II, but NOT Hiroshima or Dresden',
+  'the Cold War',
+  'a 20th-century conflict in Asia, Africa, or South America',
+  'a conflict from the last 50 years',
+];
+
+const DILEMMA_THEMES = [
+  'finding money or something valuable',
+  'lying or white lies',
+  'food, eating, or restaurants',
+  'friends and loyalty',
+  'dating or relationships',
+  'work or school',
+  'pets or animals',
+  'phones, social media, or the internet',
+  'strangers in public',
+  'family',
+];
+
+const HYPOTHETICAL_SEEDS = [
+  'waking up as an animal',
+  'time travel or waking up in another era',
+  'suddenly getting a weird, oddly specific superpower',
+  'a huge amount of money with a ridiculous catch',
+  'swapping bodies with someone',
+  'being the last person on earth',
+  'an everyday object that starts talking',
+  'a wish that backfires',
+  'being shrunk down tiny or made giant',
+  'meeting an exact clone of yourself',
+];
+
 // ---------------------------------------------------------------------------
 // Command definitions
 // ---------------------------------------------------------------------------
@@ -197,10 +241,11 @@ const handlers = {
   },
 
   async whatwouldyoudo(interaction) {
-    const reply = await askJohnny('Give the group a hypothetical.', {
+    const seed = pick(HYPOTHETICAL_SEEDS);
+    const reply = await askJohnny(`Give the group a hypothetical about ${seed}.`, {
       extraSystem:
-        `Make up ONE absurd, funny hypothetical scenario and ask the group what they'd do. Two to four ` +
-        `sentences, genuinely ridiculous, ends with the question. Don't answer it yourself.`,
+        `Make up ONE absurd, funny hypothetical scenario based loosely on "${seed}" and ask the group what ` +
+        `they'd do. Two to four sentences, genuinely ridiculous, ends with the question. Don't answer it yourself.`,
       temperature: 1.0,
     });
     await interaction.editReply(`👀 **What would you do?**\n${reply}`);
@@ -221,10 +266,11 @@ const handlers = {
   },
 
   async judge(interaction) {
-    const scenario = await askJohnny('Pose a moral dilemma.', {
+    const theme = pick(DILEMMA_THEMES);
+    const scenario = await askJohnny(`Pose a moral dilemma about ${theme}.`, {
       extraSystem:
-        `Make up ONE spicy everyday moral dilemma as a yes/no question (found cash, white lies, dumb temptations, ` +
-        `etc.). One or two sentences. Just the dilemma and the question — do NOT give your own answer yet.`,
+        `Make up ONE spicy everyday moral dilemma about ${theme}, as a yes/no question. Make it specific and a ` +
+        `little unexpected. One or two sentences. Just the dilemma and the question — do NOT give your own answer yet.`,
       temperature: 1.0,
     });
     await runVotePoll(interaction, {
@@ -239,11 +285,12 @@ const handlers = {
   },
 
   async warcrime(interaction) {
-    const scenario = await askJohnny('Name a dark historical event to judge.', {
+    const angle = pick(WAR_ANGLES);
+    const scenario = await askJohnny(`Name a dark historical event from ${angle} to judge.`, {
       extraSystem:
-        `Name ONE real, well-known dark historical event — a controversial military action, bombing, or ` +
-        `atrocity — then ask "Was it justified?" One or two sentences. Just the event and the question — do ` +
-        `NOT give your take yet.`,
+        `Name ONE real dark historical event — a controversial military action, bombing, or atrocity — from ` +
+        `${angle}. Avoid the single most obvious textbook example; pick something a bit less predictable. Then ` +
+        `ask "Was it justified?" One or two sentences. Just the event and the question — do NOT give your take yet.`,
       temperature: 1.0,
     });
     await runVotePoll(interaction, {
@@ -265,7 +312,7 @@ const handlers = {
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-client.once('ready', () => {
+client.once('clientReady', () => {
   console.log(`Johnny is online as ${client.user.tag} (model: ${MODEL})`);
 });
 
