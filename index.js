@@ -38,7 +38,7 @@ const WAR_ANGLES = [
   'the 1600s or 1700s',
   'the 1800s — colonial empires or civil wars',
   'World War I',
-  'World War II, but NOT Hiroshima or Dresden',
+  'World War II',
   'the Cold War',
   'a 20th-century conflict in Asia, Africa, or South America',
   'a conflict from the last 50 years',
@@ -285,12 +285,12 @@ const handlers = {
 
   async warcrime(interaction) {
     const angle = pick(WAR_ANGLES);
-    const scenario = await askJohnny(`Name a dark historical event from ${angle} to judge.`, {
+    const scenario = await askJohnny(`Name a real dark historical event from ${angle} to judge.`, {
       extraSystem:
-        `Name ONE real dark historical event — a controversial military action, bombing, or atrocity — from ` +
-        `${angle}. Avoid the single most obvious textbook example; pick something a bit less predictable. Then ` +
-        `ask "Was it justified?" One or two sentences. Just the event and the question — do NOT give your take yet.`,
-      temperature: 1.0,
+        `Pick ONE real, well-documented dark historical event from ${angle} — a military action, bombing, or ` +
+        `atrocity. Reply in EXACTLY this format and nothing else: the event stated in one short factual sentence, ` +
+        `then "Was it justified?" Do not list options, do not compare events, do not explain your pick, do not give your take.`,
+      temperature: 0.9,
     });
     await runVotePoll(interaction, {
       title: '🪖 War crimes with Johnny',
