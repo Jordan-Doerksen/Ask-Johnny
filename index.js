@@ -70,6 +70,27 @@ const HYPOTHETICAL_SEEDS = [
   'meeting an exact clone of yourself',
 ];
 
+const HOTTAKE_TOPICS = [
+  'food', 'movies or TV', 'phones and technology', 'sports', 'music', 'everyday life',
+  'the internet', 'work', 'holidays', 'pets', 'cars', 'fashion', 'social media',
+];
+
+const WYR_SEEDS = [
+  'food', 'superpowers', 'money', 'everyday annoyances', 'travel', 'technology',
+  'animals', 'fame', 'time', 'the body',
+];
+
+// Per-user cooldown shared across slash commands and @mentions, so the boys
+// can't machine-gun Johnny. In-memory only — resets if the bot restarts.
+const COOLDOWN_MS = 4000;
+const lastUsed = new Map();
+function onCooldown(userId) {
+  const now = Date.now();
+  if (now - (lastUsed.get(userId) || 0) < COOLDOWN_MS) return true;
+  lastUsed.set(userId, now);
+  return false;
+}
+
 // ---------------------------------------------------------------------------
 // Command definitions
 // ---------------------------------------------------------------------------
@@ -116,6 +137,25 @@ const commands = [
     .setName('news')
     .setDescription("Johnny's vibe-based \"news\" on a topic. Probably wrong. Whatever.")
     .addStringOption(o => o.setName('topic').setDescription('What topic?').setRequired(true)),
+
+  new SlashCommandBuilder()
+    .setName('summary')
+    .setDescription('Johnny flatly recaps what you missed in chat.')
+    .addIntegerOption(o =>
+      o.setName('count').setDescription('How many recent messages (default 30, max 100)').setRequired(false)),
+
+  new SlashCommandBuilder()
+    .setName('rate')
+    .setDescription('Johnny rates something out of 10. Generously, never.')
+    .addStringOption(o => o.setName('thing').setDescription('What should Johnny rate?').setRequired(true)),
+
+  new SlashCommandBuilder()
+    .setName('hottake')
+    .setDescription('Johnny states an unprompted opinion. Mildly.'),
+
+  new SlashCommandBuilder()
+    .setName('wouldyourather')
+    .setDescription('Johnny poses a would-you-rather. Vote 🇦 or 🇧.'),
 ];
 
 async function registerCommands() {
@@ -303,13 +343,76 @@ const handlers = {
         `The event was: "${scenario}". The people voted ${yes} justified and ${no} not justified. Your verdict?`,
     });
   },
+
+  async summary(interaction) {
+    const count = Math.min(Math.max(interaction.options.getInteger('count') ?? 30, 5), 100);
+    const fetched = await interaction.channel.messages.fetch({ limit: count });
+    const lines = [...fetched.values()]
+      .reverse()
+      .filter(m => !m.author.bot && m.content.trim())
+      .map(m => `${m.member?.displayName || m.author.username}: ${m.content.replace(/\s+/g, ' ').slice(0, 250)}`);
+    if (!lines.length) {
+      return interaction.editReply("nothing worth recapping. it's been quiet — or i can't read the messages.");
+    }
+    const transcript = lines.join('\n').slice(0, 6000);
+    const reply = await askJohnny(`Here's the recent chat:\n\n${transcript}`, {
+      extraSystem:
+        'Give a flat, deadpan recap of what actually happened in this chat — the gist, who was on about what, ' +
+        'like you skimmed it for someone who stepped away. A few sentences, unbothered. Do not quote it all back.',
+      maxTokens: 400,
+    });
+    await interaction.editReply(reply);
+  },
+
+  async rate(interaction) {
+    const thing = interaction.options.getString('thing');
+    const reply = await askJohnny(`Rate this out of 10: ${thing}`, {
+      extraSystem:
+        'Rate it out of 10 in your dry, deadpan way. Give the number and a flat one-line reason. Do not overthink it.',
+    });
+    await interaction.editReply(reply);
+  },
+
+  async hottake(interaction) {
+    const topic = pick(HOTTAKE_TOPICS);
+    const reply = await askJohnny(`Give a hot take about ${topic}.`, {
+      extraSystem:
+        `State ONE flat, deadpan opinion about ${topic} — the kind of mildly contrarian take you'd mutter and ` +
+        `not bother defending. One or two sentences.`,
+      temperature: 1.0,
+    });
+    await interaction.editReply(reply);
+  },
+
+  async wouldyourather(interaction) {
+    const seed = pick(WYR_SEEDS);
+    const reply = await askJohnny(`Make a would-you-rather about ${seed}.`, {
+      extraSystem:
+        `Make ONE would-you-rather themed around ${seed}, with exactly two options. Format: a one-line setup, then ` +
+        `"🇦 ..." on its own line and "🇧 ..." on its own line. Flat and a little absurd. No commentary after.`,
+      temperature: 1.0,
+    });
+    const embed = new EmbedBuilder()
+      .setColor(MAUVE)
+      .setTitle('🤔 Would you rather')
+      .setDescription(reply);
+    const msg = await interaction.editReply({ embeds: [embed] });
+    await msg.react('🇦');
+    await msg.react('🇧');
+  },
 };
 
 // ---------------------------------------------------------------------------
 // Wire up the client
 // ---------------------------------------------------------------------------
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent, // PRIVILEGED — must be enabled in the Discord Developer Portal
+  ],
+});
 
 client.once('clientReady', () => {
   console.log(`Johnny is online as ${client.user.tag} (model: ${MODEL})`);
@@ -320,12 +423,31 @@ client.on('interactionCreate', async interaction => {
   const handler = handlers[interaction.commandName];
   if (!handler) return;
 
+  if (onCooldown(interaction.user.id)) {
+    return interaction.reply({ content: 'give it a second.', ephemeral: true });
+  }
+
   try {
     await interaction.deferReply(); // Groq is slower than Discord's 3s window
     await handler(interaction);
   } catch (err) {
     console.error(`/${interaction.commandName} failed:`, err);
     await brainLag(interaction);
+  }
+});
+
+// Talk to Johnny by @mentioning him — no slash command needed.
+client.on('messageCreate', async message => {
+  if (message.author.bot) return;
+  if (!message.mentions.users.has(client.user.id)) return;
+  if (onCooldown(message.author.id)) return;
+
+  const prompt = message.content.replace(/<@!?\d+>/g, '').trim() || 'someone just pinged you with nothing to say.';
+  try {
+    await message.channel.sendTyping();
+    await message.reply(await askJohnny(prompt));
+  } catch (err) {
+    console.error('mention reply failed:', err);
   }
 });
 
