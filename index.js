@@ -77,44 +77,44 @@ const HYPOTHETICAL_SEEDS = [
 const commands = [
   new SlashCommandBuilder()
     .setName('ask')
-    .setDescription('Ask Johnny anything. He will answer with full confidence.')
+    .setDescription("Ask Johnny something. He'll answer, I guess.")
     .addStringOption(o => o.setName('question').setDescription('What do you wanna ask Johnny?').setRequired(true)),
 
   new SlashCommandBuilder()
     .setName('roast')
-    .setDescription('Johnny roasts a homie (lovingly).')
+    .setDescription('Johnny roasts a homie. Low effort, on purpose.')
     .addUserOption(o => o.setName('target').setDescription('Who is getting roasted?').setRequired(true)),
 
   new SlashCommandBuilder()
     .setName('debate')
-    .setDescription('Johnny picks a side on a topic and argues it badly.')
+    .setDescription('Johnny picks a side and argues it, mildly annoyed he has to.')
     .addStringOption(o => o.setName('topic').setDescription('What is the debate about?').setRequired(true)),
 
   new SlashCommandBuilder()
     .setName('judge')
-    .setDescription('Johnny drops a moral dilemma. Vote, then he renders his verdict.'),
+    .setDescription('Johnny poses a moral dilemma. Vote, then he shrugs out a verdict.'),
 
   new SlashCommandBuilder()
     .setName('simp')
-    .setDescription('Johnny delivers an over-the-top sincere compliment to a homie.')
+    .setDescription('Johnny says something nice about a homie. Reluctantly.')
     .addUserOption(o => o.setName('target').setDescription('Who is Johnny simping for?').setRequired(true)),
 
   new SlashCommandBuilder()
     .setName('hotpoll')
-    .setDescription('Johnny gives his take and opens it to a vote.')
+    .setDescription('Johnny gives a flat take and lets you vote on it.')
     .addStringOption(o => o.setName('question').setDescription('The yes/no question').setRequired(true)),
 
   new SlashCommandBuilder()
     .setName('warcrime')
-    .setDescription('Johnny presents a dark historical event. Vote justified or not, then he weighs in.'),
+    .setDescription('A dark historical event. Vote justified or not, then Johnny weighs in. Barely.'),
 
   new SlashCommandBuilder()
     .setName('whatwouldyoudo')
-    .setDescription('Johnny cooks up a ridiculous hypothetical for the group.'),
+    .setDescription('Johnny tosses out a ridiculous hypothetical. Do what you want with it.'),
 
   new SlashCommandBuilder()
     .setName('news')
-    .setDescription("Johnny's vibe-based summary of the latest on a topic.")
+    .setDescription("Johnny's vibe-based \"news\" on a topic. Probably wrong. Whatever.")
     .addStringOption(o => o.setName('topic').setDescription('What topic?').setRequired(true)),
 ];
 
@@ -142,7 +142,7 @@ function nameOf(interaction, optionName) {
 
 // Tell Johnny something broke without breaking character.
 async function brainLag(interaction) {
-  const msg = "yo my brain just buffered for a sec. hit me again in a minute.";
+  const msg = "brain buffered for a sec. try again whenever.";
   try {
     if (interaction.deferred || interaction.replied) await interaction.editReply(msg);
     else await interaction.reply({ content: msg, ephemeral: true });
