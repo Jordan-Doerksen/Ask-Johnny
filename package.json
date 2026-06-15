@@ -1,0 +1,17 @@
+{
+  "name": "ask-johnny",
+  "version": "1.0.0",
+  "description": "A Discord bot. Johnny is a blissfully unaware, confidently wrong normie. Powered by Groq.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.0",
+    "dotenv": "^16.4.5",
+    "groq-sdk": "^0.9.0"
+  }
+}
