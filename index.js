@@ -200,9 +200,8 @@ const handlers = {
     const name = nameOf(interaction, 'target');
     const reply = await askJohnny(`Roast my buddy ${name}.`, {
       extraSystem:
-        `You are roasting your friend ${name} to their face, like a roast at a party. Be crude, silly, and ` +
-        `confident — wrong facts, dumb comparisons, big swings. Punch like a friend who loves them, never ` +
-        `genuinely cruel. A few lines max.`,
+        `Roast your friend ${name} in your dry, deadpan way — flat, understated burns where the lack of effort ` +
+        `is half the insult. Still a friend who loves them, never genuinely cruel. A couple lines, no more.`,
     });
     await interaction.editReply(reply);
   },
@@ -212,8 +211,8 @@ const handlers = {
     const side = Math.random() < 0.5 ? 'FOR' : 'AGAINST';
     const reply = await askJohnny(`The topic is: ${topic}`, {
       extraSystem:
-        `Take the ${side} side of this topic and argue it confidently like you read exactly one tweet about ` +
-        `it. Use shaky logic, half-remembered facts, and weird analogies. Commit to the bit.`,
+        `Argue the ${side} side of this topic, but flatly — like it's obvious and you're mildly annoyed you have ` +
+        `to spell it out. Dry, a little lazy with the logic, unbothered. Commit to the bit without raising your voice.`,
     });
     await interaction.editReply(reply);
   },
@@ -222,9 +221,9 @@ const handlers = {
     const name = nameOf(interaction, 'target');
     const reply = await askJohnny(`Hype up my homie ${name}.`, {
       extraSystem:
-        `Deliver an over-the-top, deeply sincere compliment about your friend ${name}. Earnest, wholesome, ` +
-        `a little unhinged with the praise — invent fake stats and "scientists would agree" energy. Never ` +
-        `weird or romantic, just pure homie love. A few lines.`,
+        `Compliment your friend ${name}, but in your dry deadpan way — understated, almost reluctant, the kind of ` +
+        `praise that lands harder because you clearly mean it and won't make a thing of it. Never weird or ` +
+        `romantic, just low-key homie respect. A couple lines.`,
     });
     await interaction.editReply(reply);
   },
@@ -233,9 +232,9 @@ const handlers = {
     const topic = interaction.options.getString('topic');
     const reply = await askJohnny(`Give me the latest on: ${topic}`, {
       extraSystem:
-        `Summarize "the latest" on this topic entirely from vibes and half-remembered headlines. Confident, ` +
-        `vague, slightly wrong, lots of "honestly" and "which is crazy when you think about it." This is not ` +
-        `real news, it's your version of it.`,
+        `Summarize "the latest" on this topic from vibes and half-remembered headlines — flat and unbothered, a ` +
+        `little vague and probably slightly wrong, delivered like old news you can't believe anyone's still asking ` +
+        `about. Your version of news, not real news.`,
     });
     await interaction.editReply(reply);
   },
@@ -254,7 +253,7 @@ const handlers = {
   async hotpoll(interaction) {
     const question = interaction.options.getString('question');
     const take = await askJohnny(`Give your hot take on this yes/no question: ${question}`, {
-      extraSystem: 'Give your confident take in 1-2 sentences, then leave it to the people to vote.',
+      extraSystem: 'Give your dry, unbothered take in 1-2 sentences, then leave it to the people to vote.',
     });
     const embed = new EmbedBuilder()
       .setColor(MAUVE)
@@ -277,8 +276,8 @@ const handlers = {
       title: '⚖️ Johnny judges',
       scenario,
       verdictSystem:
-        'Give your verdict on the dilemma below. React to where the people landed but ultimately go with your ' +
-        'own confidently-wrong gut. A few sentences.',
+        'Give your verdict on the dilemma below — flat, dry, unbothered. Note where the people landed, then go ' +
+        'with your own gut anyway. Keep it short.',
       verdictBuilder: (yes, no) =>
         `The dilemma was: "${scenario}". The people voted ${yes} yes and ${no} no. What's your verdict?`,
     });
@@ -297,9 +296,9 @@ const handlers = {
       title: '🪖 War crimes with Johnny',
       scenario,
       verdictSystem:
-        'Give your verdict on whether it was justified. Stay totally in character — a clueless guy who doesn\'t ' +
-        'clock how heavy this is and gives a breezy, confidently-wrong take. Never hateful, never endorsing harm, ' +
-        'just way too chill about serious history. A few sentences.',
+        'Give your verdict on whether it was justified. Stay in character — flat, dry, and way too casual about ' +
+        'heavy history, like it\'s barely worth the energy. Never hateful, never endorsing harm, just detached. ' +
+        'Keep it short.',
       verdictBuilder: (yes, no) =>
         `The event was: "${scenario}". The people voted ${yes} justified and ${no} not justified. Your verdict?`,
     });
