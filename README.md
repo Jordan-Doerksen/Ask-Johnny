@@ -45,6 +45,7 @@ bothered, who nonetheless gets it right.
 | `/tldr <url>` | Johnny reads a webpage so you don't have to. |
 | `/yt <url>` | Summarizes a YouTube video from its captions (best-effort; YouTube blocks some hosts). |
 | `/define <word>` | A real dictionary definition (not an LLM guess). |
+| `/links show·add·remove` | Jordan's links & projects; editable in Discord (add/remove need Manage Server). |
 
 ### Server & meta
 | Command | What it does |
