@@ -136,3 +136,6 @@ then open the generated URL and add it to your server.
   Johnny only voices the wrapper around it, never invents the facts or numbers.
 - The starboard is off until someone with **Manage Server** runs `/starboard set #channel`. It uses the
   (non-privileged) Server Reactions intent, so there's nothing extra to enable in the portal.
+- **Daily backup:** set `BACKUP_CHANNEL_ID` (a private channel) or `OWNER_ID` (a DM) and the bot posts
+  `data/johnny.json` + `fun-police/banlist.json` once a day — a backup that survives a full host wipe,
+  no paid plan needed. To restore, download the attachment and drop it back into Files. Off if unset.
