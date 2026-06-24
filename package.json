@@ -13,5 +13,11 @@
     "discord.js": "^14.16.0",
     "dotenv": "^16.4.5",
     "groq-sdk": "^0.9.0"
+  },
+  "comments": {
+    "overrides": "discord.js pins undici to 6.24.1, which carries 4 known advisories (GHSA-p88m-4jfj-68fv et al). Force the patched 6.27.x until discord.js bumps it upstream. Safe: same undici major."
+  },
+  "overrides": {
+    "undici": "^6.27.0"
   }
 }
