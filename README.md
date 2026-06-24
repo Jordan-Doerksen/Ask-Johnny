@@ -22,11 +22,15 @@ bothered, who nonetheless gets it right.
 | `/hotpoll <question>` | Johnny's take + a 👍/👎 vote. |
 | `/judge` | A moral dilemma, the server votes ✅/❌, Johnny renders a verdict after 60s. |
 | `/warcrime` | A dark historical event — vote justified or not, Johnny weighs in after 60s. |
+| `/haiku <topic>` | A deadpan haiku. Anticlimax guaranteed. |
+| `/roll [dice]` | Dice — `2d6`, `d20`, `3d6+1`. Shows the breakdown. |
+| `/story add·show·end` | A group story, one line at a time. Johnny gives the last word. |
 
 ### The helpful
 | Command | What it does |
 |---|---|
 | `/catchup` | Recaps what you missed in this channel since you last spoke. Private to you. |
+| `/summary [count]` | Flat recap of the last chunk of chat. |
 | `/remember <subject> <fact>` | Tells Johnny a fact to hold onto (shared per server). |
 | `/facts <subject>` | Asks Johnny what he knows about someone or something. |
 | `/remind me <when> <what>` | Sets a reminder, e.g. `in 2h`, `30m`, `3d`. Survives restarts. |
@@ -37,29 +41,57 @@ bothered, who nonetheless gets it right.
 | `/poll <question> <options>` | A real multi-option vote that survives restarts; Johnny tallies it later. |
 | `/weather <place>` | The real weather (Open-Meteo), delivered like a chore. |
 | `/convert <value> <from> <to>` | Local, correct unit conversion (length, mass, volume, temperature). |
+| `/wiki <topic>` | The real Wikipedia summary, verbatim, with a flat intro. |
+| `/tldr <url>` | Johnny reads a webpage so you don't have to. |
+| `/define <word>` | A real dictionary definition (not an LLM guess). |
 
-You can also just **@mention** Johnny to talk to him without a slash command.
+### Server & meta
+| Command | What it does |
+|---|---|
+| `/afk [reason]` | Marks you away; Johnny tells anyone who pings you, and clears it when you talk. |
+| `/starboard set·threshold·off` | Mirror messages that hit enough ⭐ to a board channel. (Manage Server only.) |
+| `/activity` | Who actually talks here — top posters + busiest hour. |
+| `/stats` | Command usage + uptime. |
+| `/help` | The whole list, in his voice. |
+
+You can also just **@mention** Johnny to talk to him — and "@johnny what do you know about Dave"
+pulls from his `/facts`.
 
 ## How it's built
 
 ```
-index.js          boot, client, the interaction router, passive last-seen logging
+index.js          boot, client, interaction router, @mention + AFK + reaction handling
 commands/         one file per category — each exports { data, execute } commands
   _loader.js      discovers and registers every command
+  fun.js          ask, roast, debate, haiku, roll, … the chaos
+  polls.js        judge, warcrime, poll
+  memory.js       catchup, summary, remember, facts, afk
+  reminders.js    remind (me / list / cancel)
+  settle.js       settle, coinflip, pick
+  quickfacts.js   weather, convert, wiki, tldr, define
+  games.js        story
+  meta.js         help, stats, activity
+  starboard.js    starboard config
 lib/
   johnny.js       the persona + askJohnny() Groq wrapper
   db.js           the JSON store (data/johnny.json) — atomic, debounced writes
-  memory.js       last-seen + remembered facts
+  memory.js       last-seen, remembered facts, AFK
   scheduler.js    fires due reminders and closes polls every 20s
+  starboard.js    mirrors ⭐'d messages to the board
+  activity.js     per-guild chat tallies
   cooldown.js     in-memory per-user anti-spam
   embeds.js       shared colors + embed helpers
   weather.js      Open-Meteo lookups (no API key)
+  wiki.js         Wikipedia REST summaries
+  define.js       dictionaryapi.dev lookups
+  tldr.js         fetch + strip a webpage for summarizing
   convert.js      local unit conversion tables
   util.js         small shared helpers (duration parsing, etc.)
 ```
 
 Persistence is a single JSON file at `data/johnny.json` (gitignored, created on first run) — no database
-server, no native modules, no build step. Reminders and polls live there, so they survive a restart.
+server, no native modules, no build step. Reminders, polls, facts, stories, AFK, starboard config, and
+activity tallies all live there, so they survive a restart.
 
 ## Setup
 
@@ -98,5 +130,7 @@ then open the generated URL and add it to your server.
 
 - Johnny never breaks character and never admits he's an AI.
 - Temperature runs high (≈0.95) on purpose — that's where the chaos lives.
-- Real data (weather, conversions, reminders, poll tallies) is always real — Johnny only voices the
-  wrapper around it, never invents the numbers.
+- Real data (weather, conversions, dictionary, Wikipedia, reminders, poll tallies) is always real —
+  Johnny only voices the wrapper around it, never invents the facts or numbers.
+- The starboard is off until someone with **Manage Server** runs `/starboard set #channel`. It uses the
+  (non-privileged) Server Reactions intent, so there's nothing extra to enable in the portal.

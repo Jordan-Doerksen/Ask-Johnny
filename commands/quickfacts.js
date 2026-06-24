@@ -72,4 +72,38 @@ module.exports = [
       await interaction.editReply(`${intro}\n\n**${result.title}**\n${body}${result.url ? `\n<${result.url}>` : ''}`);
     },
   },
+
+  {
+    data: new SlashCommandBuilder()
+      .setName('tldr')
+      .setDescription('Paste a link. Johnny reads it so you do not have to.')
+      .addStringOption(o => o.setName('url').setDescription('The link').setRequired(true)),
+    async execute(interaction, ctx) {
+      const page = await ctx.tldr.fetchPageText(interaction.options.getString('url'));
+      if (page.error === 'badurl') return interaction.editReply("that's not a real link. give me an http or https url.");
+      if (page.error === 'blocked') return interaction.editReply("not fetching that. internal addresses are off limits.");
+      if (page.error === 'nottext') return interaction.editReply("that's not a webpage i can read. probably a file or an app.");
+      if (page.error) return interaction.editReply("couldn't read that page. it's down, it blocked me, or it's all javascript.");
+      const summary = await ctx.askJohnny(`Summarize this webpage flatly for someone who won't read it.\n\nTitle: ${page.title}\n\n${page.text}`, {
+        extraSystem: 'Give the gist in 2-4 flat sentences. Deadpan, unbothered. No hype, no "this article is about". Just what it says.',
+        maxTokens: 300,
+      });
+      await interaction.editReply(`**${page.title || 'the link'}**\n${summary}`);
+    },
+  },
+
+  {
+    data: new SlashCommandBuilder()
+      .setName('define')
+      .setDescription('Johnny defines a word. From a real dictionary, unfortunately.')
+      .addStringOption(o => o.setName('word').setDescription('The word').setRequired(true)),
+    async execute(interaction, ctx) {
+      const word = interaction.options.getString('word');
+      const result = await ctx.define.getDefinition(word);
+      if (!result) return interaction.editReply(`"${word}" isn't in the dictionary. you made it up or spelled it wrong.`);
+      const body = result.meanings.map(m => `*${m.pos}* — ${m.def}`).join('\n');
+      const quip = await ctx.askJohnny(`Someone looked up the word "${result.word}". Give ONE flat throwaway line. Don't define it yourself.`, { maxTokens: 40 });
+      await interaction.editReply(`**${result.word}**${result.phonetic ? ` ${result.phonetic}` : ''}\n${body}\n\n${quip}`);
+    },
+  },
 ];

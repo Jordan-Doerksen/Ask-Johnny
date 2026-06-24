@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { Client, GatewayIntentBits, REST, Routes, MessageFlags } = require('discord.js');
+const { Client, GatewayIntentBits, REST, Routes, MessageFlags, Partials } = require('discord.js');
 const { askJohnny, MODEL } = require('./lib/johnny');
 const db = require('./lib/db');
 const memory = require('./lib/memory');
@@ -9,6 +9,10 @@ const util = require('./lib/util');
 const convert = require('./lib/convert');
 const weather = require('./lib/weather');
 const wiki = require('./lib/wiki');
+const tldr = require('./lib/tldr');
+const define = require('./lib/define');
+const activity = require('./lib/activity');
+const starboard = require('./lib/starboard');
 const scheduler = require('./lib/scheduler');
 const { onCooldown } = require('./lib/cooldown');
 const { loadCommands } = require('./commands/_loader');
@@ -40,12 +44,14 @@ const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMessageReactions, // for the starboard
     GatewayIntentBits.MessageContent, // PRIVILEGED — must be enabled in the Discord Developer Portal
   ],
+  partials: [Partials.Message, Partials.Channel, Partials.Reaction], // see reactions on uncached messages
 });
 
 // Everything a command needs, handed in so command files stay thin.
-const ctx = { askJohnny, db, memory, embeds, util, convert, weather, wiki, client, commands: commandData };
+const ctx = { askJohnny, db, memory, embeds, util, convert, weather, wiki, tldr, define, activity, client, commands: commandData };
 
 client.once('clientReady', () => {
   console.log(`Johnny is online as ${client.user.tag} (model: ${MODEL})`);
@@ -80,6 +86,7 @@ client.on('messageCreate', async message => {
   // Passive: remember when each person last spoke here, so /catchup knows how
   // far back to recap. We store only the timestamp, never the message content.
   memory.touchLastSeen(message.channelId, message.author.id, message.createdTimestamp);
+  activity.record(message.guildId, message.author.id, new Date(message.createdTimestamp).getHours());
 
   // AFK: if the speaker was away, welcome them back and clear it.
   if (memory.clearAfk(message.author.id)) {
@@ -119,6 +126,11 @@ client.on('messageCreate', async message => {
   } catch (err) {
     console.error('mention reply failed:', err);
   }
+});
+
+// Starboard: watch ⭐ reactions and mirror popular messages to the board.
+client.on('messageReactionAdd', reaction => {
+  starboard.handleStar(client, reaction).catch(err => console.error('starboard:', err.message));
 });
 
 // Flush the store on shutdown so nothing in-flight is lost.
