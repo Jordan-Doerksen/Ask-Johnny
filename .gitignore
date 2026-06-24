@@ -3,3 +3,4 @@ node_modules/
 *.log
 data/
 package-lock.json
+fun-police/banlist.json

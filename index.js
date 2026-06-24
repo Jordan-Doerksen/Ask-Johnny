@@ -142,6 +142,22 @@ for (const sig of ['SIGINT', 'SIGTERM']) {
   });
 }
 
+// Optionally co-launch fun-police (the ban-list bot) as its own child process
+// from the same host — only when its own credentials are set, so ask-johnny
+// runs fine without them. Separate process means isolated env + gateway; if it
+// crashes, ask-johnny keeps running.
+function launchFunPolice() {
+  if (!process.env.FP_BOT_TOKEN) return;
+  const { fork } = require('child_process');
+  const path = require('path');
+  const child = fork(path.join(__dirname, 'fun-police', 'index.js'));
+  child.on('exit', code => console.log(`fun-police exited (code ${code}).`));
+  child.on('error', err => console.error('fun-police failed to launch:', err.message));
+  console.log('Co-launching fun-police...');
+}
+
+launchFunPolice();
+
 registerCommands()
   .then(() => client.login(TOKEN))
   .catch(err => {
