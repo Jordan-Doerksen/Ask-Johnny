@@ -106,4 +106,22 @@ module.exports = [
       await interaction.editReply(`**${result.word}**${result.phonetic ? ` ${result.phonetic}` : ''}\n${body}\n\n${quip}`);
     },
   },
+
+  {
+    data: new SlashCommandBuilder()
+      .setName('yt')
+      .setDescription('Johnny summarizes a YouTube video. If it has captions.')
+      .addStringOption(o => o.setName('url').setDescription('YouTube link or id').setRequired(true)),
+    async execute(interaction, ctx) {
+      const r = await ctx.youtube.getTranscript(interaction.options.getString('url'));
+      if (r.error === 'badid') return interaction.editReply("that's not a youtube link i recognize. paste the actual url.");
+      if (r.error === 'fetchfail') return interaction.editReply("youtube wouldn't load for me. it does that, especially from a server.");
+      if (r.error === 'notranscript') return interaction.editReply(`no captions i can read on${r.title ? ` "${r.title}"` : ' that one'}. can't summarize what i can't read.`);
+      const summary = await ctx.askJohnny(`Summarize this YouTube video from its transcript, flatly.\n\nTitle: ${r.title}\n\nTranscript:\n${r.text}`, {
+        extraSystem: 'Give the gist in 3-5 flat sentences. Deadpan, unbothered. What the video actually covers, not hype. No "this video".',
+        maxTokens: 350,
+      });
+      await interaction.editReply(`**${r.title || 'that video'}**\n${summary}`);
+    },
+  },
 ];

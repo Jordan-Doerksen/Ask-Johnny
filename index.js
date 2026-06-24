@@ -10,6 +10,7 @@ const convert = require('./lib/convert');
 const weather = require('./lib/weather');
 const wiki = require('./lib/wiki');
 const tldr = require('./lib/tldr');
+const youtube = require('./lib/youtube');
 const define = require('./lib/define');
 const activity = require('./lib/activity');
 const starboard = require('./lib/starboard');
@@ -51,7 +52,7 @@ const client = new Client({
 });
 
 // Everything a command needs, handed in so command files stay thin.
-const ctx = { askJohnny, db, memory, embeds, util, convert, weather, wiki, tldr, define, activity, client, commands: commandData };
+const ctx = { askJohnny, db, memory, embeds, util, convert, weather, wiki, tldr, youtube, define, activity, client, commands: commandData };
 
 client.once('clientReady', () => {
   console.log(`Johnny is online as ${client.user.tag} (model: ${MODEL})`);

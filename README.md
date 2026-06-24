@@ -43,6 +43,7 @@ bothered, who nonetheless gets it right.
 | `/convert <value> <from> <to>` | Local, correct unit conversion (length, mass, volume, temperature). |
 | `/wiki <topic>` | The real Wikipedia summary, verbatim, with a flat intro. |
 | `/tldr <url>` | Johnny reads a webpage so you don't have to. |
+| `/yt <url>` | Summarizes a YouTube video from its captions (best-effort; YouTube blocks some hosts). |
 | `/define <word>` | A real dictionary definition (not an LLM guess). |
 
 ### Server & meta
@@ -85,6 +86,7 @@ lib/
   wiki.js         Wikipedia REST summaries
   define.js       dictionaryapi.dev lookups
   tldr.js         fetch + strip a webpage for summarizing
+  youtube.js      best-effort YouTube transcript fetch
   convert.js      local unit conversion tables
   util.js         small shared helpers (duration parsing, etc.)
 ```
