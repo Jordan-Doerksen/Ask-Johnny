@@ -1,7 +1,7 @@
 {
   "name": "ask-johnny",
-  "version": "1.0.0",
-  "description": "A Discord bot. Johnny is a blissfully unaware, confidently wrong normie. Powered by Groq.",
+  "version": "2.0.0",
+  "description": "A Discord bot. Johnny is dry, deadpan, and grudgingly competent — he remembers things, sets reminders, settles arguments, and tells you the real weather, all like it cost him effort. Powered by Groq.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
