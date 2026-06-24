@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { Client, GatewayIntentBits, REST, Routes } = require('discord.js');
+const { Client, GatewayIntentBits, REST, Routes, MessageFlags } = require('discord.js');
 const { askJohnny, MODEL } = require('./lib/johnny');
 const db = require('./lib/db');
 const memory = require('./lib/memory');
@@ -57,11 +57,12 @@ client.on('interactionCreate', async interaction => {
   if (!cmd) return;
 
   if (cmd.cooldown !== false && onCooldown(interaction.user.id)) {
-    return interaction.reply({ content: 'give it a second.', ephemeral: true });
+    return interaction.reply({ content: 'give it a second.', flags: MessageFlags.Ephemeral });
   }
 
   try {
-    await interaction.deferReply({ ephemeral: cmd.ephemeral === true }); // Groq is slower than Discord's 3s window
+    // Groq is slower than Discord's 3s window, so defer first.
+    await interaction.deferReply(cmd.ephemeral === true ? { flags: MessageFlags.Ephemeral } : {});
     await cmd.execute(interaction, ctx);
   } catch (err) {
     console.error(`/${interaction.commandName} failed:`, err);
