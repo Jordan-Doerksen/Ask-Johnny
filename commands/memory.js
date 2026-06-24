@@ -116,4 +116,20 @@ module.exports = [
       await interaction.editReply(reply);
     },
   },
+
+  {
+    data: new SlashCommandBuilder()
+      .setName('afk')
+      .setDescription('Mark yourself away. Johnny covers for you.')
+      .addStringOption(o => o.setName('reason').setDescription('Optional reason').setRequired(false)),
+    async execute(interaction, ctx) {
+      const reason = interaction.options.getString('reason');
+      ctx.memory.setAfk(interaction.user.id, reason);
+      await interaction.editReply(
+        reason
+          ? `fine. you're afk: ${reason}. i'll tell people. probably.`
+          : "you're afk. i'll let people know, with minimal enthusiasm.",
+      );
+    },
+  },
 ];

@@ -49,4 +49,27 @@ module.exports = [
       await interaction.editReply(`${value} ${from} = ${out} ${to}\n${quip}`);
     },
   },
+
+  {
+    data: new SlashCommandBuilder()
+      .setName('wiki')
+      .setDescription('Johnny reads you the Wikipedia gist. Reluctantly.')
+      .addStringOption(o => o.setName('topic').setDescription('What to look up').setRequired(true)),
+    async execute(interaction, ctx) {
+      const topic = interaction.options.getString('topic');
+      const result = await ctx.wiki.getWiki(topic);
+      if (!result) {
+        return interaction.editReply(`couldn't find "${topic}" on wikipedia. either it doesn't exist or you spelled it creatively.`);
+      }
+      if (result.disambiguation) {
+        return interaction.editReply(`"${topic}" could be a bunch of things. be more specific. i'm not guessing.`);
+      }
+      // The summary is shown verbatim (accurate); Johnny only voices the intro.
+      const intro = await ctx.askJohnny(`Someone asked about "${result.title}". Give ONE flat intro line before the facts. Don't summarize it yourself.`, {
+        maxTokens: 50,
+      });
+      const body = result.extract.length > 1500 ? `${result.extract.slice(0, 1500)}…` : result.extract;
+      await interaction.editReply(`${intro}\n\n**${result.title}**\n${body}${result.url ? `\n<${result.url}>` : ''}`);
+    },
+  },
 ];

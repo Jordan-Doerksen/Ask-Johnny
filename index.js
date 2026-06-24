@@ -8,6 +8,7 @@ const embeds = require('./lib/embeds');
 const util = require('./lib/util');
 const convert = require('./lib/convert');
 const weather = require('./lib/weather');
+const wiki = require('./lib/wiki');
 const scheduler = require('./lib/scheduler');
 const { onCooldown } = require('./lib/cooldown');
 const { loadCommands } = require('./commands/_loader');
@@ -44,7 +45,7 @@ const client = new Client({
 });
 
 // Everything a command needs, handed in so command files stay thin.
-const ctx = { askJohnny, db, memory, embeds, util, convert, weather, client };
+const ctx = { askJohnny, db, memory, embeds, util, convert, weather, wiki, client, commands: commandData };
 
 client.once('clientReady', () => {
   console.log(`Johnny is online as ${client.user.tag} (model: ${MODEL})`);
@@ -64,6 +65,9 @@ client.on('interactionCreate', async interaction => {
     // Groq is slower than Discord's 3s window, so defer first.
     await interaction.deferReply(cmd.ephemeral === true ? { flags: MessageFlags.Ephemeral } : {});
     await cmd.execute(interaction, ctx);
+    db.data.stats.commandCounts[interaction.commandName] =
+      (db.data.stats.commandCounts[interaction.commandName] || 0) + 1;
+    db.flush();
   } catch (err) {
     console.error(`/${interaction.commandName} failed:`, err);
     await util.brainLag(interaction);
@@ -77,14 +81,41 @@ client.on('messageCreate', async message => {
   // far back to recap. We store only the timestamp, never the message content.
   memory.touchLastSeen(message.channelId, message.author.id, message.createdTimestamp);
 
+  // AFK: if the speaker was away, welcome them back and clear it.
+  if (memory.clearAfk(message.author.id)) {
+    message.reply('back, are you. i was barely covering for you.').catch(() => {});
+  }
+  // AFK: if they pinged someone who's away, say so.
+  for (const [id, user] of message.mentions.users) {
+    if (id === client.user.id || id === message.author.id) continue;
+    const afk = memory.getAfk(id);
+    if (afk) {
+      const why = afk.reason && afk.reason !== 'afk' ? `: ${afk.reason}` : '';
+      message.reply(`${user.username}'s afk${why}. don't hold your breath.`).catch(() => {});
+    }
+  }
+
   // Talk to Johnny by @mentioning him — no slash command needed.
   if (!message.mentions.users.has(client.user.id)) return;
   if (onCooldown(message.author.id)) return;
 
-  const prompt = message.content.replace(/<@!?\d+>/g, '').trim() || 'someone just pinged you with nothing to say.';
+  const raw = message.content.replace(/<@!?\d+>/g, '').trim();
   try {
     await message.channel.sendTyping();
-    await message.reply(await askJohnny(prompt));
+
+    // @mention smarts: "what do you know about X" pulls from Johnny's facts.
+    const m = raw.match(/(?:what do you know about|who is|who's|tell me about|what about)\s+(.+?)[?.!]*$/i);
+    if (m && message.guildId) {
+      const subject = m[1].trim();
+      const facts = memory.getFacts(message.guildId, subject);
+      if (facts.length) {
+        const intro = await askJohnny(`Someone asked what you know about "${subject}". Give ONE flat intro line; don't list the facts.`, { maxTokens: 60 });
+        await message.reply(`${intro}\n${facts.map(f => `• ${f.text}`).join('\n')}`);
+        return;
+      }
+    }
+
+    await message.reply(await askJohnny(raw || 'someone just pinged you with nothing to say.'));
   } catch (err) {
     console.error('mention reply failed:', err);
   }

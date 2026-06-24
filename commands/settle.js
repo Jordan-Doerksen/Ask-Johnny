@@ -60,4 +60,30 @@ module.exports = [
       await interaction.editReply(reply);
     },
   },
+
+  {
+    data: new SlashCommandBuilder()
+      .setName('roll')
+      .setDescription('Roll dice. e.g. 2d6, d20, 3d6+1.')
+      .addStringOption(o => o.setName('dice').setDescription('e.g. 2d6, d20, 4d8+2 (default 1d20)').setRequired(false)),
+    async execute(interaction) {
+      const spec = (interaction.options.getString('dice') || '1d20').toLowerCase().replace(/\s+/g, '');
+      const m = spec.match(/^(\d*)d(\d+)([+-]\d+)?$/);
+      if (!m) {
+        return interaction.editReply("that's not dice. give me something like 2d6, d20, or 3d8+1.");
+      }
+      const count = parseInt(m[1] || '1', 10);
+      const sides = parseInt(m[2], 10);
+      const mod = m[3] ? parseInt(m[3], 10) : 0;
+      if (count < 1 || count > 100 || sides < 2 || sides > 1000) {
+        return interaction.editReply("pick a sane number of dice and sides. i'm not rolling a d1.");
+      }
+      const rolls = Array.from({ length: count }, () => 1 + Math.floor(Math.random() * sides));
+      const sum = rolls.reduce((a, b) => a + b, 0) + mod;
+      const breakdown = count > 1 || mod
+        ? ` (${rolls.join(' + ')}${mod ? ` ${mod > 0 ? '+' : '-'} ${Math.abs(mod)}` : ''})`
+        : '';
+      await interaction.editReply(`🎲 **${sum}**${breakdown}. there's your fate or whatever.`);
+    },
+  },
 ];

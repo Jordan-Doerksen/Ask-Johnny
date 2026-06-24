@@ -188,4 +188,21 @@ module.exports = [
       await msg.react('🇧');
     },
   },
+
+  {
+    data: new SlashCommandBuilder()
+      .setName('haiku')
+      .setDescription('Johnny writes a haiku. Begrudgingly.')
+      .addStringOption(o => o.setName('topic').setDescription('What about?').setRequired(true)),
+    async execute(interaction, ctx) {
+      const topic = interaction.options.getString('topic');
+      const reply = await ctx.askJohnny(`Write a haiku about: ${topic}`, {
+        extraSystem:
+          'Write ONE haiku — three lines, roughly 5-7-5, no need to count perfectly — about the topic, in your flat ' +
+          'deadpan voice. Anticlimactic. Output only the three lines, nothing else.',
+        temperature: 1.0,
+      });
+      await interaction.editReply(reply);
+    },
+  },
 ];
