@@ -18,14 +18,25 @@ const BANLIST_FILE = path.join(__dirname, 'banlist.json');
 const SHAMAN_ROLE = 'shaman';
 
 function loadBanlist() {
-  if (!fs.existsSync(BANLIST_FILE)) {
-    fs.writeFileSync(BANLIST_FILE, JSON.stringify([]));
+  try {
+    if (fs.existsSync(BANLIST_FILE)) {
+      return JSON.parse(fs.readFileSync(BANLIST_FILE, 'utf8'));
+    }
+  } catch (err) {
+    // Corrupt file (e.g. a crash mid-write): back it up and start clean rather
+    // than crash on every command.
+    console.error('fun-police: banlist.json unreadable, backing it up and starting fresh:', err.message);
+    try { fs.renameSync(BANLIST_FILE, `${BANLIST_FILE}.corrupt`); } catch (_) { /* ignore */ }
   }
-  return JSON.parse(fs.readFileSync(BANLIST_FILE, 'utf8'));
+  return [];
 }
 
 function saveBanlist(list) {
-  fs.writeFileSync(BANLIST_FILE, JSON.stringify(list, null, 2));
+  // Atomic write: temp file + rename, so a crash mid-write can't corrupt or
+  // truncate the list (same durability trick as ask-johnny's store).
+  const tmp = `${BANLIST_FILE}.tmp`;
+  fs.writeFileSync(tmp, JSON.stringify(list, null, 2));
+  fs.renameSync(tmp, BANLIST_FILE);
 }
 
 function isShaman(member) {
