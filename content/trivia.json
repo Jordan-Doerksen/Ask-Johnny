@@ -1,0 +1,1682 @@
+[
+  {
+    "topicKey": "warcraft3",
+    "category": "Warcraft III",
+    "difficulty": "medium",
+    "question": "Warcraft III: Reign of Chaos (2002) was the first game in the Warcraft series to feature what?",
+    "correct": "Fully 3D graphics",
+    "incorrect": [
+      "Online Battle.net play",
+      "A built-in map editor",
+      "Playable orcs"
+    ],
+    "note": "Warcraft III was the first game in the series (and the first Blizzard game) rendered in full 3D; Warcraft I (1994) and Warcraft II (1995) used 2D sprites. The distractors all predate WC3: Battle.net arrived with Warcraft II: Battle.net Edition (1999), Warcraft II (1995) shipped with a map editor, and orcs were playable from the original Warcraft: Orcs & Humans (1994).",
+    "source": "Wikipedia — Warcraft III: Reign of Chaos (en.wikipedia.org/wiki/Warcraft_III:_Reign_of_Chaos)"
+  },
+  {
+    "topicKey": "warcraft3",
+    "category": "Warcraft III",
+    "difficulty": "easy",
+    "question": "Which Warcraft III cheat code makes your units invincible and lets them kill anything in a single hit?",
+    "correct": "whosyourdaddy",
+    "incorrect": [
+      "iseedeadpeople",
+      "greedisgood",
+      "thereisnospoon"
+    ],
+    "note": "whosyourdaddy = god mode (invincibility + one-hit kills). Distractors: iseedeadpeople = reveal map, greedisgood = gold/lumber, thereisnospoon = unlimited mana.",
+    "source": "Warcraft III cheat list (GameFAQs / warcraft.wiki.gg)"
+  },
+  {
+    "topicKey": "warcraft3",
+    "category": "Warcraft III",
+    "difficulty": "medium",
+    "question": "The Pandaren Brewmaster, a neutral hero added in The Frozen Throne, was first shown to the public as part of what?",
+    "correct": "A 2002 April Fools' joke",
+    "incorrect": [
+      "A scrapped fifth playable race",
+      "A StarCraft: Ghost crossover",
+      "A fan art contest winner"
+    ],
+    "note": "The pandaren debuted publicly in Blizzard's 2002 April Fools' Day gag, which pretended they'd be Warcraft III's fifth playable race (Samwise Didier art + fake screenshots). Fan response was strong enough that the Pandaren Brewmaster was made a genuine neutral hero in the 2003 expansion, The Frozen Throne. Note: the 'fifth playable race' distractor is an intentional trap — that framing was purely the joke's fiction; there was never a real fifth race in development that got scrapped.",
+    "source": "Wowpedia — Pandaren (April Fools) (wowpedia.fandom.com/wiki/Pandaren_(April_Fools))"
+  },
+  {
+    "topicKey": "warcraft3",
+    "category": "Warcraft III",
+    "difficulty": "easy",
+    "question": "The hugely influential game 'Defense of the Ancients' (DotA), which launched the MOBA genre, originally began as what?",
+    "correct": "A Warcraft III custom map",
+    "incorrect": [
+      "A standalone Blizzard game",
+      "A StarCraft II arcade mod",
+      "An official Frozen Throne game mode"
+    ],
+    "note": "DotA was created as a custom map in the Warcraft III World Editor by the modder \"Eul\" (2003, Reign of Chaos), then evolved into DotA Allstars on The Frozen Throne. It was a fan-made mod, never a Blizzard product or an official game mode.",
+    "source": "Wikipedia — Defense of the Ancients (en.wikipedia.org/wiki/Defense_of_the_Ancients)"
+  },
+  {
+    "topicKey": "warcraft3",
+    "category": "Warcraft III",
+    "difficulty": "medium",
+    "question": "Warcraft Adventures: Lord of the Clans, the Blizzard game cancelled in 1998 before Warcraft III, would have been what kind of game?",
+    "correct": "A point-and-click adventure",
+    "incorrect": [
+      "A turn-based strategy game",
+      "A first-person RPG",
+      "A massively multiplayer online game"
+    ],
+    "note": "Warcraft Adventures: Lord of the Clans was a point-and-click adventure game (Blizzard + Animation Magic) telling Thrall's origin story; it was cancelled in May 1998. Its narrative later became the novel Lord of the Clans.",
+    "source": "Wikipedia — Warcraft Adventures: Lord of the Clans (en.wikipedia.org/wiki/Warcraft_Adventures:_Lord_of_the_Clans)"
+  },
+  {
+    "topicKey": "warcraft3",
+    "category": "Warcraft III",
+    "difficulty": "easy",
+    "question": "Warcraft III's 'upkeep' system reduces your gold income based on what?",
+    "correct": "Total food (population) used",
+    "incorrect": [
+      "Number of buildings owned",
+      "Time elapsed in the match",
+      "Number of heroes fielded"
+    ],
+    "note": "Upkeep tiers: No Upkeep 0-50 food (100% gold), Low Upkeep 51-80 food (70% gold), High Upkeep 81-100 food (40% gold). Confirmed via classic.battle.net/war3/basics/upkeep.shtml and Warcraft Wiki.",
+    "source": "Battle.net Warcraft III Basics — Upkeep (classic.battle.net/war3/basics/upkeep.shtml)"
+  },
+  {
+    "topicKey": "warcraft3",
+    "category": "Warcraft III",
+    "difficulty": "medium",
+    "question": "In Warcraft lore, the Frozen Throne was created to imprison the soul of which being?",
+    "correct": "Ner'zhul",
+    "incorrect": [
+      "Arthas Menethil",
+      "Kel'Thuzad",
+      "Mal'Ganis"
+    ],
+    "note": "Kil'jaeden encased the orc shaman Ner'zhul's spirit in ice from the Twisting Nether, creating the Frozen Throne and transforming him into the Lich King; it later crashed into Northrend's Icecrown glacier.",
+    "source": "Warcraft Wiki — Frozen Throne (warcraft.wiki.gg/wiki/Frozen_Throne)"
+  },
+  {
+    "topicKey": "warcraft3",
+    "category": "Warcraft III",
+    "difficulty": "medium",
+    "question": "At the close of Reign of Chaos, who orders Illidan Stormrage to destroy the Frozen Throne?",
+    "correct": "Kil'jaeden",
+    "incorrect": [
+      "Archimonde",
+      "Tichondrius",
+      "Arthas"
+    ],
+    "note": "Kil'jaeden, a lord of the Burning Legion, tasks Illidan with destroying the Frozen Throne to eliminate the increasingly independent Lich King Ner'zhul. The command is delivered in the cinematic that opens The Frozen Throne (immediately following Reign of Chaos). Distractors are era-correct decoys: Archimonde led the RoC invasion but was destroyed at Mount Hyjal; Tichondrius was slain by Illidan earlier; Arthas is Illidan's rival who ultimately shatters the throne himself and becomes the new Lich King.",
+    "source": "Warcraft Wiki — Frozen Throne / Illidan Stormrage (warcraft.wiki.gg/wiki/Frozen_Throne)"
+  },
+  {
+    "topicKey": "starcraft",
+    "category": "StarCraft",
+    "difficulty": "medium",
+    "question": "When Blizzard first showed StarCraft at E3 1996, the press mocked its Warcraft II-style visuals with what dismissive nickname?",
+    "correct": "Orcs in Space",
+    "incorrect": [
+      "Diablo in Space",
+      "Space Orcs Online",
+      "Aliens: The RTS"
+    ],
+    "note": "Verified against Patrick Wyatt's Code of Honor blog (\"StarCraft: Orcs in space go down in flames\") and corroborating histories (Wikipedia, The Digital Antiquarian, Lost Media Wiki). \"Warcraft in Space\" was a variant nickname but is not among the distractors, so no ambiguity.",
+    "source": "Patrick Wyatt, 'StarCraft: Orcs in space go down in flames' (Code of Honor blog, codeofhonor.com)"
+  },
+  {
+    "topicKey": "starcraft",
+    "category": "StarCraft",
+    "difficulty": "easy",
+    "question": "Which Terran character is captured by the Zerg and mutated into the 'Queen of Blades'?",
+    "correct": "Sarah Kerrigan",
+    "incorrect": [
+      "Nova Terra",
+      "Kate Lockwell",
+      "Ariel Hanson"
+    ],
+    "note": "Verified from established StarCraft canon (StarCraft Wiki / Wikipedia, 'Sarah Kerrigan'). Kerrigan is abandoned by Arcturus Mengsk on Tarsonis, captured and infested by the Zerg, and reborn by the Overmind as the Queen of Blades. Distractors are all Terran but never underwent this transformation.",
+    "source": "StarCraft Wiki (Fandom), 'Sarah Kerrigan'; Wikipedia, 'Sarah Kerrigan'"
+  },
+  {
+    "topicKey": "starcraft",
+    "category": "StarCraft",
+    "difficulty": "medium",
+    "question": "The Terran Battlecruiser's 'Yamato Cannon' is a direct homage to the wave-motion gun from which anime?",
+    "correct": "Space Battleship Yamato",
+    "incorrect": [
+      "Mobile Suit Gundam",
+      "Neon Genesis Evangelion",
+      "Cowboy Bebop"
+    ],
+    "note": "The Wave Motion Gun (波動砲) is the signature bow-mounted energy weapon of Space Battleship Yamato; StarCraft developer Bob Fitch confirmed the Battlecruiser's Yamato Cannon references it (StarCraft Wiki; Anime News Network, 2010).",
+    "source": "StarCraft Wiki (Fandom), 'Yamato cannon'; Anime News Network (2010)"
+  },
+  {
+    "topicKey": "starcraft",
+    "category": "StarCraft",
+    "difficulty": "medium",
+    "question": "The xel'naga agent 'Emil Narud' in StarCraft II is hinted to be an earlier villain whose name Narud spells backward. Who is it?",
+    "correct": "Samir Duran",
+    "incorrect": [
+      "Gerard DuGalle",
+      "Alexei Stukov",
+      "Arcturus Mengsk"
+    ],
+    "note": "Confirmed correct and unambiguous. 'Narud' = 'Duran' reversed; Emil Narud is Samir Duran (Brood War). Distractors DuGalle, Stukov, and Mengsk are all clearly wrong (none are xel'naga agents; none are name reversals of Narud). No changes needed.",
+    "source": "StarCraft Wiki (Fandom), 'Samir Duran'"
+  },
+  {
+    "topicKey": "starcraft",
+    "category": "StarCraft",
+    "difficulty": "medium",
+    "question": "Tassadar destroyed the original Zerg Overmind on Aiur by crashing which flagship carrier into it?",
+    "correct": "The Gantrithor",
+    "incorrect": [
+      "The Hyperion",
+      "The Bucephalus",
+      "The Aleksander"
+    ],
+    "note": "Verified against StarCraft Wiki (Fandom): 'Gantrithor' and 'Battle of the First Overmind'. Tassadar sacrificed the carrier Gantrithor by crashing it into the first Overmind at the climax of the Protoss campaign (Episode III, 'Eye of the Storm'). Distractors are all Terran battlecruisers, not Protoss carriers: Hyperion (Raynor), Bucephalus (Mengsk/Dominion, SC2), Aleksander (UED flagship, DuGalle).",
+    "source": "StarCraft Wiki (Fandom), 'Gantrithor' and 'Battle of the First Overmind'"
+  },
+  {
+    "topicKey": "starcraft",
+    "category": "StarCraft",
+    "difficulty": "medium",
+    "question": "The Protoss hero Fenix is mortally wounded as a Zealot defending Aiur, then returns to battle reborn inside what kind of unit?",
+    "correct": "A Dragoon",
+    "incorrect": [
+      "An Archon",
+      "An Immortal",
+      "A Reaver"
+    ],
+    "note": "Verified against StarCraft Wiki (Fandom) 'Fenix (dragoon)'. In the original StarCraft (1998), Fenix falls as a Zealot defending Aiur at Antioch and Tassadar places him into a Dragoon. Distractors are all clearly wrong: Archon = two merged Templar; Immortal = SC2 successor unit, not Fenix's SC1 rebirth; Reaver = Scarab-launching siege unit.",
+    "source": "StarCraft Wiki (Fandom), 'Fenix (dragoon)'"
+  },
+  {
+    "topicKey": "starcraft",
+    "category": "StarCraft",
+    "difficulty": "hard",
+    "question": "In StarCraft II lore, why did the Overmind deliberately create Kerrigan as the Queen of Blades?",
+    "correct": "To forge a champion able to one day oppose Amon",
+    "incorrect": [
+      "To infiltrate the Terran Dominion",
+      "To locate the Protoss homeworld Aiur",
+      "To resurrect the fallen Cerebrates"
+    ],
+    "note": "Confirmed via StarCraft Wiki ('Overmind' and 'Sarah Kerrigan') and the SC2 campaign: the Overmind knew Amon would exterminate the Zerg once they served their purpose, so it secretly created the Queen of Blades as a free-willed weapon to undermine Amon (revealed through Zeratul's apocalyptic vision).",
+    "source": "StarCraft Wiki (Fandom), 'Overmind' and 'Sarah Kerrigan'; StarCraft II campaign"
+  },
+  {
+    "topicKey": "starcraft",
+    "category": "StarCraft",
+    "difficulty": "hard",
+    "question": "Which player is the only non-Korean ever to win a Korean StarLeague (OSL) championship in Brood War?",
+    "correct": "Guillaume 'Grrrr...' Patry",
+    "incorrect": [
+      "Bertrand 'ElkY' Grospellier",
+      "Greg 'IdrA' Fields",
+      "Jos 'Grubby' Schenkhuizen"
+    ],
+    "note": "Patry won the 2000 Hanaro Tosco OnGameNet StarLeague, the only OSL title ever taken by a non-Korean; he was inducted into the Korean e-Sports Hall of Fame in 2012.",
+    "source": "Liquipedia StarCraft Brood War Wiki, 'Grrrr...'; Wikipedia, 'Guillaume Patry'"
+  },
+  {
+    "topicKey": "diablo2",
+    "category": "Diablo II",
+    "difficulty": "easy",
+    "question": "Which two playable classes were added by the Lord of Destruction expansion?",
+    "correct": "Assassin and Druid",
+    "incorrect": [
+      "Necromancer and Paladin",
+      "Barbarian and Sorceress",
+      "Amazon and Assassin"
+    ],
+    "note": "Diablo II base game shipped with 5 classes (Amazon, Barbarian, Necromancer, Paladin, Sorceress); Lord of Destruction (2001) added the Assassin and the Druid.",
+    "source": "Diablo Wiki (diablo.fandom.com) — Lord of Destruction / class list"
+  },
+  {
+    "topicKey": "diablo2",
+    "category": "Diablo II",
+    "difficulty": "easy",
+    "question": "Which Prime Evil is the final act boss of Act III?",
+    "correct": "Mephisto",
+    "incorrect": [
+      "Diablo",
+      "Baal",
+      "Andariel"
+    ],
+    "note": "Mephisto, the Lord of Hatred, is the Act III end boss and one of the three Prime Evils. Diablo (Act IV) and Baal (Act V) are the other Prime Evils but bosses of later acts; Andariel is the Act I boss and only a Lesser Evil.",
+    "source": "PureDiablo — Act Bosses (purediablo.com/diablo-2/act-bosses)"
+  },
+  {
+    "topicKey": "diablo2",
+    "category": "Diablo II",
+    "difficulty": "easy",
+    "question": "To open the portal to the Secret Cow Level, you cube a Tome of Town Portal together with which item?",
+    "correct": "Wirt's Leg",
+    "incorrect": [
+      "Khalim's Eye",
+      "The Horadric Malus",
+      "The Hellforge Hammer"
+    ],
+    "note": "Recipe: place Wirt's Leg + a Tome of Town Portal in the Horadric Cube and transmute while in the Rogue Encampment (Act I town), after defeating that difficulty's act boss. Wirt's Leg is obtained by clicking Wirt's corpse in Tristram.",
+    "source": "The Arreat Summit — The Secret Cow Level (classic.battle.net/diablo2exp)"
+  },
+  {
+    "topicKey": "diablo2",
+    "category": "Diablo II",
+    "difficulty": "medium",
+    "question": "What is the highest and rarest rune in Diablo II, sitting 33rd on the rune list?",
+    "correct": "Zod",
+    "incorrect": [
+      "Cham",
+      "Jah",
+      "Ber"
+    ],
+    "note": "Zod is rune #33 of 33, the highest and rarest. The distractors are the next three highest runes — Cham (#32), Jah (#31), Ber (#30) — all lower, so unambiguously wrong.",
+    "source": "Diablo Wiki — Zod Rune (diablo.fandom.com/wiki/Zod_Rune)"
+  },
+  {
+    "topicKey": "diablo2",
+    "category": "Diablo II",
+    "difficulty": "easy",
+    "question": "The Enigma runeword is famous for granting any class access to which skill?",
+    "correct": "Teleport",
+    "incorrect": [
+      "Battle Orders",
+      "Whirlwind",
+      "Frozen Orb"
+    ],
+    "note": "Enigma (Jah + Ith + Ber, 3-socket body armor) grants +1 to Teleport as an oskill, letting any class use the normally Sorceress-only Teleport — its defining feature. Confirmed via diablo.fandom.com and diablo2.io.",
+    "source": "Diablo Wiki — Enigma Rune Word (diablo.fandom.com/wiki/Enigma_Rune_Word)"
+  },
+  {
+    "topicKey": "diablo2",
+    "category": "Diablo II",
+    "difficulty": "medium",
+    "question": "In the backstory, the Horadrim leader Tal Rasha volunteered to imprison which Prime Evil inside his own body?",
+    "correct": "Baal",
+    "incorrect": [
+      "Diablo",
+      "Mephisto",
+      "Duriel"
+    ],
+    "note": "Tal Rasha took Baal into his own body when Baal's soulstone was damaged; he was bound in a tomb in Aranoch, the setting of Diablo II Act II. Duriel is a Lesser Evil (not a Prime Evil) and guards that tomb.",
+    "source": "Diablo Wiki — Tal Rasha (diablo.fandom.com/wiki/Tal_Rasha)"
+  },
+  {
+    "topicKey": "diablo2",
+    "category": "Diablo II",
+    "difficulty": "medium",
+    "question": "The Dark Wanderer who carries Diablo's soulstone through Diablo II is which hero of Diablo I?",
+    "correct": "Prince Aidan, the Warrior",
+    "incorrect": [
+      "Marius",
+      "King Leoric",
+      "Deckard Cain"
+    ],
+    "note": "The Warrior class hero of Diablo I is canonically Prince Aidan, eldest son of King Leoric. After slaying Diablo in Tristram he drove the soulstone into his own forehead to contain the demon, but was corrupted and became the Dark Wanderer who heads east through Diablo II. Marius is the drifter who follows and narrates his journey; Leoric (the Skeleton King) is Aidan's father; Deckard Cain is the Horadrim lore-keeper.",
+    "source": "Diablo Wiki — Aidan / Dark Wanderer (diablo.fandom.com/wiki/Aidan)"
+  },
+  {
+    "topicKey": "diablo2",
+    "category": "Diablo II",
+    "difficulty": "medium",
+    "question": "The Assassin class belongs to which secret order, formed to hunt down corrupted mages?",
+    "correct": "The Viz-Jaq'taar",
+    "incorrect": [
+      "The Horadrim",
+      "The Zakarum",
+      "The Iron Wolves"
+    ],
+    "note": "Verified against Diablo Wiki. The Viz-Jaq'taar, the \"Order of the Mage Slayers,\" was founded by the Vizjerei mage clan after the Mage Clan Wars to police the clans and destroy demonic corruption — hence \"hunt down corrupted mages.\" Distractors are all real Diablo factions but unrelated to the Assassin: Horadrim = Tyrael's order of mages hunting the Prime Evils; Zakarum = the Eastern religion/church (Paladin origin); Iron Wolves = Act 3 mercenary sorcerers of Kurast.",
+    "source": "Diablo Wiki — Viz-Jaq'taar (diablo.fandom.com/wiki/Viz-Jaq'taar)"
+  },
+  {
+    "topicKey": "zelda-oot",
+    "category": "Zelda: Ocarina of Time",
+    "difficulty": "easy",
+    "question": "The mysterious Sheikah warrior named Sheik, who guides Link as an adult, is secretly which character in disguise?",
+    "correct": "Princess Zelda",
+    "incorrect": [
+      "Impa",
+      "Nabooru",
+      "Malon"
+    ],
+    "note": "Zelda disguises herself as the Sheikah \"Sheik\" to hide from Ganondorf and guides adult Link (teaching him warp songs) before revealing her true identity in the Temple of Time. Impa is her Sheikah attendant/Sage of Shadow, Nabooru is the Gerudo Sage of Spirit, and Malon is the Lon Lon Ranch girl — none are Sheik.",
+    "source": "Zelda Wiki (zelda.fandom.com/wiki/Sheik); The Legend of Zelda: Ocarina of Time (Wikipedia)"
+  },
+  {
+    "topicKey": "zelda-oot",
+    "category": "Zelda: Ocarina of Time",
+    "difficulty": "easy",
+    "question": "Link is raised among the childlike Kokiri of the forest, but what race is he actually born as?",
+    "correct": "Hylian",
+    "incorrect": [
+      "Sheikah",
+      "Gerudo",
+      "Zora"
+    ],
+    "note": "Link is a Hylian orphan brought to the Great Deku Tree as an infant during a war and raised as a Kokiri; his lack of a fairy (until Navi) is the early sign he is not truly one of them. Sheikah, Gerudo, and Zora are all separate races in the game.",
+    "source": "Wikipedia, 'The Legend of Zelda: Ocarina of Time' (plot/characters section)"
+  },
+  {
+    "topicKey": "zelda-oot",
+    "category": "Zelda: Ocarina of Time",
+    "difficulty": "easy",
+    "question": "Link's horse Epona shares her name with a Gaulish/Celtic goddess associated with what?",
+    "correct": "Horses",
+    "incorrect": [
+      "The harvest",
+      "The sea",
+      "War"
+    ],
+    "note": "Epona is the Gaulish/Celtic goddess of horses; her name derives from Gaulish 'epo-' ('horse'), and she was the protector of horses, mules, and donkeys (later adopted by Roman cavalry). Verified via Wikipedia and Britannica.",
+    "source": "Wikipedia, 'Epona'; Britannica, 'Epona'"
+  },
+  {
+    "topicKey": "zelda-oot",
+    "category": "Zelda: Ocarina of Time",
+    "difficulty": "medium",
+    "question": "Because of the N64 controller's button limits, how many distinct notes can Link's ocarina play?",
+    "correct": "Five",
+    "incorrect": [
+      "Four",
+      "Six",
+      "Seven"
+    ],
+    "note": "The ocarina uses 5 buttons (A + the four C-buttons), mapping to the notes D, F, A, B, and D an octave higher.",
+    "source": "Zelda Wiki / Koji Kondo interviews; the ocarina uses the A button plus the four C-buttons"
+  },
+  {
+    "topicKey": "zelda-oot",
+    "category": "Zelda: Ocarina of Time",
+    "difficulty": "medium",
+    "question": "In early N64 cartridge versions (1.0 and 1.1), the Fire Temple music sampled recordings of what, later replaced with a wordless choir?",
+    "correct": "Islamic prayer chants",
+    "incorrect": [
+      "Gregorian chant",
+      "Buddhist sutras",
+      "Hindu mantras"
+    ],
+    "note": "The samples (from the \"Voice Spectral Vol. 1\" CD) included the Basmala, Al-Ikhlas, and Takbir. After complaints, version 1.2 replaced them with a synthesized choir; this version also has green (not red) Ganondorf blood, a common way fans tell the versions apart.",
+    "source": "Zelda Wiki, 'Fire Temple (Theme)'; Zelda Dungeon, 'The Fire Temple Controversy'"
+  },
+  {
+    "topicKey": "zelda-oot",
+    "category": "Zelda: Ocarina of Time",
+    "difficulty": "medium",
+    "question": "Ocarina of Time holds the record as the only video game with what Metacritic score?",
+    "correct": "99",
+    "incorrect": [
+      "98",
+      "97",
+      "100"
+    ],
+    "note": "Per Metacritic and Guinness World Records (\"Most critically acclaimed videogame\"), Ocarina of Time (N64, 1998) is the only game with a Metascore of 99. The next-highest is 98, held by other titles such as SoulCalibur and Grand Theft Auto IV. No game has a perfect 100.",
+    "source": "Guinness World Records, 'Most critically acclaimed videogame (Metacritic)'; Metacritic"
+  },
+  {
+    "topicKey": "zelda-oot",
+    "category": "Zelda: Ocarina of Time",
+    "difficulty": "medium",
+    "question": "According to Nintendo's official 'Hyrule Historia,' the ending of Ocarina of Time splits the Zelda timeline into how many separate branches?",
+    "correct": "Three",
+    "incorrect": [
+      "Two",
+      "Four",
+      "Five"
+    ],
+    "note": "Hyrule Historia (2011) established the official timeline's three-way split at Ocarina of Time's ending: the Child Timeline, the Adult Timeline, and the Fallen Hero (Downfall) Timeline.",
+    "source": "Hyrule Historia (2011); Zelda Wiki, 'The Legend of Zelda timeline'"
+  },
+  {
+    "topicKey": "zelda-oot",
+    "category": "Zelda: Ocarina of Time",
+    "difficulty": "medium",
+    "question": "After Link successfully lifts Ganondorf's curse from inside the Great Deku Tree, what happens to the tree?",
+    "correct": "He dies anyway",
+    "incorrect": [
+      "He is fully restored to health",
+      "He turns to stone",
+      "He uproots and leaves the forest"
+    ],
+    "note": "Even after defeating Queen Gohma and breaking the curse, the Great Deku Tree dies because the curse had already done fatal damage — \"I was doomed before you started.\" He entrusts Link with the Kokiri's Emerald before withering. The Deku Tree Sprout appears later in the adult timeline.",
+    "source": "Zelda Wiki, 'Great Deku Tree'; in-game dialogue after the first dungeon"
+  },
+  {
+    "topicKey": "pokemon",
+    "category": "Pokémon Gen 1 & 2",
+    "difficulty": "easy",
+    "question": "In the Gen 1 games, whose skull does a Cubone wear over its face as a helmet?",
+    "correct": "Its dead mother's",
+    "incorrect": [
+      "A defeated rival Cubone's",
+      "A wild Kangaskhan's",
+      "An ancient Aerodactyl's"
+    ],
+    "note": "Confirmed via the Pokémon Yellow Pokédex entry (\"Wears the skull of its deceased mother\") and the Marowak-ghost storyline in Pokémon Tower. The Cubone-Kangaskhan link is only a fan theory, so that distractor is safely wrong.",
+    "source": "Bulbapedia — Cubone (Pokémon) / Marowak (ghost)"
+  },
+  {
+    "topicKey": "pokemon",
+    "category": "Pokémon Gen 1 & 2",
+    "difficulty": "medium",
+    "question": "Kanto's towns are named after colors. What theme are Johto's towns named after?",
+    "correct": "Plants and trees",
+    "incorrect": [
+      "Metals and minerals",
+      "Rivers and lakes",
+      "Famous trainers"
+    ],
+    "note": "Bulbapedia confirms Kanto cities are named after colors while Johto towns are named after plants and trees (e.g., New Bark, Cherrygrove, Azalea, Goldenrod, Mahogany, Blackthorn). Verified correct and unambiguous.",
+    "source": "Bulbapedia — Kanto / Johto region naming"
+  },
+  {
+    "topicKey": "pokemon",
+    "category": "Pokémon Gen 1 & 2",
+    "difficulty": "medium",
+    "question": "In Ecruteak City's legend, which Pokémon resurrected the three that died in the Brass (Burned) Tower fire, creating Raikou, Entei, and Suicune?",
+    "correct": "Ho-Oh",
+    "incorrect": [
+      "Lugia",
+      "Celebi",
+      "Mew"
+    ],
+    "note": "Per Bulbapedia (Legendary beasts / Burned Tower): three unnamed Pokémon died in the Brass Tower fire; Ho-Oh resurrected them as Raikou (lightning), Entei (flames), and Suicune (rain that quenched the fire).",
+    "source": "Bulbapedia — Legendary beasts / Burned Tower"
+  },
+  {
+    "topicKey": "pokemon",
+    "category": "Pokémon Gen 1 & 2",
+    "difficulty": "medium",
+    "question": "According to Pokédex lore, what causes a Slowpoke to evolve into Slowbro?",
+    "correct": "A Shellder bites its tail",
+    "incorrect": [
+      "Trading it while it holds a King's Rock",
+      "Exposure to a Water Stone",
+      "Leveling up during a full moon"
+    ],
+    "note": "Iconic Gen 1 lore: a Shellder clamps onto Slowpoke's tail, triggering the evolution into Slowbro. The King's Rock distractor is deceptive because it IS a real Slowpoke evolution method — but it yields Slowking, not Slowbro.",
+    "source": "Bulbapedia — Slowbro (Pokémon)"
+  },
+  {
+    "topicKey": "pokemon",
+    "category": "Pokémon Gen 1 & 2",
+    "difficulty": "medium",
+    "question": "According to the Pokémon Mansion journals on Cinnabar Island, where was Mew originally discovered?",
+    "correct": "A jungle in Guyana, South America",
+    "incorrect": [
+      "A cave beneath Cinnabar Island",
+      "The Sevii Islands",
+      "Deep inside Mt. Moon"
+    ],
+    "note": "Confirmed via Bulbapedia — Pokémon Mansion journals. The journal entries (Red/Blue/Yellow) state a new Pokémon was found deep in the jungle of Guyana, South America, and named Mew. The Guyana reference was later removed in Let's Go Pikachu/Eevee, but it stands as canon for Gen 1/2.",
+    "source": "Bulbapedia — Pokémon Mansion journals"
+  },
+  {
+    "topicKey": "pokemon",
+    "category": "Pokémon Gen 1 & 2",
+    "difficulty": "medium",
+    "question": "According to Pokédex lore, where was Voltorb first sighted?",
+    "correct": "At a Poké Ball factory",
+    "incorrect": [
+      "Inside the Kanto Power Plant",
+      "In a Silph Co. laboratory",
+      "Among abandoned Poké Marts"
+    ],
+    "note": "Voltorb's FireRed Pokédex entry: \"Voltorb was first sighted at a company that manufactures Poké Balls. The link between that sighting and the fact that this Pokémon looks very similar to a Poké Ball remains a mystery.\" The Power Plant is a strong distractor because it's Voltorb's common in-game catch location, but it is not the \"first sighted\" lore.",
+    "source": "Bulbapedia — Voltorb (Pokémon)"
+  },
+  {
+    "topicKey": "pokemon",
+    "category": "Pokémon Gen 1 & 2",
+    "difficulty": "medium",
+    "question": "Grimer's Pokédex entry says it was born when sludge in a dirty stream was exposed to what?",
+    "correct": "The moon's X-rays",
+    "incorrect": [
+      "Radioactive waste",
+      "A bolt of lightning",
+      "Industrial acid"
+    ],
+    "note": "Grimer (#088, a Kanto Pokémon) is described in its Pokédex as having been born when sludge in a dirty stream was exposed to the moon's X-rays. This \"moon's X-rays\" origin first appeared in Gen 3 (FireRed) and is stated verbatim as \"born when sludge in a dirty stream was exposed to the moon's X-rays\" in Gen 8 (Sword). Note: the original main-series Gen 1 entries (Red/Blue: factory sludge; Yellow: hardened sludge) do NOT mention this, so the fact should not be attributed specifically to Gen 1. Source: Bulbapedia — Grimer (Pokémon).",
+    "source": "Bulbapedia — Grimer (Pokémon)"
+  },
+  {
+    "topicKey": "pokemon",
+    "category": "Pokémon Gen 1 & 2",
+    "difficulty": "medium",
+    "question": "Alakazam's Gen 1 Pokédex boasts that its ever-multiplying brain cells give it an IQ of roughly what?",
+    "correct": "5,000",
+    "incorrect": [
+      "1,000",
+      "10,000",
+      "500"
+    ],
+    "note": "Alakazam's Gen 1 (Red/Blue) Pokédex entry states its intelligence quotient is said to be 5,000, with a brain that outperforms a supercomputer. Verified via Bulbapedia and Pokémon Database.",
+    "source": "Bulbapedia — Alakazam (Pokémon)"
+  },
+  {
+    "topicKey": "lotr",
+    "category": "The Lord of the Rings",
+    "difficulty": "easy",
+    "question": "Who struck the killing blow that destroyed the Witch-king of Angmar at the Battle of the Pelennor Fields?",
+    "correct": "Éowyn",
+    "incorrect": [
+      "Aragorn",
+      "Éomer",
+      "Gandalf"
+    ],
+    "note": "Éowyn delivered the final killing blow, aided by Merry, whose enchanted Barrow-blade first broke the spell binding the Witch-king. This fulfilled the prophecy that he would fall to no living man (\"I am no man\"). Book: RotK, Book V, 'The Battle of the Pelennor Fields'.",
+    "source": "The Lord of the Rings: The Return of the King, Book V, 'The Battle of the Pelennor Fields'; Tolkien Gateway 'Éowyn'"
+  },
+  {
+    "topicKey": "lotr",
+    "category": "The Lord of the Rings",
+    "difficulty": "medium",
+    "question": "According to Gandalf, the value of Bilbo's mithril coat was greater than what?",
+    "correct": "The whole Shire and everything in it",
+    "incorrect": [
+      "The entire treasure hoard of Erebor",
+      "The kingdom of Rohan",
+      "The Arkenstone alone"
+    ],
+    "note": "In The Fellowship of the Ring ('A Journey in the Dark'), Gandalf says of the mithril coat Thorin gave Bilbo (later passed to Frodo): 'its worth was greater than the value of the whole Shire and everything in it.'",
+    "source": "The Lord of the Rings: The Fellowship of the Ring; Tolkien Gateway 'Mithril-coat'"
+  },
+  {
+    "topicKey": "lotr",
+    "category": "The Lord of the Rings",
+    "difficulty": "medium",
+    "question": "What was Gandalf's original name in Valinor, the Undying Lands, before he came to Middle-earth?",
+    "correct": "Olórin",
+    "incorrect": [
+      "Curumo",
+      "Aiwendil",
+      "Alatar"
+    ],
+    "note": "Olórin is Gandalf's Maia name in Valinor (Unfinished Tales, 'The Istari'). The distractors are the Valinorean names of the other Istari: Curumo (Saruman), Aiwendil (Radagast), and Alatar (a Blue Wizard).",
+    "source": "Unfinished Tales, 'The Istari'; Tolkien Gateway 'Gandalf'"
+  },
+  {
+    "topicKey": "lotr",
+    "category": "The Lord of the Rings",
+    "difficulty": "medium",
+    "question": "How old was Aragorn during the War of the Ring?",
+    "correct": "87",
+    "incorrect": [
+      "47",
+      "122",
+      "210"
+    ],
+    "note": "Aragorn was born 1 March T.A. 2931; during the War of the Ring (T.A. 3018-3019) he was 87 (turning 88 on 1 March 3019). 210 is his age at death, not during the War.",
+    "source": "The Lord of the Rings, Appendix A & B; Tolkien Gateway 'Aragorn II Elessar'"
+  },
+  {
+    "topicKey": "lotr",
+    "category": "The Lord of the Rings",
+    "difficulty": "medium",
+    "question": "After murdering his relative Déagol for the One Ring, what did Sméagol claim the Ring was, to justify taking it?",
+    "correct": "A birthday present",
+    "incorrect": [
+      "A family heirloom",
+      "A lost treasure of the river-folk",
+      "Payment for an old debt"
+    ],
+    "note": "From 'The Shadow of the Past' in The Fellowship of the Ring: it was Sméagol's birthday, and he insisted Déagol give him the Ring as a birthday present, then murdered him when refused.",
+    "source": "The Fellowship of the Ring, 'The Shadow of the Past'; Tolkien Gateway 'Déagol'"
+  },
+  {
+    "topicKey": "lotr",
+    "category": "The Lord of the Rings",
+    "difficulty": "medium",
+    "question": "Drinking Ent-draughts made Merry and Pippin the tallest Hobbits in Shire history, surpassing which earlier record-holder?",
+    "correct": "Bandobras 'Bullroarer' Took",
+    "incorrect": [
+      "Gerontius 'the Old' Took",
+      "Bilbo Baggins",
+      "Isengrim Took II"
+    ],
+    "note": "Per the Prologue of The Lord of the Rings, Bandobras 'Bullroarer' Took was four foot five and the tallest Hobbit on record, \"surpassed in all Hobbit records only by two famous characters of old\" — Merry and Pippin, whose growth came from Treebeard's Ent-draughts.",
+    "source": "The Lord of the Rings, Prologue; Tolkien Gateway 'Bandobras Took'"
+  },
+  {
+    "topicKey": "lotr",
+    "category": "The Lord of the Rings",
+    "difficulty": "medium",
+    "question": "The giant spider Shelob was said to be the last surviving child of which primordial being?",
+    "correct": "Ungoliant",
+    "incorrect": [
+      "Draugluin",
+      "Thuringwethil",
+      "Carcharoth"
+    ],
+    "note": "Per The Two Towers, \"Shelob's Lair\": Shelob is \"the last child of Ungoliant to trouble the unhappy world.\" Distractors are other legendarium monsters (a werewolf, a vampire, and a great wolf), none related to Shelob's parentage.",
+    "source": "The Two Towers, 'Shelob's Lair'; Tolkien Gateway 'Shelob'"
+  },
+  {
+    "topicKey": "lotr",
+    "category": "The Lord of the Rings",
+    "difficulty": "medium",
+    "question": "Tolkien took the name 'Gandalf' — along with nearly all the dwarf names in The Hobbit — from a dwarf-name list in which real-world source?",
+    "correct": "The Old Norse poem Völuspá",
+    "incorrect": [
+      "The Finnish Kalevala",
+      "The Old English Beowulf",
+      "The German Nibelungenlied"
+    ],
+    "note": "The dwarf-name list is the Dvergatal ('Catalogue of Dwarves'), a passage within Völuspá in the Poetic Edda. 'Gandalf' derives from Old Norse Gandalfr ('wand/staff-elf'). Distractors are strong because Tolkien drew on all three for OTHER elements (Kalevala → Quenya/Kullervo, Beowulf → Rohan/Smaug, Nibelungenlied → ring/Germanic material), but none is the dwarf-name source.",
+    "source": "Wikipedia 'Gandalf'; Tolkien Gateway 'Völuspá' (the Dvergatal / 'Catalogue of Dwarves')"
+  },
+  {
+    "topicKey": "mononoke",
+    "category": "Princess Mononoke",
+    "difficulty": "easy",
+    "question": "What is the name of Ashitaka's loyal red elk mount that carries him on his journey west?",
+    "correct": "Yakul",
+    "incorrect": [
+      "Moro",
+      "Okkoto",
+      "Nago"
+    ],
+    "note": "Yakul is Ashitaka's red elk (Akashishi) mount. The distractors are all other animal characters in the film — Moro the wolf goddess, Okkoto the blind boar god, and Nago the demon boar — so none can be mistaken as also-correct.",
+    "source": "Ghibli Wiki (Yakul) and Wikipedia: Princess Mononoke"
+  },
+  {
+    "topicKey": "mononoke",
+    "category": "Princess Mononoke",
+    "difficulty": "medium",
+    "question": "In which period of Japanese history is Princess Mononoke primarily set?",
+    "correct": "Muromachi period",
+    "incorrect": [
+      "Edo period",
+      "Heian period",
+      "Kamakura period"
+    ],
+    "note": "Set in the late Muromachi period (roughly 1336-1573); Miyazaki used this era of social upheaval to justify figures like Lady Eboshi. Confirmed via Wikipedia: Princess Mononoke.",
+    "source": "Wikipedia: Princess Mononoke (Setting)"
+  },
+  {
+    "topicKey": "mononoke",
+    "category": "Princess Mononoke",
+    "difficulty": "medium",
+    "question": "Which fantasy author wrote the English-language dub script for Princess Mononoke's 1999 Miramax release?",
+    "correct": "Neil Gaiman",
+    "incorrect": [
+      "Terry Pratchett",
+      "Clive Barker",
+      "Ursula K. Le Guin"
+    ],
+    "note": "Miramax first asked Quentin Tarantino to write the English adaptation; he recommended Gaiman. Gaiman's writing credit was left off the U.S. poster because the Weinsteins wanted their names on it. Ursula K. Le Guin is a strong distractor because Studio Ghibli did adapt her work (Tales from Earthsea, 2006) — but she had no role in Mononoke.",
+    "source": "Gizmodo and Wikipedia: Princess Mononoke"
+  },
+  {
+    "topicKey": "mononoke",
+    "category": "Princess Mononoke",
+    "difficulty": "medium",
+    "question": "The word 'mononoke' in the title is not a name — what does it actually refer to?",
+    "correct": "A vengeful or monstrous spirit",
+    "incorrect": [
+      "A forest princess",
+      "A wolf goddess",
+      "A sacred deer god"
+    ],
+    "note": "'Mononoke' (物の怪) literally means 'mystery of things' — an umbrella term in Japanese folklore for a supernatural, usually wrathful/vengeful spirit. The title 'Mononoke Hime' (Princess Mononoke) is what Irontown villagers call San, framing her as such a spirit; 'hime' (princess) is a separate word. Distractors are real film elements: Moro is the wolf goddess and the Shishigami is the deer god, but neither is the meaning of the word.",
+    "source": "Wikipedia and CBR: Princess Mononoke character guide"
+  },
+  {
+    "topicKey": "mononoke",
+    "category": "Princess Mononoke",
+    "difficulty": "medium",
+    "question": "Which actress voiced the wolf god Moro in the English dub of Princess Mononoke?",
+    "correct": "Gillian Anderson",
+    "incorrect": [
+      "Minnie Driver",
+      "Claire Danes",
+      "Sigourney Weaver"
+    ],
+    "note": "In the 1999 Miramax/Disney English dub, Gillian Anderson voiced Moro. Minnie Driver voiced Lady Eboshi and Claire Danes voiced San; Sigourney Weaver was not in the film.",
+    "source": "Wikipedia: Princess Mononoke (Voice cast)"
+  },
+  {
+    "topicKey": "mononoke",
+    "category": "Princess Mononoke",
+    "difficulty": "medium",
+    "question": "To which ancient people does the cursed prince Ashitaka belong?",
+    "correct": "The Emishi",
+    "incorrect": [
+      "The Ainu",
+      "The Yamato",
+      "The Jomon"
+    ],
+    "note": "Ashitaka is the last prince of the Emishi, an ancient people of the Tohoku/Honshu region who resisted the Yamato. Distractors are deliberately close: the Ainu and Jomon are peoples historically linked to the Emishi (related to / ancestral to), and the Yamato were their historical rivals — but none is the tribe he belongs to.",
+    "source": "Wikipedia: Princess Mononoke and Sannai-Maruyama references"
+  },
+  {
+    "topicKey": "mononoke",
+    "category": "Princess Mononoke",
+    "difficulty": "hard",
+    "question": "Of the roughly 144,000 hand-drawn cels in the film, about how many did Miyazaki personally correct or redraw?",
+    "correct": "About 80,000",
+    "incorrect": [
+      "About 15,000",
+      "About 40,000",
+      "About 110,000"
+    ],
+    "note": "Confirmed by Wikipedia (Princess Mononoke): ~144,000 total cels, and \"Miyazaki is estimated to have drawn or retouched nearly 80,000 cels himself.\" Consistent with Mental Floss / ScreenRant citing producer Toshio Suzuki.",
+    "source": "Mental Floss '13 Crowning Facts' and ScreenRant, citing producer Toshio Suzuki"
+  },
+  {
+    "topicKey": "mononoke",
+    "category": "Princess Mononoke",
+    "difficulty": "medium",
+    "question": "How did producer Toshio Suzuki protest Miramax's demand to cut the film for the U.S. release?",
+    "correct": "He sent a katana inscribed 'No Cuts'",
+    "incorrect": [
+      "He withdrew the film from the U.S.",
+      "He held a public press conference",
+      "He returned Miramax's advance payment"
+    ],
+    "note": "Miyazaki debunked the rumor that HE sent the sword, clarifying it was his producer, Toshio Suzuki, who presented Miramax a katana with the message 'No cuts.' The film ultimately released uncut in 1999.",
+    "source": "Wikipedia and Gizmodo: Princess Mononoke"
+  },
+  {
+    "topicKey": "starship-troopers",
+    "category": "Starship Troopers",
+    "difficulty": "easy",
+    "question": "Who directed the 1997 film Starship Troopers?",
+    "correct": "Paul Verhoeven",
+    "incorrect": [
+      "James Cameron",
+      "Roland Emmerich",
+      "Ridley Scott"
+    ],
+    "note": "Paul Verhoeven directed Starship Troopers (1997), his follow-up to RoboCop and Total Recall.",
+    "source": "Wikipedia, 'Starship Troopers (film)' (en.wikipedia.org/wiki/Starship_Troopers_(film))"
+  },
+  {
+    "topicKey": "starship-troopers",
+    "category": "Starship Troopers",
+    "difficulty": "easy",
+    "question": "Which actor plays the protagonist, Johnny Rico?",
+    "correct": "Casper Van Dien",
+    "incorrect": [
+      "Patrick Muldoon",
+      "Jake Busey",
+      "Matt Damon"
+    ],
+    "note": "Casper Van Dien starred as Johnny Rico. Patrick Muldoon (Zander Barcalow) and Jake Busey (Ace Levy) played other roles in the film; Matt Damon was not in it.",
+    "source": "Wikipedia, 'Starship Troopers (film)' cast section"
+  },
+  {
+    "topicKey": "starship-troopers",
+    "category": "Starship Troopers",
+    "difficulty": "medium",
+    "question": "Which actor plays psychic military-intelligence officer Carl Jenkins?",
+    "correct": "Neil Patrick Harris",
+    "incorrect": [
+      "Freddie Prinze Jr.",
+      "Ryan Phillippe",
+      "Chris O'Donnell"
+    ],
+    "note": "Carl Jenkins, Johnny Rico's friend, rises to a psychic military-intelligence role (the black SS-styled uniform in the finale); played by Neil Patrick Harris. The three distractors are 90s-era actors not in the film.",
+    "source": "Wikipedia, 'Starship Troopers (film)' cast section"
+  },
+  {
+    "topicKey": "starship-troopers",
+    "category": "Starship Troopers",
+    "difficulty": "medium",
+    "question": "Screenwriter Edward Neumeier had earlier written which other Paul Verhoeven satire?",
+    "correct": "RoboCop",
+    "incorrect": [
+      "Total Recall",
+      "Demolition Man",
+      "The Running Man"
+    ],
+    "note": "Edward Neumeier co-wrote RoboCop (1987) with Michael Miner; it, like Starship Troopers (1997), was directed by Paul Verhoeven. Total Recall is a Verhoeven film but Neumeier did not write it; Demolition Man and The Running Man are neither Verhoeven-directed nor Neumeier-written.",
+    "source": "Wikipedia, 'Starship Troopers (film)' / 'RoboCop' development"
+  },
+  {
+    "topicKey": "starship-troopers",
+    "category": "Starship Troopers",
+    "difficulty": "easy",
+    "question": "What recurring interactive prompt signs off the film's Federal Network propaganda broadcasts?",
+    "correct": "Would you like to know more?",
+    "incorrect": [
+      "Duty. Honor. Federation.",
+      "The future belongs to us",
+      "Enlist for Earth today"
+    ],
+    "note": "Confirmed correct answer and all 3 distractors as clearly wrong. \"Would you like to know more?\" is the film's famous FedNet segue/sign-off. Corrected a grammar typo in the stem (\"sign off's\" -> \"signs off\"); wording otherwise unchanged.",
+    "source": "Wikipedia, 'Starship Troopers (film)'; Medium essay 'Would You Like to Know More?'"
+  },
+  {
+    "topicKey": "starship-troopers",
+    "category": "Starship Troopers",
+    "difficulty": "hard",
+    "question": "The film's alien-planet surface battles were shot at which real location?",
+    "correct": "Hell's Half Acre, Wyoming",
+    "incorrect": [
+      "Monument Valley, Utah",
+      "Death Valley, California",
+      "White Sands, New Mexico"
+    ],
+    "note": "Hell's Half Acre in Natrona County, Wyoming stood in for the bug planets Klendathu and Planet P; principal photography spent about six weeks there starting April 1996.",
+    "source": "Wikipedia filming locations; movie-locations.com/movies/s/Starship-Troopers.php"
+  },
+  {
+    "topicKey": "starship-troopers",
+    "category": "Starship Troopers",
+    "difficulty": "medium",
+    "question": "What was Paul Verhoeven's notorious relationship with Robert Heinlein's source novel?",
+    "correct": "He never finished reading it",
+    "incorrect": [
+      "He memorized long passages",
+      "He reread it every year",
+      "He co-wrote it with Heinlein"
+    ],
+    "note": "Verhoeven has said he read only the first two chapters, found the book boring and too militaristic ('a very right-wing book,' per Empire), and had screenwriter Edward Neumeier summarize the rest.",
+    "source": "Empire interview via Wikipedia; American Reformer, 'Heinlein Vs. Verhoeven'"
+  },
+  {
+    "topicKey": "starship-troopers",
+    "category": "Starship Troopers",
+    "difficulty": "medium",
+    "question": "Starship Troopers earned a single Academy Award nomination, in which category?",
+    "correct": "Best Visual Effects",
+    "incorrect": [
+      "Best Sound",
+      "Best Original Score",
+      "Best Makeup"
+    ],
+    "note": "Nominated at the 70th Academy Awards (1998); lost Best Visual Effects to Titanic. It was the film's only Oscar nomination.",
+    "source": "Wikipedia, 'Starship Troopers (film)' accolades; 70th Academy Awards"
+  },
+  {
+    "topicKey": "matrix",
+    "category": "The Matrix",
+    "difficulty": "medium",
+    "question": "The rooftop \"bullet time\" shot of Neo bending backward to dodge Agent bullets was captured using roughly how many still cameras firing in sequence?",
+    "correct": "About 120",
+    "incorrect": [
+      "About 12",
+      "About 500",
+      "About 2,400"
+    ],
+    "note": "Confirmed: the famous rooftop bullet-time sequence used 120 still camera setups plus two film cameras (Collider; befores & afters).",
+    "source": "Wikipedia, \"Bullet time\"; Collider, \"The Matrix bullet time scene\""
+  },
+  {
+    "topicKey": "matrix",
+    "category": "The Matrix",
+    "difficulty": "hard",
+    "question": "Before Keanu Reeves was cast, the producers offered to rewrite Neo as a female character specifically to land which actress?",
+    "correct": "Sandra Bullock",
+    "incorrect": [
+      "Carrie-Anne Moss",
+      "Janet Jackson",
+      "Winona Ryder"
+    ],
+    "note": "Producer Lorenzo di Bonaventura confirmed they told Sandra Bullock they would change Neo to a woman for her; she passed, and the role went to Keanu Reeves. Source: Den of Geek / IndieWire / W Magazine.",
+    "source": "Den of Geek, \"The Matrix: Sandra Bullock Almost Cast as Neo\""
+  },
+  {
+    "topicKey": "matrix",
+    "category": "The Matrix",
+    "difficulty": "medium",
+    "question": "Gloria Foster played the Oracle in the first two films but was recast (with Mary Alice) for Revolutions. Why?",
+    "correct": "Foster died during filming",
+    "incorrect": [
+      "Foster retired from acting",
+      "A contract and pay dispute",
+      "A scheduling conflict with a Broadway play"
+    ],
+    "note": "Gloria Foster died September 29, 2001 of complications from diabetes during the back-to-back shoot of Reloaded and Revolutions; she completed her Reloaded scenes but not Revolutions, and Mary Alice took over the role.",
+    "source": "Wikipedia, \"The Oracle (The Matrix)\"; Screen Rant"
+  },
+  {
+    "topicKey": "matrix",
+    "category": "The Matrix",
+    "difficulty": "hard",
+    "question": "The nameplate on Morpheus's ship, the Nebuchadnezzar, reads \"Mark III No. 11\" — a nod to which biblical passage?",
+    "correct": "The Gospel of Mark, chapter 3, verse 11",
+    "incorrect": [
+      "The Book of Daniel, chapter 3, verse 11",
+      "Revelation, chapter 3, verse 11",
+      "The Gospel of Matthew, chapter 3, verse 11"
+    ],
+    "note": "The plate is styled like a manufacturer's model/serial number (\"Mark III No. 11\"), which is exactly why it doubles as Mark 3:11 — the verse where unclean spirits recognize Jesus as the Son of God, mirroring the crew's view of Neo.",
+    "source": "Wikipedia, \"Nebuchadnezzar (The Matrix)\""
+  },
+  {
+    "topicKey": "matrix",
+    "category": "The Matrix",
+    "difficulty": "medium",
+    "question": "The \"Burly Brawl\" in Reloaded, in which Neo fights roughly 100 copies of Agent Smith, reportedly cost how much to produce as a single sequence?",
+    "correct": "About $40 million",
+    "incorrect": [
+      "About $4 million",
+      "About $15 million",
+      "About $100 million"
+    ],
+    "note": "The Burly Brawl reportedly cost around $40 million and took roughly 27 days to shoot, using motion-capture and CGI to replicate ~100 digital Agent Smiths — one of the most expensive single scenes in film history at the time (the whole film's budget was ~$150M).",
+    "source": "No Film School, \"How The Matrix Reloaded Blew $40 Million on One Scene\""
+  },
+  {
+    "topicKey": "matrix",
+    "category": "The Matrix",
+    "difficulty": "medium",
+    "question": "For the Reloaded highway chase, the production built its own custom multi-lane freeway on what kind of site?",
+    "correct": "A decommissioned naval air station",
+    "incorrect": [
+      "A dry lake bed in Nevada",
+      "A closed stretch of the German Autobahn",
+      "A drained California reservoir"
+    ],
+    "note": "The custom ~1.25-mile freeway was built on the runways of the decommissioned Naval Air Station Alameda, California, for the chase sequence, then demolished.",
+    "source": "Dangerousroads, \"The Matrix Reloaded Highway\"; Wikipedia, \"Naval Air Station Alameda\""
+  },
+  {
+    "topicKey": "matrix",
+    "category": "The Matrix",
+    "difficulty": "medium",
+    "question": "In the Architect's monologue in Reloaded, Neo is revealed to be which iteration of \"the One\"?",
+    "correct": "The sixth",
+    "incorrect": [
+      "The first",
+      "The third",
+      "The seventh"
+    ],
+    "note": "The Architect says \"this is the sixth version,\" meaning Zion had been rebuilt and destroyed five times before Neo. This iteration is distinct because Neo attaches to one person (Trinity) rather than to humanity in general.",
+    "source": "Matrix Wiki, \"The Architect (scene)\"; Screen Rant"
+  },
+  {
+    "topicKey": "matrix",
+    "category": "The Matrix",
+    "difficulty": "hard",
+    "question": "What injury limited Keanu Reeves during the four months of martial-arts training for the first Matrix?",
+    "correct": "Recent cervical spine (neck) surgery",
+    "incorrect": [
+      "A torn knee ligament",
+      "A broken ankle",
+      "A dislocated shoulder"
+    ],
+    "note": "Reeves had a two-level cervical fusion (a plate in his neck) for spinal stenosis just before training and wore a neck brace during the four-month kung-fu prep, keeping it secret so he wouldn't lose the role.",
+    "source": "SlashFilm, \"Keanu Reeves Wasn't Exactly In Fighting Shape\"; Kung-fu Kingdom"
+  },
+  {
+    "topicKey": "dissection",
+    "category": "Dissection (band)",
+    "difficulty": "easy",
+    "question": "Who was the guitarist, vocalist, and primary songwriter who founded and led Dissection?",
+    "correct": "Jon Nödtveidt",
+    "incorrect": [
+      "Quorthon",
+      "Euronymous",
+      "Set Teitan"
+    ],
+    "note": "Jon Nödtveidt founded Dissection in 1989 and remained its guitarist, lead vocalist, and chief songwriter until his death in 2006. Quorthon (Bathory), Euronymous (Mayhem), and Set Teitan (a later live/session guitarist in Dissection, but never its leader or vocalist) are all incorrect.",
+    "source": "Wikipedia: Jon Nödtveidt / Dissection (band)"
+  },
+  {
+    "topicKey": "dissection",
+    "category": "Dissection (band)",
+    "difficulty": "easy",
+    "question": "Which 1995 record was Dissection's second studio album, widely praised for fusing black metal with Gothenburg melodic death?",
+    "correct": "Storm of the Light's Bane",
+    "incorrect": [
+      "The Somberlain",
+      "Reinkaos",
+      "Live Legacy"
+    ],
+    "note": "Confirmed via Wikipedia and Encyclopaedia Metallum. Released 17 Nov 1995 (Nuclear Blast), second of three studio albums. The Somberlain = 1993 debut; Reinkaos = 2006 final album; Live Legacy = 2003 live album (not studio).",
+    "source": "Wikipedia: Storm of the Light's Bane"
+  },
+  {
+    "topicKey": "dissection",
+    "category": "Dissection (band)",
+    "difficulty": "medium",
+    "question": "Which producer engineered and mixed both The Somberlain and Storm of the Light's Bane at Unisound studio?",
+    "correct": "Dan Swanö",
+    "incorrect": [
+      "Peter Tägtgren",
+      "Fredrik Nordström",
+      "Tomas Skogsberg"
+    ],
+    "note": "Dan Swanö ran Unisound (also credited as Hellspawn Studio) and served as recording/mixing engineer on both Dissection albums; he remastered The Somberlain in 2022. Distractors are real Swedish producers at other studios — Tägtgren (Abyss), Nordström (Studio Fredman), Skogsberg (Sunlight) — none tied to these records.",
+    "source": "Wikipedia: The Somberlain / Storm of the Light's Bane"
+  },
+  {
+    "topicKey": "dissection",
+    "category": "Dissection (band)",
+    "difficulty": "medium",
+    "question": "Jon Nödtveidt was imprisoned in 1997, forcing Dissection to disband. What crime was he convicted of being an accessory to?",
+    "correct": "Murder",
+    "incorrect": [
+      "Church arson",
+      "Grave desecration",
+      "Weapons trafficking"
+    ],
+    "note": "Nödtveidt was convicted (July 1998) as an accessory to the 1997 murder of Josef ben Meddour in Gothenburg; sentenced to 10 years, released 2004. Church arson and grave desecration belong to the Norwegian black metal scene, not to this case.",
+    "source": "Wikipedia: Jon Nödtveidt (conviction, July 1998)"
+  },
+  {
+    "topicKey": "dissection",
+    "category": "Dissection (band)",
+    "difficulty": "medium",
+    "question": "Dissection's final album Reinkaos (2006) was released through the band's own label. What was it called?",
+    "correct": "Black Horizon Music",
+    "incorrect": [
+      "Nuclear Blast",
+      "No Fashion Records",
+      "Osmose Productions"
+    ],
+    "note": "Confirmed correct. Black Horizon Music was the imprint Jon Nodtveidt formed to self-release Reinkaos \"without compromise.\" Distractors are genuine Dissection-adjacent labels (No Fashion = The Somberlain, Nuclear Blast = Storm of the Light's Bane, Osmose = European reissues) but none is the band's own label, so all three are clearly wrong for this question.",
+    "source": "Wikipedia: Reinkaos"
+  },
+  {
+    "topicKey": "dissection",
+    "category": "Dissection (band)",
+    "difficulty": "hard",
+    "question": "The lyrics of Reinkaos drew their 'magical formulae' from a grimoire tied to the Misanthropic Luciferian Order. Which book?",
+    "correct": "Liber Azerate",
+    "incorrect": [
+      "The Necronomicon",
+      "Liber AL vel Legis",
+      "Liber Null"
+    ],
+    "note": "Confirmed accurate. Liber Azerate is the MLO grimoire (by Frater Nemidial) from which Reinkaos took its magical formulae; Nodtveidt was an MLO member. Distractors are all real but from unrelated traditions (Lovecraft fiction; Crowley/Thelema; Carroll/chaos magic), so none is ambiguously correct. Sources: en.wikipedia.org/wiki/Reinkaos, metal-archives.com.",
+    "source": "Wikipedia: Reinkaos / Dissection (band)"
+  },
+  {
+    "topicKey": "dissection",
+    "category": "Dissection (band)",
+    "difficulty": "medium",
+    "question": "The cover art of both The Somberlain and Storm of the Light's Bane was painted by an artist known as 'Necrolord.' What is his real name?",
+    "correct": "Kristian Wåhlin",
+    "incorrect": [
+      "Joachim Luetke",
+      "Zbigniew Bielak",
+      "Travis Smith"
+    ],
+    "note": "Necrolord = Kristian Wåhlin painted both album covers (The Somberlain 1993, Storm of the Light's Bane 1995). Verified via en.wikipedia.org/wiki/Kristian_Wåhlin and en.wikipedia.org/wiki/Storm_of_the_Light's_Bane. Distractors are real metal cover artists (Luetke, Bielak, Smith) but none is Necrolord.",
+    "source": "Wikipedia: Kristian Wåhlin"
+  },
+  {
+    "topicKey": "dissection",
+    "category": "Dissection (band)",
+    "difficulty": "hard",
+    "question": "Set Teitan, guitarist in Dissection's 2004 reformation lineup, went on to serve for years as lead guitarist of which black metal band?",
+    "correct": "Watain",
+    "incorrect": [
+      "Marduk",
+      "Dark Funeral",
+      "Mayhem"
+    ],
+    "note": "Correct answer Watain confirmed (Set Teitan = Davide Totaro; Dissection 2004-2006, Watain live/lead guitarist 2005-2018). Distractor \"Behemoth\" was replaced with \"Mayhem\": Set Teitan actually toured as a session guitarist with Behemoth in 2018 (the Brooklyn Nazi-salute incident was at a Behemoth show), so it was an ambiguous near-miss rather than a clean distractor. Marduk and Dark Funeral kept — both prominent Swedish black metal bands Set Teitan never played in. Mayhem is likewise clearly wrong.",
+    "source": "Wikipedia: Set Teitan"
+  },
+  {
+    "topicKey": "ancient-history",
+    "category": "Ancient History",
+    "difficulty": "easy",
+    "question": "Caligula reportedly planned to appoint which of his animals as a Roman consul?",
+    "correct": "His horse, Incitatus",
+    "incorrect": [
+      "His hunting hound",
+      "His pet leopard",
+      "A sacred bull"
+    ],
+    "note": "From Suetonius (Life of Caligula 55) and Cassius Dio: Caligula gave Incitatus a marble stall, ivory manger, and purple blankets, and reportedly intended to make him consul. The 'reportedly' framing correctly reflects the debatable reliability of these ancient anecdotes.",
+    "source": "https://en.wikipedia.org/wiki/Incitatus"
+  },
+  {
+    "topicKey": "ancient-history",
+    "category": "Ancient History",
+    "difficulty": "easy",
+    "question": "The Rosetta Stone carries the same decree in Egyptian hieroglyphs, Demotic script, and which third script?",
+    "correct": "Ancient Greek",
+    "incorrect": [
+      "Latin",
+      "Coptic",
+      "Aramaic"
+    ],
+    "note": "Verified correct and unchanged. The Rosetta Stone records the Memphis Decree (196 BC) in three scripts: hieroglyphic, Demotic, and Greek; the Greek text enabled Champollion's decipherment. Distractors confirmed wrong — Latin (no Roman presence in Ptolemaic Egypt yet), Coptic (a later stage of Egyptian, did not exist until centuries later), and Aramaic (not on the stone).",
+    "source": "https://en.wikipedia.org/wiki/Rosetta_Stone"
+  },
+  {
+    "topicKey": "ancient-history",
+    "category": "Ancient History",
+    "difficulty": "medium",
+    "question": "The world's oldest surviving law code, older than Hammurabi's by about three centuries, is named for which Sumerian king?",
+    "correct": "Ur-Nammu of Ur",
+    "incorrect": [
+      "Sargon of Akkad",
+      "Ashurbanipal",
+      "Nebuchadnezzar II"
+    ],
+    "note": "Code of Ur-Nammu (c. 2100-2050 BCE), Third Dynasty of Ur, is the oldest surviving law code; attributed to Ur-Nammu or his son Shulgi. The word 'surviving' is load-bearing (the older Urukagina reforms don't survive as a text), so the claim holds.",
+    "source": "https://en.wikipedia.org/wiki/Code_of_Ur-Nammu"
+  },
+  {
+    "topicKey": "ancient-history",
+    "category": "Ancient History",
+    "difficulty": "medium",
+    "question": "According to Herodotus, the runner Pheidippides was sent from Athens to which city to beg for military help before the Battle of Marathon?",
+    "correct": "Sparta",
+    "incorrect": [
+      "Thebes",
+      "Corinth",
+      "Plataea"
+    ],
+    "note": "Herodotus (Histories, Book VI, 105-106) records that Pheidippides ran from Athens to Sparta to seek aid; the famous Marathon-to-Athens death run is a later legend, not in Herodotus.",
+    "source": "https://en.wikipedia.org/wiki/Pheidippides"
+  },
+  {
+    "topicKey": "ancient-history",
+    "category": "Ancient History",
+    "difficulty": "easy",
+    "question": "Which Roman naturalist, author of the encyclopedic 'Natural History,' died during the 79 AD eruption of Mount Vesuvius?",
+    "correct": "Pliny the Elder",
+    "incorrect": [
+      "Pliny the Younger",
+      "Seneca the Younger",
+      "Tacitus"
+    ],
+    "note": "Pliny the Elder (Gaius Plinius Secundus) authored Naturalis Historia and died near Stabiae during the 79 AD Vesuvius eruption. His nephew Pliny the Younger witnessed it from across the bay, survived, and later described it in letters to Tacitus.",
+    "source": "https://en.wikipedia.org/wiki/Pliny_the_Elder"
+  },
+  {
+    "topicKey": "ancient-history",
+    "category": "Ancient History",
+    "difficulty": "medium",
+    "question": "The Antikythera mechanism, a geared bronze device recovered from a Greek shipwreck, is best understood as a machine for predicting what?",
+    "correct": "Astronomical positions and eclipses",
+    "incorrect": [
+      "Ocean tides for sailors",
+      "Grain harvest yields",
+      "Prime numbers for surveyors"
+    ],
+    "note": "Verified against well-established scholarship: the Antikythera mechanism (recovered c. 1901 from a shipwreck off Antikythera) is an ancient analog computer that modeled the positions of the Sun, Moon, and planets and predicted eclipses, and also tracked calendar and Olympiad cycles. Distractors are unambiguously incorrect.",
+    "source": "https://en.wikipedia.org/wiki/Antikythera_mechanism"
+  },
+  {
+    "topicKey": "ancient-history",
+    "category": "Ancient History",
+    "difficulty": "medium",
+    "question": "Linear B, the Bronze Age script famously deciphered by Michael Ventris in 1952, was shown to record an early form of which language?",
+    "correct": "Greek",
+    "incorrect": [
+      "Phoenician",
+      "Hittite",
+      "Etruscan"
+    ],
+    "note": "Linear B records Mycenaean Greek, the oldest attested form of the Greek language. Ventris announced the decipherment in 1952, working with John Chadwick.",
+    "source": "https://en.wikipedia.org/wiki/Linear_B"
+  },
+  {
+    "topicKey": "ancient-history",
+    "category": "Ancient History",
+    "difficulty": "medium",
+    "question": "Who is the earliest author in world history known by name, an Akkadian high priestess who signed her hymns to the goddess Inanna?",
+    "correct": "Enheduanna",
+    "incorrect": [
+      "Sappho",
+      "Nefertiti",
+      "Hatshepsut"
+    ],
+    "note": "Enheduanna (c. 2285-2250 BCE) was high priestess of the moon god Nanna at Ur and daughter of Sargon of Akkad; her signed hymns to Inanna make her the first named author in recorded history.",
+    "source": "https://www.worldhistory.org/Enheduanna/"
+  },
+  {
+    "topicKey": "megaliths",
+    "category": "Megaliths",
+    "difficulty": "easy",
+    "question": "Göbekli Tepe, often called the world's oldest known monumental temple complex, is located in which modern country?",
+    "correct": "Turkey",
+    "incorrect": [
+      "Syria",
+      "Iraq",
+      "Lebanon"
+    ],
+    "note": "Göbekli Tepe sits near Şanlıurfa in southeastern Turkey; UNESCO World Heritage Site #1572, inscribed 2018.",
+    "source": "UNESCO World Heritage Centre listing (whc.unesco.org/en/list/1572)"
+  },
+  {
+    "topicKey": "megaliths",
+    "category": "Megaliths",
+    "difficulty": "medium",
+    "question": "The Carnac stone alignments, the largest collection of standing stones in the world, are found in which region?",
+    "correct": "Brittany, France",
+    "incorrect": [
+      "Cornwall, England",
+      "Galicia, Spain",
+      "County Kerry, Ireland"
+    ],
+    "note": "Carnac is in the Morbihan department of Brittany, France; its 3,000+ menhirs form the world's largest such collection (Neolithic, c. 4500–3300 BC).",
+    "source": "Carnac stones, Wikipedia; menhirs-carnac.fr"
+  },
+  {
+    "topicKey": "megaliths",
+    "category": "Megaliths",
+    "difficulty": "medium",
+    "question": "At Newgrange in Ireland, sunlight famously floods the inner chamber through a purpose-built 'roof-box' at sunrise on which day of the year?",
+    "correct": "The winter solstice",
+    "incorrect": [
+      "The summer solstice",
+      "The spring equinox",
+      "The autumn equinox"
+    ],
+    "note": "Newgrange (Brú na Bóinne, c. 3200 BCE) has a stone roof-box above the entrance; at dawn on the winter solstice (around Dec 21, for several days) a beam travels the 19m passage to light the burial chamber. Distractors are all clearly wrong — no equinox or summer-solstice alignment exists at Newgrange.",
+    "source": "newgrange.com winter solstice pages; National Museum of Ireland"
+  },
+  {
+    "topicKey": "megaliths",
+    "category": "Megaliths",
+    "difficulty": "medium",
+    "question": "Stonehenge's builders locked the sarsen uprights to their horizontal lintels using which joinery technique normally associated with woodworking?",
+    "correct": "Mortise and tenon",
+    "incorrect": [
+      "Dovetail joints",
+      "Dowel pegs and glue",
+      "Iron cramps"
+    ],
+    "note": "Confirmed by English Heritage ('The Stones of Stonehenge'): mortise-and-tenon joints fix the uprights to the lintels; tongue-and-groove joints lock adjacent lintels together. Both are woodworking techniques applied to stone.",
+    "source": "English Heritage, 'The Stones of Stonehenge'"
+  },
+  {
+    "topicKey": "megaliths",
+    "category": "Megaliths",
+    "difficulty": "medium",
+    "question": "The Ġgantija temples, among the oldest free-standing stone structures on Earth, sit on which Mediterranean island?",
+    "correct": "Gozo (Malta)",
+    "incorrect": [
+      "Sardinia",
+      "Crete",
+      "Cyprus"
+    ],
+    "note": "Ġgantija (c. 3600 BCE) is on Gozo in the Maltese archipelago, part of the UNESCO 'Megalithic Temples of Malta'; it predates Stonehenge and the Egyptian pyramids.",
+    "source": "Ġgantija, Wikipedia; UNESCO 'Megalithic Temples of Malta'"
+  },
+  {
+    "topicKey": "megaliths",
+    "category": "Megaliths",
+    "difficulty": "medium",
+    "question": "A 2024 study concluded that Stonehenge's six-tonne Altar Stone most likely originated in which region, overturning a century of belief that it was Welsh?",
+    "correct": "Northeast Scotland",
+    "incorrect": [
+      "The Preseli Hills, Wales",
+      "West Woods, Wiltshire",
+      "Cornwall"
+    ],
+    "note": "The Nature study (Clarke et al., 2024; UCL News, Aug 2024) matched the Altar Stone's mineral age/chemistry to the Orcadian Basin of northeast Scotland. The distractors are the real sources of Stonehenge's OTHER stones: Preseli Hills = bluestones; West Woods, Wiltshire = sarsens; Cornwall = none.",
+    "source": "UCL News, Aug 2024; Clarke et al., Nature (2024)"
+  },
+  {
+    "topicKey": "megaliths",
+    "category": "Megaliths",
+    "difficulty": "medium",
+    "question": "Göbekli Tepe's massive enclosures survived so well largely because, around 8000 BCE, the people there did what to them?",
+    "correct": "Deliberately buried them under rubble and debris",
+    "incorrect": [
+      "Encased the pillars in mud brick",
+      "Submerged them beneath a reservoir",
+      "Dismantled and carried them away"
+    ],
+    "note": "Excavators at the German Archaeological Institute found the Layer III enclosures were intentionally backfilled with limestone rubble, animal bones, and flint fragments around 8000 BCE; this rapid, deliberate burial protected the T-shaped pillars, which is why they survived in place.",
+    "source": "German Archaeological Institute; gobekli-tepe.com, 'Why Was Göbekli Tepe Buried?'"
+  },
+  {
+    "topicKey": "megaliths",
+    "category": "Megaliths",
+    "difficulty": "medium",
+    "question": "Silbury Hill, part of the Avebury megalithic landscape in Wiltshire, holds which distinction?",
+    "correct": "Tallest prehistoric man-made mound in Europe",
+    "incorrect": [
+      "Largest stone circle in the world",
+      "Oldest passage tomb in Britain",
+      "Britain's longest single stone row"
+    ],
+    "note": "Silbury Hill is a ~39 m Neolithic artificial chalk mound (c. 2470-2350 BC). No burial has ever been found in it, so it is not a tomb; the largest stone circle is neighbouring Avebury.",
+    "source": "Silbury Hill, Wikipedia; English Heritage"
+  },
+  {
+    "topicKey": "options-trading",
+    "category": "Options Trading",
+    "difficulty": "easy",
+    "question": "How many shares of the underlying stock does one standard U.S. equity options contract represent?",
+    "correct": "100 shares",
+    "incorrect": [
+      "10 shares",
+      "500 shares",
+      "1,000 shares"
+    ],
+    "note": "A standard U.S. equity options contract carries a multiplier of 100, so one contract controls 100 shares. The \"10 shares\" figure refers to discontinued non-standard \"mini options,\" not standard contracts.",
+    "source": "The Options Clearing Corporation, 'Options 101' equity options primer (theocc.com)"
+  },
+  {
+    "topicKey": "options-trading",
+    "category": "Options Trading",
+    "difficulty": "medium",
+    "question": "When the Chicago Board Options Exchange opened for trading in April 1973, which kind of option could you actually trade?",
+    "correct": "Call options only",
+    "incorrect": [
+      "Put options only",
+      "Both calls and puts",
+      "Stock-index options"
+    ],
+    "note": "CBOE opened April 26, 1973 listing only call options on 16 stocks. Listed puts followed in 1977; stock-index options (OEX/S&P 100) in 1983.",
+    "source": "Cboe, 'The Creation of Listed Options at Cboe' (cboe.com); Wikipedia: Cboe Global Markets"
+  },
+  {
+    "topicKey": "options-trading",
+    "category": "Options Trading",
+    "difficulty": "medium",
+    "question": "Which ancient Greek thinker is credited with the first recorded call option, paying deposits to reserve olive presses before a big harvest?",
+    "correct": "Thales of Miletus",
+    "incorrect": [
+      "Socrates",
+      "Plato",
+      "Pythagoras"
+    ],
+    "note": "Aristotle, Politics I.11 (Bekker 1259a): Thales used astronomical foresight to reserve olive presses cheaply in the off-season, then let them at a premium during the harvest — the classic first-recorded-call-option anecdote.",
+    "source": "Aristotle, 'Politics' 1259a (Perseus Digital Library); Wikipedia: Thales of Miletus"
+  },
+  {
+    "topicKey": "options-trading",
+    "category": "Options Trading",
+    "difficulty": "medium",
+    "question": "As a rough rule of thumb, an option with a delta of 0.30 is often read as having about what probability of expiring in the money?",
+    "correct": "About 30%",
+    "incorrect": [
+      "About 3%",
+      "About 50%",
+      "About 70%"
+    ],
+    "note": "Delta is commonly used as a quick proxy for the (risk-neutral) probability an option finishes in the money, so a 0.30 delta ≈ ~30%. Technically delta = N(d1) slightly overstates the true ITM probability N(d2), but the question explicitly frames it as a rough rule of thumb, which is correct.",
+    "source": "Wikipedia: Greeks (finance); Fidelity, 'Options delta' explainer"
+  },
+  {
+    "topicKey": "options-trading",
+    "category": "Options Trading",
+    "difficulty": "medium",
+    "question": "The CBOE Volatility Index (VIX), Wall Street's 'fear gauge,' measures the market's expected volatility over roughly what forward horizon?",
+    "correct": "30 days",
+    "incorrect": [
+      "7 days",
+      "90 days",
+      "1 year"
+    ],
+    "note": "The VIX is a 30-day forward-looking measure of expected volatility, derived from SPX (S&P 500) option prices. Note: Cboe publishes related indices at other horizons (e.g., the 3-month VIX3M/VXV near 90 days), but the VIX itself is the 30-day gauge — so '90 days' is a genuinely wrong distractor, not a synonym.",
+    "source": "Wikipedia: VIX; Cboe VIX methodology white paper"
+  },
+  {
+    "topicKey": "options-trading",
+    "category": "Options Trading",
+    "difficulty": "medium",
+    "question": "Which co-creator of the Black-Scholes options-pricing model had died by 1995 and so could not share the 1997 Nobel Memorial Prize awarded to his collaborators?",
+    "correct": "Fischer Black",
+    "incorrect": [
+      "Paul Samuelson",
+      "Eugene Fama",
+      "Robert Solow"
+    ],
+    "note": "Fischer Black died in August 1995; the 1997 Nobel Memorial Prize in Economic Sciences went to Myron Scholes and Robert C. Merton, and the Nobel is not awarded posthumously.",
+    "source": "Nobel Prize press release, Economic Sciences 1997 (nobelprize.org); Wikipedia: Myron Scholes"
+  },
+  {
+    "topicKey": "options-trading",
+    "category": "Options Trading",
+    "difficulty": "hard",
+    "question": "Which second-order Greek measures how an option's delta drifts purely from the passage of time, so a position's delta can shift over a weekend even if the stock never moves?",
+    "correct": "Charm",
+    "incorrect": [
+      "Vanna",
+      "Vomma",
+      "Color"
+    ],
+    "note": "Charm (a.k.a. delta decay, DdeltaDtime) is the rate of change of delta with respect to time. Distractors are all real Greeks but measure different things: Vanna = delta's sensitivity to volatility; Vomma/volga = vega's sensitivity to volatility; Color = gamma decay (rate of change of gamma over time). Verified against Quantsapp and Pro Trader Dashboard.",
+    "source": "Wikipedia: Greeks (finance); Macroption, 'Higher Order Greeks'"
+  },
+  {
+    "topicKey": "options-trading",
+    "category": "Options Trading",
+    "difficulty": "hard",
+    "question": "Which 19th-century financier, dubbed 'The Father of Puts and Calls,' used put-call parity to build synthetic loans that skirted New York's usury laws?",
+    "correct": "Russell Sage",
+    "incorrect": [
+      "Jay Gould",
+      "Daniel Drew",
+      "Jesse Livermore"
+    ],
+    "note": "Russell Sage (1816-1906), nicknamed 'Old Straddle,' was convicted in 1869 (fined $500) for using put/call/stock combinations to synthesize loans at rates above NY usury limits.",
+    "source": "Wikipedia: Put-call parity; Panoptic, 'The Father of Options' (panoptic.xyz)"
+  },
+  {
+    "topicKey": "vibe-coding",
+    "category": "Vibe Coding",
+    "difficulty": "medium",
+    "question": "Who coined the term \"vibe coding\" in a viral early-2025 post?",
+    "correct": "Andrej Karpathy",
+    "incorrect": [
+      "Simon Willison",
+      "Garry Tan",
+      "Rick Rubin"
+    ],
+    "note": "Karpathy introduced \"vibe coding\" on X on Feb 2, 2025 (x.com/karpathy/status/1886192184808149383). Simon Willison later wrote well-known definitional commentary on it, Garry Tan helped popularize it, and Rick Rubin released \"The Way of Code\" building on the idea — none coined the term.",
+    "source": "Andrej Karpathy on X, Feb 2, 2025 (x.com/karpathy/status/1886192184808149383); Wikipedia \"Vibe coding\""
+  },
+  {
+    "topicKey": "vibe-coding",
+    "category": "Vibe Coding",
+    "difficulty": "medium",
+    "question": "Which dictionary named \"vibe coding\" its Word of the Year for 2025?",
+    "correct": "Collins Dictionary",
+    "incorrect": [
+      "Merriam-Webster",
+      "Oxford",
+      "Cambridge"
+    ],
+    "note": "Collins Dictionary announced \"vibe coding\" as its 2025 Word of the Year on Nov 6, 2025, defining it as using AI prompted by natural language to help write code (term popularized by Andrej Karpathy). The other 2025 picks: Oxford = \"rage bait\", Cambridge = \"parasocial\", Merriam-Webster = \"slop\".",
+    "source": "Collins Dictionary Word of the Year 2025 announcement; CNN, Nov 6, 2025"
+  },
+  {
+    "topicKey": "vibe-coding",
+    "category": "Vibe Coding",
+    "difficulty": "medium",
+    "question": "Which AI code editor did Karpathy name in his original vibe-coding post?",
+    "correct": "Cursor (Composer)",
+    "incorrect": [
+      "GitHub Copilot",
+      "Replit Agent",
+      "Windsurf"
+    ],
+    "note": "Karpathy's original tweet (Feb 2, 2025) reads: \"It's possible because the LLMs (e.g. Cursor Composer w Sonnet) are getting too good.\" The only AI code editor he named was Cursor (Composer); he also mentioned SuperWhisper for voice, but that is not a code editor.",
+    "source": "Andrej Karpathy on X, Feb 2, 2025"
+  },
+  {
+    "topicKey": "vibe-coding",
+    "category": "Vibe Coding",
+    "difficulty": "medium",
+    "question": "In his tweet, Karpathy said he barely touched the keyboard because he talked to the assistant using which voice tool?",
+    "correct": "SuperWhisper",
+    "incorrect": [
+      "Dragon NaturallySpeaking",
+      "Otter.ai",
+      "Whisper Flow"
+    ],
+    "note": "Karpathy's coining tweet (X, Feb 2, 2025): \"Also I just talk to Composer with SuperWhisper so I barely even touch the keyboard.\" Confirmed via the tweet and superwhisper.com.",
+    "source": "Andrej Karpathy on X, Feb 2, 2025"
+  },
+  {
+    "topicKey": "vibe-coding",
+    "category": "Vibe Coding",
+    "difficulty": "medium",
+    "question": "In the original tweet, how did Karpathy describe handling the AI's code changes?",
+    "correct": "Accepts all, doesn't read the diffs",
+    "incorrect": [
+      "Reviews every diff line by line",
+      "Writes tests for each change",
+      "Commits only after manual QA"
+    ],
+    "note": "Direct paraphrase of Karpathy's line \"I 'Accept All' always, I don't read the diffs anymore\" from the vibe coding tweet (X, Feb 2, 2025).",
+    "source": "Andrej Karpathy on X, Feb 2, 2025; Simon Willison, simonwillison.net, Feb 6, 2025"
+  },
+  {
+    "topicKey": "vibe-coding",
+    "category": "Vibe Coding",
+    "difficulty": "medium",
+    "question": "In March 2025, YC's Garry Tan said that for a quarter of the Winter 2025 batch, what share of their code was AI-generated?",
+    "correct": "95%",
+    "incorrect": [
+      "50%",
+      "75%",
+      "100%"
+    ],
+    "note": "Garry Tan (YC CEO) on X, Mar 6, 2025: \"For 25% of the Winter 2025 batch, 95% of lines of code are LLM generated. That's not a typo. The age of vibe coding is here.\" Corroborated by TechCrunch, Mar 6, 2025.",
+    "source": "Garry Tan on X, Mar 6, 2025; TechCrunch, Mar 6, 2025"
+  },
+  {
+    "topicKey": "vibe-coding",
+    "category": "Vibe Coding",
+    "difficulty": "hard",
+    "question": "Simon Willison argued that if you fully review, test, and understand AI-written code, it isn't vibe coding but using the LLM as what?",
+    "correct": "A typing assistant",
+    "incorrect": [
+      "A pair programmer",
+      "A code reviewer",
+      "A rubber duck"
+    ],
+    "note": "Correct answer is Willison's own words. Verbatim quote: \"If an LLM wrote every line of your code, but you've reviewed, tested, and understood it all, that's not vibe coding in my book—that's using an LLM as a typing assistant.\" Attribution note: this exact \"typing assistant\" phrasing comes from Willison as quoted in Ars Technica (Benj Edwards, \"Will the future of software development run on vibes?\", Mar 5 2025), not verbatim from the cited blog post \"Not all AI-assisted programming is vibe coding\" (Mar 19 2025), where he frames the same idea as \"software development.\" Consider updating the source citation to the Ars Technica article for the exact quote.",
+    "source": "Simon Willison, \"Not all AI-assisted programming is vibe coding,\" simonwillison.net, Mar 2025"
+  },
+  {
+    "topicKey": "vibe-coding",
+    "category": "Vibe Coding",
+    "difficulty": "medium",
+    "question": "Rick Rubin's vibe-coding project with Anthropic, \"The Way of Code,\" reimagines which ancient text?",
+    "correct": "The Tao Te Ching",
+    "incorrect": [
+      "The Art of War",
+      "The I Ching",
+      "The Analects"
+    ],
+    "note": "Full title: \"The Way of Code: The Timeless Art of Vibe Coding\" (Rick Rubin x Anthropic, 2025). It adapts Lao Tzu's Tao Te Ching into 81 coding-themed meditations with interactive Claude-powered art. The I Ching and The Analects are also Chinese classics, which makes them strong but clearly-wrong distractors.",
+    "source": "thewayofcode.com; Anthropic / Rick Rubin \"The Way of Code\" launch, 2025"
+  },
+  {
+    "topicKey": "philosophy",
+    "category": "Philosophy",
+    "difficulty": "medium",
+    "question": "In The Matrix, Neo hides his contraband discs inside a hollowed-out copy of a real philosophy book. Which one?",
+    "correct": "Simulacra and Simulation",
+    "incorrect": [
+      "Discipline and Punish",
+      "Being and Time",
+      "Critique of Pure Reason"
+    ],
+    "note": "Jean Baudrillard's \"Simulacra and Simulation\" appears in the film's opening; the prop is shown opened to its final chapter, \"On Nihilism.\" The distractors are all genuine philosophy works (Foucault, Heidegger, Kant) but none is the hollowed-out book, keeping them cleanly wrong.",
+    "source": "Matrix Wiki, 'Simulacra and Simulation'; Wikipedia, 'The Matrix'"
+  },
+  {
+    "topicKey": "philosophy",
+    "category": "Philosophy",
+    "difficulty": "hard",
+    "question": "The hollowed book in The Matrix is deliberately opened to one specific chapter of Simulacra and Simulation. Which chapter is shown?",
+    "correct": "On Nihilism",
+    "incorrect": [
+      "The Precession of Simulacra",
+      "Simulacra and Science Fiction",
+      "The China Syndrome"
+    ],
+    "note": "In The Matrix (1999), Neo hides his contraband discs in a hollowed-out copy of Jean Baudrillard's Simulacra and Simulation. The prop is deliberately opened to the chapter 'On Nihilism' — which is actually the book's final chapter but is placed mid-volume in the prop, reflecting Thomas Anderson's directionless, nihilistic state before he takes the red pill. The distractors are all genuine chapters of the same book, making them plausible but wrong. Source: Matrix Wiki, 'Simulacra and Simulation'.",
+    "source": "Matrix Wiki, 'Simulacra and Simulation'"
+  },
+  {
+    "topicKey": "philosophy",
+    "category": "Philosophy",
+    "difficulty": "easy",
+    "question": "In Plato's Allegory of the Cave, what do the chained prisoners mistake for reality?",
+    "correct": "Shadows on the wall",
+    "incorrect": [
+      "Reflections in water",
+      "Echoes down a well",
+      "Figures in their dreams"
+    ],
+    "note": "Republic Book VII: prisoners chained facing a wall see only shadows cast by a fire behind them and take those shadows for the whole of reality. Water reflections belong to the later ascent stage seen by the freed prisoner, so the 'chained prisoners' wording keeps it unambiguous.",
+    "source": "Plato, Republic, Book VII (514a–520a)"
+  },
+  {
+    "topicKey": "philosophy",
+    "category": "Philosophy",
+    "difficulty": "medium",
+    "question": "René Descartes introduced his 'evil demon' (genius malignus) — a deceiver who could make all of reality an illusion — in which of his works?",
+    "correct": "Meditations on First Philosophy",
+    "incorrect": [
+      "Discourse on the Method",
+      "Principles of Philosophy",
+      "The Passions of the Soul"
+    ],
+    "note": "The evil demon (genius malignus) is introduced in the First Meditation of Descartes' Meditations on First Philosophy (1641) as his tool of radical/hyperbolic doubt. Discourse on the Method (1637) is the tempting distractor — it contains 'cogito ergo sum' but not the evil demon.",
+    "source": "Wikipedia, 'Evil demon'; Descartes, Meditations on First Philosophy (1641)"
+  },
+  {
+    "topicKey": "philosophy",
+    "category": "Philosophy",
+    "difficulty": "medium",
+    "question": "Philosopher Hilary Putnam is famous for a transcendental argument claiming that we cannot be what?",
+    "correct": "Brains in a vat",
+    "incorrect": [
+      "Deceived by an evil demon",
+      "Dreaming this very moment",
+      "Living in a computer simulation"
+    ],
+    "note": "Putnam, Reason, Truth and History (1981): the brains-in-a-vat argument uses semantic externalism/causal reference to show the claim is self-refuting. The distractors are separate skeptical scenarios (Descartes' evil demon, the dream argument, Bostrom's simulation) not attributable to Putnam.",
+    "source": "Hilary Putnam, Reason, Truth and History (1981); Stanford Encyclopedia of Philosophy, 'Brains in a Vat'"
+  },
+  {
+    "topicKey": "philosophy",
+    "category": "Philosophy",
+    "difficulty": "hard",
+    "question": "Nick Bostrom's 2003 simulation argument is a trilemma: at least one of three propositions must be true. Which of these is NOT one of them?",
+    "correct": "Simulated minds cannot be conscious",
+    "incorrect": [
+      "Almost all civilizations go extinct before becoming 'posthuman'",
+      "Posthuman civilizations almost never run ancestor-simulations",
+      "We are almost certainly living in a simulation"
+    ],
+    "note": "Verified against Nick Bostrom, \"Are You Living in a Computer Simulation?\", The Philosophical Quarterly 53(211), 2003. The three propositions of the trilemma are: (1) almost all human-level civilizations go extinct before reaching a posthuman stage; (2) posthuman civilizations are extremely unlikely to run ancestor-simulations; (3) we are almost certainly living in a simulation. \"Simulated minds cannot be conscious\" is not a proposition of the argument — Bostrom explicitly relies on substrate-independence, which permits consciousness in simulations, so it is the correct \"NOT one of them\" answer.",
+    "source": "Nick Bostrom, 'Are You Living in a Computer Simulation?', The Philosophical Quarterly (2003)"
+  },
+  {
+    "topicKey": "philosophy",
+    "category": "Philosophy",
+    "difficulty": "medium",
+    "question": "In the free-will debate, what is the name for the view that free will and determinism can both be true at the same time?",
+    "correct": "Compatibilism",
+    "incorrect": [
+      "Libertarianism",
+      "Hard determinism",
+      "Fatalism"
+    ],
+    "note": "Compatibilism holds that free will and determinism are compatible, so both can be true at once. The distractors are all incompatibilist or free-will-denying views: libertarianism (free will real, determinism false), hard determinism (determinism true, free will an illusion), and fatalism (events inevitable regardless of choice).",
+    "source": "Internet Encyclopedia of Philosophy, 'Free Will'; Stanford Encyclopedia of Philosophy"
+  },
+  {
+    "topicKey": "philosophy",
+    "category": "Philosophy",
+    "difficulty": "medium",
+    "question": "Robert Nozick's 'experience machine' thought experiment — a tank that feeds your brain any pleasurable experience you want — was designed to refute which ethical theory?",
+    "correct": "Ethical hedonism",
+    "incorrect": [
+      "Deontology",
+      "Virtue ethics",
+      "Divine command theory"
+    ],
+    "note": "Nozick introduced the experience machine to argue against hedonism: if we would refuse to plug in, we value more than just pleasurable experience (e.g., actually doing things and contact with reality), which refutes the claim that pleasure is the only intrinsic good.",
+    "source": "Robert Nozick, Anarchy, State, and Utopia (1974); Wikipedia, 'Experience machine'"
+  }
+]

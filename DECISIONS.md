@@ -46,6 +46,15 @@ data. The fun is the contrast between a guy who can't be bothered and a bot that
 - Voice is one flat note across every command; a mood/voice pass is deferred (chose awareness first).
 
 ## Change Log
+- **2026-07-10** — Trivia bank (Johnny's own questions, swarm-built). A research+verify swarm (135 agents:
+  one researcher per special interest → an independent fact-checker per question) produced
+  `content/trivia.json` — **120 questions, 8 per interest, every one fact-checked** (correct answer
+  confirmed, all 3 distractors confirmed wrong/unambiguous; unverifiable ones dropped). `/trivia play` now
+  defaults to this bank with a topic dropdown per interest + "surprise me"; OpenTDB kept as the "the web"
+  option and as a fallback if the bank has no match. The reveal now includes the factoid behind the answer.
+  `lib/trivia.js` loads the bank at require time; `content/` is committed (unlike the gitignored `data/`).
+  Rationale for the swarm: the owner didn't want to hand-author questions, and generated trivia MUST be
+  accurate (the "real data is always real" rule) — hence the per-question adversarial fact-check gate.
 - **2026-07-10** — Feature batch 2: trivia + birthdays (the other two picks from the repo survey).
   - **Trivia** (`lib/trivia.js` + `commands/trivia.js`): `/trivia play·leaderboard`. Real OpenTDB questions
     (base64-encoded fetch, no key, no dep) — keeps the "real data is always real" rule; Johnny only voices

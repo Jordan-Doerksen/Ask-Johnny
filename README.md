@@ -22,7 +22,7 @@ bothered, who nonetheless gets it right.
 | `/haiku <topic>` | A deadpan haiku. Anticlimax guaranteed. |
 | `/roll [dice]` | Dice — `2d6`, `d20`, `3d6+1`. Shows the breakdown. |
 | `/story add·show·end` | A group story, one line at a time. Johnny gives the last word. |
-| `/trivia play·leaderboard` | A real trivia question (OpenTDB) with reaction answers; Johnny scores it after 30s. |
+| `/trivia play·leaderboard` | Real trivia — pick one of Johnny's own topics (his fact-checked bank) or `the web` (OpenTDB); reaction answers, scored after 30s, with the factoid on reveal. |
 
 ### The helpful
 | Command | What it does |
@@ -90,7 +90,7 @@ lib/
   memory.js       last-seen, remembered facts, AFK, who's away
   quotes.js       the quote book (per-guild)
   lore.js         server canon, folded into Johnny's LLM context
-  trivia.js       OpenTDB questions + the per-guild leaderboard
+  trivia.js       loads the local bank (content/trivia.json) + OpenTDB + the per-guild leaderboard
   birthdays.js    birthday storage + date parsing (announced by the scheduler)
   scheduler.js    every 20s: fires reminders, closes polls + trivia, daily birthday + backup
   starboard.js    mirrors ⭐'d messages to the board

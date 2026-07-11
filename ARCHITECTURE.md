@@ -30,7 +30,8 @@ lib/                    the engines the commands lean on
   memory.js             last-seen, facts, AFK (+ afkNames for the mention brain)
   quotes.js             the quote book (per-guild)
   lore.js               server canon, folded into Johnny's LLM context
-  trivia.js             OpenTDB question fetch + the per-guild leaderboard
+  trivia.js             loads content/trivia.json (Johnny's fact-checked bank) + OpenTDB + leaderboard
+content/trivia.json     the committed trivia bank — 120 questions across his 15 special interests
   birthdays.js          birthday storage + date parsing (announced by the scheduler)
   scheduler.js          20s poll — fires due reminders, closes polls, daily backup
   starboard.js          the ⭐ reaction watcher → board post
