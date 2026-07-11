@@ -78,6 +78,7 @@ module.exports = [
       .setName('tldr')
       .setDescription('Paste a link. Johnny reads it so you do not have to.')
       .addStringOption(o => o.setName('url').setDescription('The link').setRequired(true)),
+    cooldownMs: 15_000, // fetches an external page + an LLM call — let it rest
     async execute(interaction, ctx) {
       const page = await ctx.tldr.fetchPageText(interaction.options.getString('url'));
       if (page.error === 'badurl') return interaction.editReply("that's not a real link. give me an http or https url.");
@@ -112,6 +113,7 @@ module.exports = [
       .setName('yt')
       .setDescription('Johnny summarizes a YouTube video. If it has captions.')
       .addStringOption(o => o.setName('url').setDescription('YouTube link or id').setRequired(true)),
+    cooldownMs: 15_000, // fetches a transcript + an LLM call — let it rest
     async execute(interaction, ctx) {
       const r = await ctx.youtube.getTranscript(interaction.options.getString('url'));
       if (r.error === 'badid') return interaction.editReply("that's not a youtube link i recognize. paste the actual url.");

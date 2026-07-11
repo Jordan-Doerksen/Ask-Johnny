@@ -21,6 +21,7 @@ module.exports = [
       .setName('catchup')
       .setDescription('Johnny recaps what you missed in here. Flatly.'),
     ephemeral: true, // it's what *you* missed — keep it to you
+    cooldownMs: 15_000, // fetches 100 messages + an LLM call — let it rest
     async execute(interaction, ctx) {
       const channel = interaction.channel;
       const userId = interaction.user.id;
@@ -58,7 +59,7 @@ module.exports = [
       .setName('remember')
       .setDescription('Tell Johnny a fact. He will hold onto it, grudgingly.')
       .addStringOption(o => o.setName('subject').setDescription('Who or what is this about? e.g. "dave"').setRequired(true))
-      .addStringOption(o => o.setName('fact').setDescription('The thing to remember').setRequired(true)),
+      .addStringOption(o => o.setName('fact').setDescription('The thing to remember').setRequired(true).setMaxLength(1000)),
     async execute(interaction, ctx) {
       const subject = interaction.options.getString('subject');
       const fact = interaction.options.getString('fact');
@@ -86,7 +87,7 @@ module.exports = [
           `Give ONE flat intro line, like begrudgingly opening a grubby notebook. Do not list the facts yourself.`,
         { maxTokens: 80 },
       );
-      await interaction.editReply(`${intro}\n${found.map(f => `• ${f.text}`).join('\n')}`);
+      await interaction.editReply(ctx.util.capMsg(`${intro}\n${found.map(f => `• ${f.text}`).join('\n')}`));
     },
   },
 
@@ -96,6 +97,7 @@ module.exports = [
       .setDescription('Johnny flatly recaps the last chunk of chat.')
       .addIntegerOption(o =>
         o.setName('count').setDescription('How many recent messages (default 30, max 100)').setRequired(false)),
+    cooldownMs: 15_000, // fetches a chunk of chat + an LLM call — let it rest
     async execute(interaction, ctx) {
       const count = Math.min(Math.max(interaction.options.getInteger('count') ?? 30, 5), 100);
       const fetched = await interaction.channel.messages.fetch({ limit: count });

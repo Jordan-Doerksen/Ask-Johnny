@@ -4,6 +4,7 @@ const { Client, GatewayIntentBits, REST, Routes, MessageFlags, Partials } = requ
 const { askJohnny, MODEL } = require('./lib/johnny');
 const db = require('./lib/db');
 const memory = require('./lib/memory');
+const mention = require('./lib/mention');
 const embeds = require('./lib/embeds');
 const util = require('./lib/util');
 const convert = require('./lib/convert');
@@ -13,9 +14,14 @@ const tldr = require('./lib/tldr');
 const youtube = require('./lib/youtube');
 const define = require('./lib/define');
 const activity = require('./lib/activity');
+const quotes = require('./lib/quotes');
+const lore = require('./lib/lore');
+const trivia = require('./lib/trivia');
+const birthdays = require('./lib/birthdays');
+const ratelimit = require('./lib/ratelimit');
 const starboard = require('./lib/starboard');
 const scheduler = require('./lib/scheduler');
-const { onCooldown } = require('./lib/cooldown');
+const { check, mark } = require('./lib/cooldown');
 const { loadCommands } = require('./commands/_loader');
 
 const TOKEN = process.env.BOT_TOKEN;
@@ -52,7 +58,7 @@ const client = new Client({
 });
 
 // Everything a command needs, handed in so command files stay thin.
-const ctx = { askJohnny, db, memory, embeds, util, convert, weather, wiki, tldr, youtube, define, activity, client, commands: commandData };
+const ctx = { askJohnny, db, memory, embeds, util, convert, weather, wiki, tldr, youtube, define, activity, quotes, lore, trivia, birthdays, ratelimit, client, commands: commandData };
 
 client.once('clientReady', () => {
   console.log(`Johnny is online as ${client.user.tag} (model: ${MODEL})`);
@@ -64,8 +70,20 @@ client.on('interactionCreate', async interaction => {
   const cmd = handlers[interaction.commandName];
   if (!cmd) return;
 
-  if (cmd.cooldown !== false && onCooldown(interaction.user.id)) {
-    return interaction.reply({ content: 'give it a second.', flags: MessageFlags.Ephemeral });
+  if (cmd.cooldown !== false) {
+    // Global machine-gun guard (all commands + @mentions) plus an optional longer
+    // per-command rest for the expensive LLM/fetch commands. Peek both first and
+    // commit only if both pass, so a command rejected by its own longer cooldown
+    // doesn't burn the shared global window (and vice versa).
+    const perCmd = cmd.cooldownMs || 0;
+    if (check(interaction.user.id)) {
+      return interaction.reply({ content: 'give it a second.', flags: MessageFlags.Ephemeral });
+    }
+    if (perCmd && check(interaction.user.id, perCmd, interaction.commandName)) {
+      return interaction.reply({ content: 'easy. that one takes it out of me. give it a bit.', flags: MessageFlags.Ephemeral });
+    }
+    mark(interaction.user.id);
+    if (perCmd) mark(interaction.user.id, interaction.commandName);
   }
 
   try {
@@ -103,27 +121,15 @@ client.on('messageCreate', async message => {
     }
   }
 
-  // Talk to Johnny by @mentioning him — no slash command needed.
+  // Talk to Johnny by @mentioning him — no slash command needed. The mention
+  // brain (lib/mention.js) gives him recent-chat context + what he knows about
+  // the speaker, so the reply isn't a stateless one-shot anymore.
   if (!message.mentions.users.has(client.user.id)) return;
-  if (onCooldown(message.author.id)) return;
+  if (check(message.author.id)) return;
+  mark(message.author.id);
 
-  const raw = message.content.replace(/<@!?\d+>/g, '').trim();
   try {
-    await message.channel.sendTyping();
-
-    // @mention smarts: "what do you know about X" pulls from Johnny's facts.
-    const m = raw.match(/(?:what do you know about|who is|who's|tell me about|what about)\s+(.+?)[?.!]*$/i);
-    if (m && message.guildId) {
-      const subject = m[1].trim();
-      const facts = memory.getFacts(message.guildId, subject);
-      if (facts.length) {
-        const intro = await askJohnny(`Someone asked what you know about "${subject}". Give ONE flat intro line; don't list the facts.`, { maxTokens: 60 });
-        await message.reply(`${intro}\n${facts.map(f => `• ${f.text}`).join('\n')}`);
-        return;
-      }
-    }
-
-    await message.reply(await askJohnny(raw || 'someone just pinged you with nothing to say.'));
+    await mention.handleMention(message, client, ctx);
   } catch (err) {
     console.error('mention reply failed:', err);
   }

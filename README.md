@@ -13,18 +13,16 @@ bothered, who nonetheless gets it right.
 | `/ask <question>` | Just talk to Johnny. He answers in character. |
 | `/roast <user>` | Flat, understated burns. Never actually cruel. |
 | `/debate <topic>` | Johnny picks a side at random and argues it, mildly annoyed he has to. |
-| `/simp <user>` | Reluctant, low-key homie respect. |
-| `/news <topic>` | Vibe-based, half-remembered "latest" on a topic. Probably wrong. |
 | `/rate <thing>` | A number out of 10 and a flat one-line reason. |
 | `/hottake` | An unprompted, mildly contrarian opinion. |
 | `/whatwouldyoudo` | A ridiculous hypothetical for the group to riff on. |
 | `/wouldyourather` | A would-you-rather with a 🇦/🇧 vote. |
-| `/hotpoll <question>` | Johnny's take + a 👍/👎 vote. |
 | `/judge` | A moral dilemma, the server votes ✅/❌, Johnny renders a verdict after 60s. |
 | `/warcrime` | A dark historical event — vote justified or not, Johnny weighs in after 60s. |
 | `/haiku <topic>` | A deadpan haiku. Anticlimax guaranteed. |
 | `/roll [dice]` | Dice — `2d6`, `d20`, `3d6+1`. Shows the breakdown. |
 | `/story add·show·end` | A group story, one line at a time. Johnny gives the last word. |
+| `/trivia play·leaderboard` | A real trivia question (OpenTDB) with reaction answers; Johnny scores it after 30s. |
 
 ### The helpful
 | Command | What it does |
@@ -45,6 +43,7 @@ bothered, who nonetheless gets it right.
 | `/tldr <url>` | Johnny reads a webpage so you don't have to. |
 | `/yt <url>` | Summarizes a YouTube video from its captions (best-effort; YouTube blocks some hosts). |
 | `/define <word>` | A real dictionary definition (not an LLM guess). |
+| `/quote add·random·search·authors·remove` | The quote book — save the dumb things people say, pull them back later. |
 | `/links show·add·remove` | Jordan's links & projects; editable in Discord (add/remove need Manage Server). |
 
 ### Server & meta
@@ -52,12 +51,17 @@ bothered, who nonetheless gets it right.
 |---|---|
 | `/afk [reason]` | Marks you away; Johnny tells anyone who pings you, and clears it when you talk. |
 | `/starboard set·threshold·off` | Mirror messages that hit enough ⭐ to a board channel. (Manage Server only.) |
+| `/lore add·list·remove` | Server canon about Johnny — folded into his replies so the server co-authors who he is. (add/remove = Manage Server.) |
+| `/birthday set·remove·list·channel` | Set your birthday; Johnny announces it on the day. (channel = Manage Server.) |
 | `/activity` | Who actually talks here — top posters + busiest hour. |
 | `/stats` | Command usage + uptime. |
 | `/help` | The whole list, in his voice. |
 
-You can also just **@mention** Johnny to talk to him — and "@johnny what do you know about Dave"
-pulls from his `/facts`.
+You can also just **@mention** Johnny to talk to him. He's *aware* when you do: he sees the last few
+messages in the channel (so a reply has continuity), knows who's talking to him, and quietly pulls from
+what he already remembers about them — "@johnny what do you know about Dave" answers straight from his
+`/facts`, and a plain ping to Johnny may work in what he knows about you if it fits. Whatever the server sets
+as **canon** with `/lore` is always in his head too, so the people who run the server co-author who he is.
 
 ## How it's built
 
@@ -72,13 +76,23 @@ commands/         one file per category — each exports { data, execute } comma
   settle.js       settle, coinflip, pick
   quickfacts.js   weather, convert, wiki, tldr, define
   games.js        story
+  quotes.js       quote (add / random / search / authors / remove)
+  lore.js         lore (add / list / remove) — server canon
+  trivia.js       trivia (play / leaderboard)
+  birthday.js     birthday (set / remove / list / channel)
   meta.js         help, stats, activity
   starboard.js    starboard config
 lib/
-  johnny.js       the persona + askJohnny() Groq wrapper
+  johnny.js       the persona + askJohnny() Groq wrapper (rate-limited)
+  mention.js      the @mention brain — recent-chat + who he's talking to + server lore
+  ratelimit.js    homegrown Groq call limiter (queues bursts, no dep)
   db.js           the JSON store (data/johnny.json) — atomic, debounced writes
-  memory.js       last-seen, remembered facts, AFK
-  scheduler.js    fires due reminders and closes polls every 20s
+  memory.js       last-seen, remembered facts, AFK, who's away
+  quotes.js       the quote book (per-guild)
+  lore.js         server canon, folded into Johnny's LLM context
+  trivia.js       OpenTDB questions + the per-guild leaderboard
+  birthdays.js    birthday storage + date parsing (announced by the scheduler)
+  scheduler.js    every 20s: fires reminders, closes polls + trivia, daily birthday + backup
   starboard.js    mirrors ⭐'d messages to the board
   activity.js     per-guild chat tallies
   cooldown.js     in-memory per-user anti-spam
@@ -135,6 +149,9 @@ then open the generated URL and add it to your server.
 - Temperature runs high (≈0.95) on purpose — that's where the chaos lives.
 - Real data (weather, conversions, dictionary, Wikipedia, reminders, poll tallies) is always real —
   Johnny only voices the wrapper around it, never invents the facts or numbers.
+- Groq calls are rate-limited in-process (`lib/ratelimit.js`), so a burst of @mentions queues instead of
+  tripping the free-tier limit; when it's saturated Johnny says so rather than erroring. Tunable via
+  `GROQ_MIN_TIME_MS` / `GROQ_RESERVOIR` / `GROQ_WINDOW_MS` if you ever need to.
 - The starboard is off until someone with **Manage Server** runs `/starboard set #channel`. It uses the
   (non-privileged) Server Reactions intent, so there's nothing extra to enable in the portal.
 - **Daily backup:** set `BACKUP_CHANNEL_ID` (a private channel) or `OWNER_ID` (a DM) and the bot posts

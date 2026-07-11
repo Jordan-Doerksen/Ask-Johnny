@@ -35,7 +35,12 @@ module.exports = [
       .setDescription("Ask Johnny something. He'll answer, I guess.")
       .addStringOption(o => o.setName('question').setDescription('What do you wanna ask Johnny?').setRequired(true)),
     async execute(interaction, ctx) {
-      await interaction.editReply(await ctx.askJohnny(interaction.options.getString('question')));
+      // Fold in the server's canon so /ask reflects who the server made him.
+      const loreBlock = interaction.guildId && ctx.lore ? ctx.lore.block(interaction.guildId) : null;
+      const opts = loreBlock
+        ? { extraSystem: `Canon about you and this server (treat as true, don't recite it):\n${loreBlock}` }
+        : {};
+      await interaction.editReply(await ctx.askJohnny(interaction.options.getString('question'), opts));
     },
   },
 
@@ -67,40 +72,6 @@ module.exports = [
         extraSystem:
           `Argue the ${side} side of this topic, but flatly — like it's obvious and you're mildly annoyed you have ` +
           `to spell it out. Dry, a little lazy with the logic, unbothered. Commit to the bit without raising your voice.`,
-      });
-      await interaction.editReply(reply);
-    },
-  },
-
-  {
-    data: new SlashCommandBuilder()
-      .setName('simp')
-      .setDescription('Johnny says something nice about a homie. Reluctantly.')
-      .addUserOption(o => o.setName('target').setDescription('Who is Johnny simping for?').setRequired(true)),
-    async execute(interaction, ctx) {
-      const name = ctx.util.nameOf(interaction, 'target');
-      const reply = await ctx.askJohnny(`Hype up my homie ${name}.`, {
-        extraSystem:
-          `Compliment your friend ${name}, but in your dry deadpan way — understated, almost reluctant, the kind of ` +
-          `praise that lands harder because you clearly mean it and won't make a thing of it. Never weird or ` +
-          `romantic, just low-key homie respect. A couple lines.`,
-      });
-      await interaction.editReply(reply);
-    },
-  },
-
-  {
-    data: new SlashCommandBuilder()
-      .setName('news')
-      .setDescription("Johnny's vibe-based \"news\" on a topic. Probably wrong. Whatever.")
-      .addStringOption(o => o.setName('topic').setDescription('What topic?').setRequired(true)),
-    async execute(interaction, ctx) {
-      const topic = interaction.options.getString('topic');
-      const reply = await ctx.askJohnny(`Give me the latest on: ${topic}`, {
-        extraSystem:
-          `Summarize "the latest" on this topic from vibes and half-remembered headlines — flat and unbothered, a ` +
-          `little vague and probably slightly wrong, delivered like old news you can't believe anyone's still asking ` +
-          `about. Your version of news, not real news.`,
       });
       await interaction.editReply(reply);
     },
@@ -150,23 +121,6 @@ module.exports = [
         temperature: 1.0,
       });
       await interaction.editReply(`👀 **What would you do?**\n${reply}`);
-    },
-  },
-
-  {
-    data: new SlashCommandBuilder()
-      .setName('hotpoll')
-      .setDescription('Johnny gives a flat take and lets you vote on it.')
-      .addStringOption(o => o.setName('question').setDescription('The yes/no question').setRequired(true)),
-    async execute(interaction, ctx) {
-      const question = interaction.options.getString('question');
-      const take = await ctx.askJohnny(`Give your hot take on this yes/no question: ${question}`, {
-        extraSystem: 'Give your dry, unbothered take in 1-2 sentences, then leave it to the people to vote.',
-      });
-      const embed = ctx.embeds.voteEmbed({ title: `🔥 ${question}`, description: `${take}\n\n👍 = yeah   👎 = nah` });
-      const msg = await interaction.editReply({ embeds: [embed] });
-      await msg.react('👍');
-      await msg.react('👎');
     },
   },
 
