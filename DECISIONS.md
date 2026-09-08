@@ -12,8 +12,7 @@ data. The fun is the contrast between a guy who can't be bothered and a bot that
 ## Non-Negotiable Constraints
 - **Real data is always real.** Weather, conversions, dictionary, Wikipedia, poll tallies,
   reminders — fetched or computed, never invented by the model. Johnny only voices the wrapper.
-- **Secrets live in a gitignored `.env`.** Never a committed token (ask-johnny *and* the vendored
-  fun-police). The fun-police leak lesson stands.
+- **Secrets live in a gitignored `.env`.** Never a committed token. The fun-police leak lesson stands.
 - **In character, always.** Johnny never admits he's an AI, never lectures, never refuses.
 - **No native modules, no build step.** `npm install && npm start` must stay green on a free host
   (Wispbyte). Persistence is one JSON file with atomic, debounced writes.
@@ -36,16 +35,128 @@ data. The fun is the contrast between a guy who can't be bothered and a bot that
 6. **@mention Johnny is memory-aware** (2026-07-10). His ping replies see recent channel messages
    and what he knows about the speaker (`/facts`, AFK). Change rule: awareness is additive context
    only — never fabricate a "memory," never leak group-chat framing into the slash commands.
-7. **fun-police is co-launched as a child process with its own creds** (`FP_BOT_TOKEN`). It stays a
-   separate gateway/process so a crash there doesn't take Johnny down. Change rule: keep it isolated.
+7. **RETIRED 2026-09-07 — fun-police was co-launched as a child process with its own creds**
+   (`FP_BOT_TOKEN`). It stayed a separate gateway/process so a crash there could not take Johnny down.
+   Retired because the co-launch started a second Discord application from Johnny's server, and
+   Wispbyte stops a server that runs two bots. The vendored copy is deleted, and the standalone repo
+   `github.com/Jordan-Doerksen/fun-police` is the only copy. See the Change Log entry dated 2026-09-07.
+8. **The model provider is configuration, not code** (2026-09-07). `groq-sdk` is removed. `lib/llm.js`
+   calls any OpenAI-compatible chat-completions API with plain `fetch` (Node 18+, no dependency).
+   `config/llm.json` holds the provider chain: `order`, `defaults`, and, for each provider, `baseUrl`,
+   `apiKeyEnv`, `model`, `modelEnv`, `tokenParam`, and `extraBody`. A provider whose API key is absent
+   from the environment is skipped without an error, thus an unconfigured fallback has no cost.
+   Change rule: a new provider is one config entry plus one key in `.env`. It must never require an
+   edit to `lib/johnny.js`.
+9. **Failures are recorded, not only printed** (2026-09-07). `lib/log.js` writes JSON-lines records to
+   `logs/johnny.log` (about 2 MB, one rollover file kept) and mirrors each record to the console. Every
+   LLM call logs its outcome: the provider, the model, the latency, the token counts, the attempt
+   number, and whether the call fell back to another provider. This closes the gap that hid the August
+   outage, and it brings the bot into agreement with the observability law, which it did not meet
+   before. Change rule: each new failure path gets a log event. A silent failure is a defect.
 
 ## Open Questions
-- fun-police lives here (vendored) *and* as its own repo — declare which is canonical in the brain's
-  project map, then keep one authoritative copy.
 - Recurring / "remind @someone-else" reminders are wanted but blocked on the no-timezone constraint.
 - Voice is one flat note across every command; a mood/voice pass is deferred (chose awareness first).
+- The Cloudflare Workers AI fallback is not verified. There is no Cloudflare account to test it
+  against, thus the provider chain has one untested link. Test it when an account exists.
 
 ## Change Log
+- **2026-09-07** — Change Request: fun-police is removed from this repo (Decision 7 retired).
+  Approved scope: "Get rid of fun-police." The Discord server that it policed is dead.
+  - **Trigger.** Wispbyte permits one Discord bot for each server, and it checks every minute. It
+    stops a server that runs two bots automatically. The co-launch started a SECOND Discord
+    application from Johnny's server. Thus the arrangement put the working bot at risk of a stop, for
+    the sake of a bot whose server is dead. Johnny is the bot that must stay up.
+  - **Safety checks before the deletion.** The standalone repo `github.com/Jordan-Doerksen/fun-police`
+    exists at `C:\projects\bots\fun-police`. Its working tree is clean, and it has 0 unpushed commits.
+    The vendored copy was a duplicate, thus nothing unique was lost. The ban list held 0 entries, thus
+    no data needed a migration.
+  - **The six changes.** (1) `launchFunPolice()` and its call site are deleted from `index.js`; a
+    comment marks the removal and points at this file. (2) The vendored `fun-police/` directory is
+    deleted. (3) `.env.example` no longer holds `FP_BOT_TOKEN` and `FP_CLIENT_ID`, and its
+    daily-backup comment no longer names `fun-police/banlist.json`. (4) `.gitignore` no longer holds
+    the `fun-police/banlist.json` line. (5) `lib/scheduler.js`: `BACKUP_FILES` no longer includes
+    `fun-police/banlist.json`, and the backup message no longer tells the user to restore into
+    `fun-police/`. (6) The Non-Negotiable Constraints no longer name a vendored copy.
+  - **A backup defect found in the same pass.** Change 5 repaired no crash: the `existsSync` filter
+    always skipped a file that is absent. But the daily backup shipped one file fewer than its own
+    restore instructions named, thus the instructions were wrong for a user who followed them.
+  - **An Open Question resolved.** The question "fun-police lives here (vendored) *and* as its own
+    repo — declare which is canonical" is answered by this CR. The standalone repo is the only copy,
+    thus the question is removed from Open Questions.
+  - **The port was interviewed and DECLINED (owner, 2026-09-07).** The first plan was to move
+    `/banlist`, `/ban` and `/unban` into Johnny as native commands. The interview listed the conflicts:
+    the list is global where every other Johnny feature is per-guild; it writes its own file against
+    Decision 2; its emoji-and-exclamation copy contradicts the "in character, always" constraint; and
+    `/ban` in a live server implies a real Discord ban when the command bans nobody. The owner's
+    ruling: do not port it. His reason — he will not overlap real bans with a fake one, and a command
+    that only adds a name to a list does not earn a place (Decision 5). No ban-list code exists in this
+    repo. Change rule: treat a future request for this feature as a new CR, not as unfinished work.
+  - **Verification after the change.** 38 modules load, 37 commands register, and all 4 probes pass.
+- **2026-09-07** — Follow-up, same CR: the real-data commands hold their one-line shape again.
+  The swap changed behaviour that no test covered. `openai/gpt-oss-120b` obeys a length rule in the
+  SYSTEM prompt but largely ignores one in the user message, so `/wiki` wrote its own full summary
+  directly above the verbatim Wikipedia extract — a duplicate, and a risk of contradicting the real
+  data, which the "real data is always real" constraint forbids. `commands/quickfacts.js` now applies
+  a shared `ONE_LINER` system rule to `/weather`, `/convert`, `/wiki` and `/define`. Measured effect on
+  `/wiki`: about 300 characters down to about 60. Two further findings from the same pass. First, a
+  reasoning model spends the completion budget on thinking, so the 40 to 60 token caps on these
+  commands produced empty and mid-word-truncated replies; `reasoningHeadroom` in `config/llm.json`
+  (128 tokens for Groq) is added to whatever a caller asks for, so call sites keep sizing the REPLY
+  and the thinking room is set once. Second, asking for an "intro line" made the model define the
+  topic, and the fixed phrasing produced the same opening word ("Fine") seven times in a row; `/wiki`
+  now asks for a REACTION and rotates a `WIKI_ANGLES` seed, the same anti-repetition pattern
+  `commands/fun.js` already uses. Verified: six of six distinct openings, no facts in the intro.
+  Change rule: a command that prints an LLM line beside real data states its length limit in
+  `extraSystem`, never only in the user message.
+- **2026-09-07** — Change Request: model swap, provider chain, and logging (Decisions 8 and 9).
+  Approved scope: "Swap the model, and make the provider a config value."
+  - **Trigger.** On 2026-08-16 Groq moved `llama-3.3-70b-versatile` to enterprise-only accounts. Each
+    LLM call then returned HTTP 404 `model_not_found`. The bot stayed online, thus nothing looked
+    broken: Discord users only saw the flat "brain buffered for a sec" message. The API key was valid
+    for the full period and was never the cause. This is the SECOND model retirement that took this bot
+    offline. The first was `llama3-70b-8192`, recorded in the old comment in `lib/johnny.js`.
+  - **Decision 8 — the provider is config.** `groq-sdk` is removed. `lib/llm.js` calls any
+    OpenAI-compatible chat-completions API with plain `fetch` (Node 18+, no dependency).
+    `config/llm.json` holds the chain: `order`, `defaults`, and, for each provider, `baseUrl`,
+    `apiKeyEnv`, `model`, `modelEnv`, `tokenParam`, and `extraBody`. A provider whose API key is absent
+    is skipped without an error, thus an unconfigured fallback has no cost. A new provider is one
+    config entry plus one key in `.env`, and never an edit to `lib/johnny.js`.
+  - **Decision 9 — failures are recorded.** `lib/log.js` writes JSON-lines records to
+    `logs/johnny.log` (about 2 MB, one rollover file kept) and mirrors each record to the console.
+    Every LLM call logs the provider, the model, the latency, the token counts, the attempt number,
+    and whether it fell back. This closes the gap that hid the August outage. It also brings the bot
+    into agreement with the observability law, which it did not meet before.
+  - **The provider chain as built.** Primary: Groq `openai/gpt-oss-120b`, with `reasoning_effort:
+    "low"` and `include_reasoning: false`. Fallback: Cloudflare Workers AI, dormant until
+    `CF_ACCOUNT_ID` and `CF_API_TOKEN` are set. The Cloudflare path is **structurally verified, not
+    live-tested** — there is no Cloudflare account to test it against yet.
+  - **Model behaviour, verified by test on 2026-09-07.** Two findings control the configuration.
+    - At the default reasoning effort, `openai/gpt-oss-120b` REFUSES `/roast`: it replies "I'm not
+      going to do that." `reasoning_effort: "low"` removes the refusal, and it also cuts the latency
+      to about 300 ms. The setting is functional, not cosmetic.
+    - `reasoning_format` is not supported on gpt-oss, and it does not give an error. It returns an
+      empty message. Never set it for that model. `qwen/qwen3.6-27b` is different: it writes its raw
+      chain-of-thought into the reply content. Thus `lib/llm.js` removes `<think>` blocks from each
+      reply as a defence.
+  - **A regression found and repaired during the build.** The removal of `groq-sdk` also removed its
+    `maxRetries: 3`. That setting was added deliberately in commit 2879e18, to absorb a connection drop
+    in the middle of a response. `lib/llm.js` rebuilds the function: 2 retries, with 400 ms and 800 ms
+    backoff, on a transient failure only (network error, timeout, 429, 5xx). A permanent failure (404,
+    401) falls over to the next provider immediately, with no retry. This is exactly the type of silent
+    capability loss that the change-control process exists to catch.
+  - **Rate-limit retune, with its reason.** `lib/ratelimit.js` defaults changed from MIN_TIME_MS 1200 /
+    RESERVOIR 20 to MIN_TIME_MS 2000 / RESERVOIR 7. The limiter was tuned for a requests-per-minute
+    ceiling, but requests are not the binding constraint. The measured Groq free-tier limits are 30
+    requests/min, 1,000 requests/day, 8,000 tokens/min, and 200,000 tokens/day. The persona costs about
+    900 input tokens per call. Thus the real ceiling is about 8 calls per minute and about **190
+    replies per day**. That figure is a true operating constraint on the design.
+  - **Housekeeping in the same change.** `discord.js` to `^14.27.0`. The `undici` override went from
+    `^6.27.0` to `^6.27.1`, because the advisory range is now `<=6.27.0` and the old pin no longer
+    cleared it (`npm audit` went from 3 moderate to 0). A new `npm run probe` command
+    (`scripts/probe-llm.js`) tests the model path end to end without Discord; all 4 of its probes pass.
+    The startup guard in `index.js` no longer names `GROQ_API_KEY` — it requires at least one
+    configured provider.
 - **2026-07-10** — Trivia bank (Johnny's own questions, swarm-built). A research+verify swarm (135 agents:
   one researcher per special interest → an independent fact-checker per question) produced
   `content/trivia.json` — **120 questions, 8 per interest, every one fact-checked** (correct answer

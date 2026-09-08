@@ -1,0 +1,81 @@
+{
+  "_comment": [
+    "The LLM provider chain. Johnny tries each provider in `order` until one answers.",
+    "A provider is SKIPPED silently when its apiKeyEnv is not set, so an unconfigured",
+    "fallback costs nothing and breaks nothing. Every value here is tunable without",
+    "touching lib/llm.js — that is the point of this file.",
+    "",
+    "Why this exists: on 2026-08-16 Groq retired llama-3.3-70b-versatile to enterprise-only",
+    "and Johnny went silent. Model IDs are not stable. They live in config now."
+  ],
+
+  "order": ["groq", "cloudflare"],
+
+  "defaults": {
+    "temperature": 0.95,
+    "maxTokens": 350,
+    "timeoutMs": 30000
+  },
+
+  "providers": {
+    "groq": {
+      "label": "Groq",
+      "baseUrl": "https://api.groq.com/openai/v1",
+      "apiKeyEnv": "GROQ_API_KEY",
+      "model": "openai/gpt-oss-120b",
+      "modelEnv": "GROQ_MODEL",
+      "tokenParam": "max_completion_tokens",
+      "reasoningHeadroom": 128,
+      "extraBody": {
+        "reasoning_effort": "low",
+        "include_reasoning": false
+      },
+      "_notes": [
+        "reasoning_effort MUST stay 'low'. At the default ('medium') gpt-oss reasons itself",
+        "into refusing /roast — verified 2026-09-07: it replied 'I'm not going to do that.'",
+        "At 'low' it roasts in character in ~300ms.",
+        "",
+        "Do NOT add reasoning_format here. gpt-oss does not support it and does not error —",
+        "it returns an EMPTY message and Johnny says nothing. Verified 2026-09-07.",
+        "",
+        "include_reasoning:false keeps the model's scratchpad out of the response entirely.",
+        "",
+        "reasoningHeadroom exists because reasoning_tokens are billed from the SAME budget",
+        "as the reply. Commands ask for as little as 40 tokens (/define, /convert, /wiki),",
+        "which a reasoning model can spend entirely on thinking — verified 2026-09-07: one",
+        "/define call returned an empty message, and /wiki replies truncated mid-word. The",
+        "headroom is added to whatever the caller asks for, so call sites keep sizing the",
+        "REPLY and the thinking room is set once, here. Set it to 0 for a non-reasoning model.",
+        "",
+        "Free tier ceiling (verified against the live key 2026-09-07): 30 RPM, 1000 req/day,",
+        "8000 tokens/min, 200,000 tokens/day. The persona is ~900 input tokens, so the real",
+        "ceiling is roughly 190 replies/day. TPD is what runs out first, not requests.",
+        "",
+        "Alternatives on this key if gpt-oss ever goes: openai/gpt-oss-20b (faster, thinner",
+        "writing), groq/compound-mini (best voice, but +1200 input tokens per call and only",
+        "250 req/day). Do NOT use qwen3.6-27b — it writes its chain-of-thought into the reply."
+      ]
+    },
+
+    "cloudflare": {
+      "label": "Cloudflare Workers AI",
+      "baseUrl": "https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/ai/v1",
+      "apiKeyEnv": "CF_API_TOKEN",
+      "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+      "modelEnv": "CF_MODEL",
+      "tokenParam": "max_tokens",
+      "extraBody": {},
+      "_notes": [
+        "DORMANT until CF_ACCOUNT_ID and CF_API_TOKEN are set. Skipped silently otherwise.",
+        "",
+        "STRUCTURALLY VERIFIED, NOT LIVE-TESTED — there is no Cloudflare account to test",
+        "against yet. The base URL and OpenAI-compatible shape come from Cloudflare's docs;",
+        "the model ID is from their catalogue and should be confirmed on first use.",
+        "",
+        "Why this one is the fallback: 10,000 neurons/day free, permanently, no credit card.",
+        "That is roughly 1,600 Johnny replies/day — far more headroom than Groq's free tier.",
+        "Cheaper per call if neurons ever get tight: @cf/meta/llama-3.2-3b-instruct."
+      ]
+    }
+  }
+}

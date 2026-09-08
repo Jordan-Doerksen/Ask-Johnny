@@ -23,9 +23,13 @@ commands/               one file per category; each exports { data, execute } (o
   links.js              links (show / add / remove)
   starboard.js          starboard config (set / threshold / off)
 lib/                    the engines the commands lean on
-  johnny.js             the persona + askJohnny() Groq wrapper (temp ~0.95, rate-limited)
+  johnny.js             the persona + an askJohnny() wrapper over lib/llm.js (temp ~0.95,
+                        rate-limited) — it holds no model ID and no provider client
+  llm.js                the OpenAI-compatible chat client — walks the provider chain, retries a
+                        transient failure, falls over, strips <think> blocks from a reply
+  log.js                JSON-lines log to logs/johnny.log (about 2 MB, one rollover) + console mirror
   mention.js            the @mention brain — awareness (recent chat + speaker facts + AFK + server lore)
-  ratelimit.js          homegrown Groq call limiter — serialized, min-gap + reservoir, no dep
+  ratelimit.js          homegrown LLM call limiter — serialized, min-gap + reservoir, no dep
   db.js                 the JSON store: one live object, atomic debounced flush
   memory.js             last-seen, facts, AFK (+ afkNames for the mention brain)
   quotes.js             the quote book (per-guild)
@@ -39,7 +43,9 @@ content/trivia.json     the committed trivia bank — 120 questions across his 1
   cooldown.js           in-memory 4s per-user anti-spam
   embeds.js             shared colors + vote/verdict embed helpers
   weather / wiki / define / tldr / youtube / convert / util   small single-purpose helpers
-fun-police/             vendored ban-list bot, co-launched as a child process (own creds)
+config/llm.json         the provider chain — order, defaults, and per-provider baseUrl / apiKeyEnv /
+                        model / modelEnv / tokenParam / extraBody
+scripts/probe-llm.js    `npm run probe` — an end-to-end test of the model path, without Discord
 data/johnny.json        the whole persistent state (gitignored)
 ```
 
@@ -59,9 +65,23 @@ jobs — the birthday announcement and the data backup — each gated by a persi
 double-fire them.
 
 ## Cost & rate limits
-Every Groq call funnels through `ratelimit.js` — one global in-process limiter that serializes calls,
-spaces them by a min gap, and caps starts per rolling window. A burst of @mentions queues rather than
-tripping Groq's free-tier limit. Two guards sit in front of it: the short per-user global cooldown
-(`cooldown.js`, the machine-gun guard) plus longer per-command cooldowns (`cmd.cooldownMs`) on the
-expensive fetch+LLM commands. When the limiter is saturated, the @mention path bails with a flat
-"cooling down" line instead of queueing a reply that lands a minute late.
+Every LLM call funnels through `ratelimit.js` — one global in-process limiter that serializes calls,
+spaces them by a min gap (2000 ms), and caps starts per rolling window (reservoir 7). A burst of
+@mentions queues rather than tripping the free-tier limit. Two guards sit in front of it: the short
+per-user global cooldown (`cooldown.js`, the machine-gun guard) plus longer per-command cooldowns
+(`cmd.cooldownMs`) on the expensive fetch+LLM commands. When the limiter is saturated, the @mention
+path bails with a flat "cooling down" line instead of queueing a reply that lands a minute late.
+
+The measured Groq free-tier limits are 30 requests/min, 1,000 requests/day, 8,000 tokens/min, and
+200,000 tokens/day. Tokens are the binding constraint, not requests: the persona costs about 900 input
+tokens per call, thus the real ceiling is about 8 calls per minute and **about 190 replies per day**.
+
+The arrangement has two layers. The limiter shapes bursts before a call starts. `lib/llm.js` handles a
+call that still fails: it retries a transient failure, then falls over to the next provider.
+
+### The call path
+`askJohnny()` → `ratelimit.schedule()` → `llm.chat()` → provider 1 (Groq `openai/gpt-oss-120b`, up to
+2 retries) → provider 2 (Cloudflare Workers AI, only if its keys are set) → throw
+`allProvidersFailed`. `lib/llm.js` retries a transient failure only (network error, timeout, 429, 5xx),
+with 400 ms then 800 ms backoff. A permanent failure (404, 401) goes to the next provider immediately,
+with no retry. `lib/log.js` records every outcome.

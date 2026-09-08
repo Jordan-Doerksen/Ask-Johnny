@@ -1,7 +1,9 @@
 require('dotenv').config();
 
 const { Client, GatewayIntentBits, REST, Routes, MessageFlags, Partials } = require('discord.js');
-const { askJohnny, MODEL } = require('./lib/johnny');
+const { askJohnny } = require('./lib/johnny');
+const llm = require('./lib/llm');
+const log = require('./lib/log');
 const db = require('./lib/db');
 const memory = require('./lib/memory');
 const mention = require('./lib/mention');
@@ -28,8 +30,15 @@ const TOKEN = process.env.BOT_TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
 const GUILD_ID = process.env.GUILD_ID; // optional — instant command updates on one server
 
-if (!TOKEN || !CLIENT_ID || !process.env.GROQ_API_KEY) {
-  console.error('Missing env vars. Need BOT_TOKEN, CLIENT_ID, and GROQ_API_KEY (see .env.example).');
+// Johnny needs Discord creds plus AT LEAST ONE model provider. Which provider is now
+// config (config/llm.json), so the guard asks the client what is actually configured
+// rather than naming one vendor's key.
+if (!TOKEN || !CLIENT_ID) {
+  console.error('Missing env vars. Need BOT_TOKEN and CLIENT_ID (see .env.example).');
+  process.exit(1);
+}
+if (!llm.activeProviders().length) {
+  console.error('No LLM provider configured. Set GROQ_API_KEY (or a fallback provider) — see .env.example.');
   process.exit(1);
 }
 
@@ -61,7 +70,9 @@ const client = new Client({
 const ctx = { askJohnny, db, memory, embeds, util, convert, weather, wiki, tldr, youtube, define, activity, quotes, lore, trivia, birthdays, ratelimit, client, commands: commandData };
 
 client.once('clientReady', () => {
-  console.log(`Johnny is online as ${client.user.tag} (model: ${MODEL})`);
+  // Log the whole provider chain at boot. When Johnny goes quiet, the first question is
+  // always "which model was he even on" — the answer is now the first line in the log.
+  log.info('boot', { as: client.user.tag, chain: llm.describe(), commands: commandData.length });
   scheduler.start(client, ctx); // begin firing reminders + closing polls
 });
 
@@ -94,7 +105,7 @@ client.on('interactionCreate', async interaction => {
       (db.data.stats.commandCounts[interaction.commandName] || 0) + 1;
     db.flush();
   } catch (err) {
-    console.error(`/${interaction.commandName} failed:`, err);
+    log.error('command_failed', { command: interaction.commandName, msg: err.message, providers: err.allProvidersFailed || false });
     await util.brainLag(interaction);
   }
 });
@@ -131,13 +142,13 @@ client.on('messageCreate', async message => {
   try {
     await mention.handleMention(message, client, ctx);
   } catch (err) {
-    console.error('mention reply failed:', err);
+    log.error('mention_failed', { msg: err.message, providers: err.allProvidersFailed || false });
   }
 });
 
 // Starboard: watch ⭐ reactions and mirror popular messages to the board.
 client.on('messageReactionAdd', reaction => {
-  starboard.handleStar(client, reaction).catch(err => console.error('starboard:', err.message));
+  starboard.handleStar(client, reaction).catch(err => log.error('starboard_failed', { msg: err.message }));
 });
 
 // Flush the store on shutdown so nothing in-flight is lost.
@@ -148,25 +159,14 @@ for (const sig of ['SIGINT', 'SIGTERM']) {
   });
 }
 
-// Optionally co-launch fun-police (the ban-list bot) as its own child process
-// from the same host — only when its own credentials are set, so ask-johnny
-// runs fine without them. Separate process means isolated env + gateway; if it
-// crashes, ask-johnny keeps running.
-function launchFunPolice() {
-  if (!process.env.FP_BOT_TOKEN) return;
-  const { fork } = require('child_process');
-  const path = require('path');
-  const child = fork(path.join(__dirname, 'fun-police', 'index.js'));
-  child.on('exit', code => console.log(`fun-police exited (code ${code}).`));
-  child.on('error', err => console.error('fun-police failed to launch:', err.message));
-  console.log('Co-launching fun-police...');
-}
-
-launchFunPolice();
+// (The fun-police co-launch was removed 2026-09-07 — see DECISIONS.md. It ran a SECOND
+// Discord application from this one server, which is what Wispbyte auto-stops. Johnny is
+// the bot that has to stay up, so the second gateway is gone. fun-police survives on its
+// own at github.com/Jordan-Doerksen/fun-police.)
 
 registerCommands()
   .then(() => client.login(TOKEN))
   .catch(err => {
-    console.error('Startup failed:', err);
+    log.error('startup_failed', { msg: err.message });
     process.exit(1);
   });

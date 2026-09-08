@@ -4,6 +4,30 @@ const { SlashCommandBuilder } = require('discord.js');
 // (weather) or computed locally (convert) — and Johnny only ever voices the
 // wrapper around it. Per the house rule, he never invents the numbers.
 
+// Every command here prints Johnny's line NEXT TO verbatim real data. A wordy line
+// therefore repeats that data, and can contradict it — which is the one thing the house
+// rule forbids. The length limit has to live in the SYSTEM prompt: gpt-oss honours it
+// there and largely ignores it in the user message. Verified 2026-09-07 — with the limit
+// only in the user message, /wiki wrote its own full Stonehenge summary directly above
+// the real Wikipedia extract. (The old model obeyed the user-message version; this is
+// the behaviour that changed with the provider swap, not a new requirement.)
+const ONE_LINER =
+  'Answer with ONE short sentence, then stop. Never explain, summarize, define, or list facts — ' +
+  'the real information is already shown to the user right beside your line, so repeating it is ' +
+  'noise and contradicting it is worse. You are only the throwaway remark in front of the data.';
+
+// Same trick the chaos commands use (see commands/fun.js): without a varied seed the model
+// falls into one default opening and never leaves it. Measured 2026-09-07 — seven /wiki
+// intros in a row began with the word "Fine". Rotating the angle breaks the tic.
+const WIKI_ANGLES = [
+  'sound mildly put upon that you had to look it up',
+  'make a flat remark about the person asking',
+  'note that the article is right there and they could have read it',
+  'sound like you already knew this and are unimpressed',
+  'be briefly, flatly curious about it despite yourself',
+  'treat the request as one more thing on a long list',
+];
+
 module.exports = [
   {
     data: new SlashCommandBuilder()
@@ -19,6 +43,7 @@ module.exports = [
 
       const dataLine = `${w.label}: ${w.temp}°C, feels like ${w.feels}°C, ${w.desc}, wind ${w.wind} km/h.`;
       const quip = await ctx.askJohnny(`The weather is: ${dataLine} Give ONE flat, deadpan reaction line. Don't repeat the numbers.`, {
+        extraSystem: ONE_LINER,
         maxTokens: 60,
       });
       await interaction.editReply(`${dataLine}\n${quip}`);
@@ -44,6 +69,7 @@ module.exports = [
 
       const out = ctx.convert.round(res.value);
       const quip = await ctx.askJohnny(`Converted ${value} ${from} to ${out} ${to}. Give ONE flat throwaway line. Don't restate the math.`, {
+        extraSystem: ONE_LINER,
         maxTokens: 50,
       });
       await interaction.editReply(`${value} ${from} = ${out} ${to}\n${quip}`);
@@ -65,7 +91,12 @@ module.exports = [
         return interaction.editReply(`"${topic}" could be a bunch of things. be more specific. i'm not guessing.`);
       }
       // The summary is shown verbatim (accurate); Johnny only voices the intro.
-      const intro = await ctx.askJohnny(`Someone asked about "${result.title}". Give ONE flat intro line before the facts. Don't summarize it yourself.`, {
+      // Asking for an "intro line" about a topic invites the model to define the topic,
+      // and the real extract is printed immediately below — so it echoed Wikipedia's own
+      // first sentence. Ask for the REACTION instead, and forbid the facts outright.
+      const angle = ctx.util.pick(WIKI_ANGLES);
+      const intro = await ctx.askJohnny(`Someone made you look up "${result.title}" on Wikipedia. Give ONE flat line — ${angle}. Say NOTHING factual about it: no dates, no places, no definition. The real article is printed directly under your line.`, {
+        extraSystem: ONE_LINER,
         maxTokens: 50,
       });
       const body = result.extract.length > 1500 ? `${result.extract.slice(0, 1500)}…` : result.extract;
@@ -103,7 +134,10 @@ module.exports = [
       const result = await ctx.define.getDefinition(word);
       if (!result) return interaction.editReply(`"${word}" isn't in the dictionary. you made it up or spelled it wrong.`);
       const body = result.meanings.map(m => `*${m.pos}* — ${m.def}`).join('\n');
-      const quip = await ctx.askJohnny(`Someone looked up the word "${result.word}". Give ONE flat throwaway line. Don't define it yourself.`, { maxTokens: 40 });
+      const quip = await ctx.askJohnny(`Someone looked up the word "${result.word}". Give ONE flat throwaway line. Don't define it yourself.`, {
+        extraSystem: ONE_LINER,
+        maxTokens: 40,
+      });
       await interaction.editReply(`**${result.word}**${result.phonetic ? ` ${result.phonetic}` : ''}\n${body}\n\n${quip}`);
     },
   },
