@@ -6,9 +6,9 @@ const { SlashCommandBuilder } = require('discord.js');
 // timezones); an unparseable time is refused, never guessed at.
 
 const SET_LINES = [
-  (when, what) => `fine. ${when}. i'll mention "${what}". don't hold your breath, but i will.`,
-  (when, what) => `noted. ${when} from now, i bug you about "${what}". try to act surprised.`,
-  (when, what) => `${when}. "${what}". consider it on my list. such as it is.`,
+  (when, what) => `Confirmed. In ${when} I raise "${what}".`,
+  (when, what) => `Logged. ${when} from now, I remind you about "${what}".`,
+  (when, what) => `Set for ${when} from now: "${what}". It is on the list.`,
 ];
 
 const MAX_MS = 365 * 86_400_000;
@@ -16,7 +16,7 @@ const MAX_MS = 365 * 86_400_000;
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('remind')
-    .setDescription('Johnny reminds you about something. Eventually.')
+    .setDescription('Johnny reminds you about something at the time you set.')
     .addSubcommand(s =>
       s.setName('me').setDescription('Set a reminder')
         .addStringOption(o => o.setName('when').setDescription('e.g. "in 2h", "30m", "3d"').setRequired(true))
@@ -40,10 +40,10 @@ async function remindMe(interaction, ctx) {
 
   const ms = ctx.util.parseDuration(when);
   if (!ms) {
-    return interaction.editReply("i can't read that as a time. give me something like 'in 2h', '30m', or '3d'.");
+    return interaction.editReply("That is not a time I can read. Use a format like 'in 2h', '30m', or '3d'.");
   }
   if (ms > MAX_MS) {
-    return interaction.editReply("a year out. i'm not holding that. pick something this decade.");
+    return interaction.editReply('Negative. One year is the maximum. Pick a shorter interval.');
   }
 
   const reminder = {
@@ -66,12 +66,12 @@ async function remindList(interaction, ctx) {
   const now = Date.now();
   const mine = ctx.db.data.reminders.filter(r => !r.done && r.userId === interaction.user.id);
   if (!mine.length) {
-    return interaction.editReply("you've got nothing pending. living in the moment, apparently.");
+    return interaction.editReply('No pending reminders.');
   }
   const lines = mine
     .sort((a, b) => a.fireAt - b.fireAt)
     .map(r => `\`${r.id}\` — in ${ctx.util.humanizeMs(r.fireAt - now)}: ${r.text}`);
-  await interaction.editReply(`your pending reminders:\n${lines.join('\n')}`);
+  await interaction.editReply(`Your pending reminders:\n${lines.join('\n')}`);
 }
 
 async function remindCancel(interaction, ctx) {
@@ -81,8 +81,8 @@ async function remindCancel(interaction, ctx) {
     r => !(r.id === id && r.userId === interaction.user.id),
   );
   if (ctx.db.data.reminders.length === before) {
-    return interaction.editReply("don't have that one. check /remind list for the id.");
+    return interaction.editReply('No reminder of yours has that id. Check /remind list.');
   }
   ctx.db.flush();
-  await interaction.editReply('cancelled. as if it never mattered.');
+  await interaction.editReply('Cancelled.');
 }

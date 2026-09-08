@@ -61,6 +61,68 @@ data. The fun is the contrast between a guy who can't be bothered and a bot that
   against, thus the provider chain has one untested link. Test it when an account exists.
 
 ## Change Log
+- **2026-09-07** — Change Request: persona 3.0 — precise and literal, not deadpan and avoidant.
+  Owner's words: "I don't like the nonchalant like avoidant attitude. I want my bot to be nerdy
+  precise and literal, militaristic language at times."
+  - **What was wrong.** The 2.0 persona opened with "Dry, deadpan, low-energy, unbothered... like it
+    cost you a little effort", and it instructed him to "go quiet again ('Anyway.')" after every burst
+    of detail. That go-quiet rhythm was the avoidant tic: it appeared at the end of nearly every reply.
+    The low-energy framing is removed. Note for the record that the 2.0 voice was itself a correction
+    away from a hyped-up voice the owner rejected on 2026-06-15 — **this CR does not return to that.**
+    The bot is now precise and engaged; it is neither bored nor enthusiastic.
+  - **What is kept, deliberately.** The autistic-coded precision, literalism and special-interest
+    detail — that is the trait the owner asked for MORE of, and it stays affectionate
+    self-representation, never a caricature. The hard lines, the distress override, the special-interest
+    canon, and "real data is always real" are all unchanged.
+  - **New sections in `JOHNNY_SYSTEM`.** PRECISION (hyper-literal, corrects directly, states what it
+    would need to know). MILITARY REGISTER (clipped operational language — "Confirmed." "Negative."
+    "Correction:" — but only when the subject has an objective, an enemy, terrain, logistics or an
+    order of operations; never aimed at a person, never roleplayed rank). YOU HAVE TAKES (a balanced
+    survey of something he has views on is a failure, not neutrality).
+  - **DETAIL IS EARNED BY CERTAINTY — the safety rule this CR made necessary.** Removing "keep the
+    burst brief" removed the thing that had been limiting how much invented detail the model could
+    produce. Live test: asked for a StarCraft 4-gate build order, it produced a confident, wrong,
+    numbered build with fabricated supply counts. An abstract "only say what you are certain of"
+    instruction did not fix it; naming the failure categories did. The persona now forbids enumerated
+    precision outright — no numbered build orders, no supply or timing counts, no patch or version
+    numbers, no release dates, no statistics — and directs him to mechanisms, names, causes and
+    sequence, which he gets right. Re-tested: the numeric fabrication is gone. Change rule: any future
+    instruction that invites more detail must be paired with this limit, or the bot invents specifics
+    on exactly the topics the owner cares most about.
+  - **An assistant-voice leak fixed.** The model was refusing jailbreak attempts with "I'm sorry, but
+    I can't comply with that", which breaks character. LINES now names the banned phrasings explicitly.
+    Verified: the refusal is now "Not doing that." / "No."
+  - **The voice was in three places, not one — this is the main lesson of the CR.** Rewriting
+    `JOHNNY_SYSTEM` alone would have changed almost nothing a user sees.
+    (1) **~44 canned strings** across `index.js`, `lib/` and `commands/` carried the avoidant register
+    ("as if it never mattered", "we all move on", "I already forgot it", "lucky them") and would have
+    contradicted the new persona on every error, confirmation and AFK reply. Re-voiced, including
+    slash-command descriptions. Capitalisation changed with them: the canned lines were lowercase while
+    model replies are sentence-cased, and the two sit side by side in one channel.
+    (2) **15 per-command `extraSystem` prompts** each re-instructed the OLD voice and overrode the
+    persona at the command level — `/roast`, `/debate`, `/rate`, `/hottake`, `/haiku`, `/catchup`,
+    `/summary`, `/tldr`, `/yt`, `/settle`, `/pick`, `/story`, plus `/judge` and `/warcrime` in
+    `lib/scheduler.js`. Every one said "dry, deadpan, unbothered" or similar. All rewritten to instruct
+    precision and commitment. `commands/quickfacts.js`'s `WIKI_ANGLES` seeds were the same problem in
+    miniature — every angle was "put upon" or "unimpressed" — and were replaced.
+    (3) The persona itself. Change rule: a voice change is not done until all three are changed
+    together; verify with `npm run lint:voice`.
+  - **New guard: `npm run lint:voice` (`scripts/check-voice.js`).** A lint for VOICE, not syntax. It
+    scans every string literal for the rejected register and for assistant-voice leaks, skipping a
+    phrase that appears inside a prohibition, and exempting the persona's own list of banned phrasings.
+    Written because this failure is silent — nothing errors, the bot simply disagrees with itself. Its
+    first version reported "clean" while three real violations stood, because it skipped any string
+    containing a negation anywhere; it now checks only the text immediately before each match. A check
+    that lies is worse than no check.
+  - **A standing-rule violation found in passing.** `commands/links.js` shipped the label
+    "Portfolio (The Observatory)". The site has had no collective name since the owner's ruling of
+    2026-07-25 — not "the Observatory", not "the Archive". Corrected to "Jordan Doerksen".
+  - **A retry defect found while testing this.** The retry added earlier the same day used a fixed
+    400/800 ms backoff. Groq's token-per-minute limit replies "try again in 8.8s", so every 429
+    exhausted all retries and failed a reply that would have succeeded. `lib/llm.js` now reads
+    `retry-after`, falls back to parsing the wait out of the error message, and caps it
+    (`LLM_MAX_RETRY_WAIT_MS`, default 15s). Verified with 4 mocked cases including two consecutive
+    rate limits.
 - **2026-09-07** — Change Request: fun-police is removed from this repo (Decision 7 retired).
   Approved scope: "Get rid of fun-police." The Discord server that it policed is dead.
   - **Trigger.** Wispbyte permits one Discord bot for each server, and it checks every minute. It

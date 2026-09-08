@@ -46,6 +46,9 @@ content/trivia.json     the committed trivia bank — 120 questions across his 1
 config/llm.json         the provider chain — order, defaults, and per-provider baseUrl / apiKeyEnv /
                         model / modelEnv / tokenParam / extraBody
 scripts/probe-llm.js    `npm run probe` — an end-to-end test of the model path, without Discord
+scripts/check-voice.js  `npm run lint:voice` — scans every string for the rejected voice. Johnny's
+                        voice lives in THREE places (the persona, ~44 canned replies, ~15 per-command
+                        extraSystem prompts); this catches the two that are easy to forget
 data/johnny.json        the whole persistent state (gitignored)
 ```
 

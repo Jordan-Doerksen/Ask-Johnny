@@ -24,29 +24,30 @@ module.exports = {
       const line = interaction.options.getString('line');
       if (!stories[ch]) stories[ch] = [];
       if (stories[ch].length >= MAX_LINES) {
-        return interaction.editReply("this story's gone on long enough. someone /story end it.");
+        return interaction.editReply('This story is at the line limit. Use /story end to finish it.');
       }
       stories[ch].push({ name: interaction.member?.displayName || interaction.user.username, text: line });
       ctx.db.flush();
-      return interaction.editReply(`added. that's line ${stories[ch].length}. someone keep it going.`);
+      return interaction.editReply(`Logged. That is line ${stories[ch].length}. The next line is open.`);
     }
 
     if (sub === 'show') {
       const s = stories[ch];
-      if (!s || !s.length) return interaction.editReply('there is no story going. /story add to start one.');
-      return interaction.editReply(`📖 the story so far:\n${s.map(l => l.text).join(' ')}`.slice(0, 1900));
+      if (!s || !s.length) return interaction.editReply('No story is running here. Use /story add to start one.');
+      return interaction.editReply(`📖 The story so far:\n${s.map(l => l.text).join(' ')}`.slice(0, 1900));
     }
 
     // end
     const s = stories[ch];
-    if (!s || !s.length) return interaction.editReply('nothing to end. there is no story.');
+    if (!s || !s.length) return interaction.editReply('No story to end.');
     const text = s.map(l => l.text).join(' ').slice(0, 4000);
     const ending = await ctx.askJohnny(`Here's a group story. Write ONE flat, anticlimactic final sentence to end it:\n\n${text}`, {
-      extraSystem: 'End the story in one deadpan line. Undercut whatever was building. No drama.',
+      extraSystem: 'End the story in ONE line that actually resolves it. Land the ending, do not undercut it ' +
+        'and do not trail off. No drama, no moral.',
       temperature: 1.0,
     });
     delete stories[ch];
     ctx.db.flush();
-    return interaction.editReply(`📖 ${text}\n\n…${ending}\n\n*the end. finally.*`.slice(0, 1990));
+    return interaction.editReply(`📖 ${text}\n\n…${ending}\n\n*The end.*`.slice(0, 1990));
   },
 };

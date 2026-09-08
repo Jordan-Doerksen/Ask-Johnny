@@ -88,10 +88,10 @@ client.on('interactionCreate', async interaction => {
     // doesn't burn the shared global window (and vice versa).
     const perCmd = cmd.cooldownMs || 0;
     if (check(interaction.user.id)) {
-      return interaction.reply({ content: 'give it a second.', flags: MessageFlags.Ephemeral });
+      return interaction.reply({ content: 'Stand by. One second between commands.', flags: MessageFlags.Ephemeral });
     }
     if (perCmd && check(interaction.user.id, perCmd, interaction.commandName)) {
-      return interaction.reply({ content: 'easy. that one takes it out of me. give it a bit.', flags: MessageFlags.Ephemeral });
+      return interaction.reply({ content: 'That command has a longer cooldown. Stand by.', flags: MessageFlags.Ephemeral });
     }
     mark(interaction.user.id);
     if (perCmd) mark(interaction.user.id, interaction.commandName);
@@ -120,7 +120,7 @@ client.on('messageCreate', async message => {
 
   // AFK: if the speaker was away, welcome them back and clear it.
   if (memory.clearAfk(message.author.id)) {
-    message.reply('back, are you. i was barely covering for you.').catch(() => {});
+    message.reply('Welcome back. AFK status cleared.').catch(() => {});
   }
   // AFK: if they pinged someone who's away, say so.
   for (const [id, user] of message.mentions.users) {
@@ -128,7 +128,7 @@ client.on('messageCreate', async message => {
     const afk = memory.getAfk(id);
     if (afk) {
       const why = afk.reason && afk.reason !== 'afk' ? `: ${afk.reason}` : '';
-      message.reply(`${user.username}'s afk${why}. don't hold your breath.`).catch(() => {});
+      message.reply(`${user.username} is AFK${why}. Expect a delay.`).catch(() => {});
     }
   }
 

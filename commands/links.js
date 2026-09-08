@@ -5,7 +5,9 @@ const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('disc
 // from the defaults below, which can then be added to or removed like any other.
 
 const DEFAULTS = [
-  { label: 'Portfolio (The Observatory)', url: 'https://jordan-doerksen.github.io' },
+  // The site has no collective name for itself (owner ruling 2026-07-25) — not "the
+  // Observatory", not "the Archive". It is just Jordan Doerksen's site.
+  { label: 'Jordan Doerksen', url: 'https://jordan-doerksen.github.io' },
   { label: 'GitHub', url: 'https://github.com/Jordan-Doerksen' },
 ];
 
@@ -37,26 +39,26 @@ module.exports = {
     if (sub === 'show') {
       const links = getLinks(ctx, guildId);
       if (!links.length) {
-        return interaction.editReply('no links saved. someone with Manage Server can `/links add` some.');
+        return interaction.editReply('No links saved. Anyone with Manage Server can add one with `/links add`.');
       }
       const embed = new EmbedBuilder()
         .setColor(ctx.embeds.MAUVE)
-        .setTitle("Jordan's stuff")
+        .setTitle("Jordan's links")
         .setDescription(links.map(l => `• [${l.label}](${l.url})`).join('\n'))
-        .setFooter({ text: 'go look, or don\'t. it\'s all there.' });
+        .setFooter({ text: 'Add or remove with /links add and /links remove.' });
       return interaction.editReply({ embeds: [embed] });
     }
 
     // add / remove are Manage Server only, so the list stays curated.
     if (!interaction.memberPermissions?.has(PermissionFlagsBits.ManageGuild)) {
-      return interaction.editReply("that's a Manage Server thing. not your call, or mine.");
+      return interaction.editReply('Negative. This requires Manage Server.');
     }
 
     if (sub === 'add') {
       const label = interaction.options.getString('label').trim().slice(0, 80);
       const url = interaction.options.getString('url').trim();
       if (!/^https?:\/\/\S+\.\S+/i.test(url)) {
-        return interaction.editReply("that's not a url i'll vouch for. start it with http(s):// and make it real.");
+        return interaction.editReply('That is not a valid URL. It must start with http:// or https://.');
       }
       const links = getLinks(ctx, guildId);
       const at = links.findIndex(l => l.label.toLowerCase() === label.toLowerCase());
@@ -64,7 +66,7 @@ module.exports = {
       if (at >= 0) links[at] = entry; // same label -> update
       else links.push(entry);
       ctx.db.flush();
-      return interaction.editReply(`added **${label}**. it's on the list now. try to keep it working.`);
+      return interaction.editReply(`Added **${label}** to the list.`);
     }
 
     // remove
@@ -73,9 +75,9 @@ module.exports = {
     const before = links.length;
     ctx.db.data.links[guildId] = links.filter(l => l.label.toLowerCase() !== label.toLowerCase());
     if (ctx.db.data.links[guildId].length === before) {
-      return interaction.editReply(`no link called "${label}". check \`/links show\` for the exact label.`);
+      return interaction.editReply(`No link called "${label}". Check \`/links show\` for the exact label.`);
     }
     ctx.db.flush();
-    return interaction.editReply(`removed **${label}**. gone. like it never linked.`);
+    return interaction.editReply(`Removed **${label}** from the list.`);
   },
 };

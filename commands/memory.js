@@ -5,10 +5,10 @@ const { SlashCommandBuilder } = require('discord.js');
 // reads recent messages live from Discord and recaps what you missed.
 
 const EMPTY_LINES = [
-  "nothing happened. you didn't miss anything. you're welcome i guess.",
-  "it's been dead in here. nothing to catch up on. consider yourself caught up.",
-  'no activity worth the recap. quiet as a library. a boring library.',
-  "you missed nothing. genuinely nothing. don't let it go to your head.",
+  'Nothing happened. You missed nothing.',
+  'No activity since you were last here. You are caught up.',
+  'Nothing to recap. The channel has been quiet.',
+  'Negative. There is nothing to report.',
 ];
 
 const pick = arr => arr[Math.floor(Math.random() * arr.length)];
@@ -19,7 +19,7 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('catchup')
-      .setDescription('Johnny recaps what you missed in here. Flatly.'),
+      .setDescription('Johnny recaps what you missed in this channel.'),
     ephemeral: true, // it's what *you* missed — keep it to you
     cooldownMs: 15_000, // fetches 100 messages + an LLM call — let it rest
     async execute(interaction, ctx) {
@@ -46,8 +46,8 @@ module.exports = [
       const transcript = lines.slice(-120).join('\n').slice(0, 6000);
       const reply = await ctx.askJohnny(`Here's what happened in chat since they were last around:\n\n${transcript}`, {
         extraSystem:
-          'Give a flat, deadpan recap of what actually happened — the gist, who was on about what, like you skimmed ' +
-          'it for someone who stepped away. A few sentences, unbothered. Do not quote it all back.',
+          'Recap what actually happened — who said what, and the point of it. Accurate and specific, names ' +
+          'included. A few sentences. Do not quote it all back, and do not invent anything that is not there.',
         maxTokens: 400,
       });
       await interaction.editReply(reply);
@@ -57,14 +57,14 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('remember')
-      .setDescription('Tell Johnny a fact. He will hold onto it, grudgingly.')
+      .setDescription('Tell Johnny a fact. He keeps it on file.')
       .addStringOption(o => o.setName('subject').setDescription('Who or what is this about? e.g. "dave"').setRequired(true))
       .addStringOption(o => o.setName('fact').setDescription('The thing to remember').setRequired(true).setMaxLength(1000)),
     async execute(interaction, ctx) {
       const subject = interaction.options.getString('subject');
       const fact = interaction.options.getString('fact');
       ctx.memory.addFact(interaction.guildId, subject, fact, interaction.user.id);
-      await interaction.editReply(`noted. ${subject}: ${fact}. i'll carry that around forever now.`);
+      await interaction.editReply(`Logged. ${subject}: ${fact}. It stays on file.`);
     },
   },
 
@@ -77,7 +77,7 @@ module.exports = [
       const subject = interaction.options.getString('subject');
       const found = ctx.memory.getFacts(interaction.guildId, subject);
       if (!found.length) {
-        return interaction.editReply(`i've got nothing on ${subject}. blank slate. lucky them.`);
+        return interaction.editReply(`Nothing on file for ${subject}.`);
       }
 
       // Johnny voices a one-line intro; the facts themselves are shown verbatim
@@ -94,7 +94,7 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('summary')
-      .setDescription('Johnny flatly recaps the last chunk of chat.')
+      .setDescription('Johnny recaps the last chunk of chat.')
       .addIntegerOption(o =>
         o.setName('count').setDescription('How many recent messages (default 30, max 100)').setRequired(false)),
     cooldownMs: 15_000, // fetches a chunk of chat + an LLM call — let it rest
@@ -106,13 +106,13 @@ module.exports = [
         .filter(m => !m.author.bot && m.content.trim())
         .map(m => `${m.member?.displayName || m.author.username}: ${m.content.replace(/\s+/g, ' ').slice(0, 250)}`);
       if (!lines.length) {
-        return interaction.editReply("nothing worth recapping. it's been quiet — or i can't read the messages.");
+        return interaction.editReply('Nothing to recap. The channel is quiet, or I cannot read the messages.');
       }
       const transcript = lines.join('\n').slice(0, 6000);
       const reply = await ctx.askJohnny(`Here's the recent chat:\n\n${transcript}`, {
         extraSystem:
-          'Give a flat, deadpan recap of what actually happened in this chat — the gist, who was on about what, ' +
-          'like you skimmed it for someone who stepped away. A few sentences, unbothered. Do not quote it all back.',
+          'Recap what actually happened in this chat — who said what, and the point of it. Accurate and specific, ' +
+          'names included. A few sentences. Do not quote it all back, and do not invent anything that is not there.',
         maxTokens: 400,
       });
       await interaction.editReply(reply);
@@ -129,8 +129,8 @@ module.exports = [
       ctx.memory.setAfk(interaction.user.id, reason);
       await interaction.editReply(
         reason
-          ? `fine. you're afk: ${reason}. i'll tell people. probably.`
-          : "you're afk. i'll let people know, with minimal enthusiasm.",
+          ? `Logged. You are AFK: ${reason}. I will tell anyone who asks.`
+          : 'Logged. You are AFK. I will tell anyone who asks.',
       );
     },
   },

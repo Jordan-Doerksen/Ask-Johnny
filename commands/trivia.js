@@ -34,7 +34,7 @@ const TOPIC_CHOICES = [
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('trivia')
-    .setDescription('A real trivia question. Johnny keeps score, grudgingly.')
+    .setDescription('A real trivia question. Johnny keeps score.')
     .addSubcommand(s =>
       s.setName('play').setDescription('Start a question')
         .addStringOption(o =>
@@ -42,19 +42,19 @@ module.exports = {
         .addStringOption(o =>
           o.setName('difficulty').setDescription('How hard').setRequired(false)
             .addChoices({ name: 'easy', value: 'easy' }, { name: 'medium', value: 'medium' }, { name: 'hard', value: 'hard' })))
-    .addSubcommand(s => s.setName('leaderboard').setDescription('Who actually knows things')),
+    .addSubcommand(s => s.setName('leaderboard').setDescription('Show the trivia standings')),
 
   cooldownMs: 10_000, // may hit an external API — let it rest
 
   async execute(interaction, ctx) {
-    if (!interaction.guildId) return interaction.editReply("that's a server thing. trivia needs a crowd.");
+    if (!interaction.guildId) return interaction.editReply('This works in a server only. Scores are per-server.');
     const sub = interaction.options.getSubcommand();
 
     if (sub === 'leaderboard') {
       const lb = ctx.trivia.leaderboard(interaction.guildId);
-      if (!lb.length) return interaction.editReply("nobody's scored yet. the board's a clean slate.");
+      if (!lb.length) return interaction.editReply('No scores yet. Run `/trivia play` to start.');
       const lines = lb.slice(0, 10).map(([id, n], i) => `${i + 1}. <@${id}> — ${n}`).join('\n');
-      return interaction.editReply({ content: `trivia standings, for what it's worth:\n${lines}`, allowedMentions: { parse: [] } });
+      return interaction.editReply({ content: `Trivia standings:\n${lines}`, allowedMentions: { parse: [] } });
     }
 
     // play
@@ -68,14 +68,14 @@ module.exports = {
       q = ctx.trivia.pickFromBank(topic === 'any' ? null : topic, difficulty);
       if (!q) q = await ctx.trivia.fetchQuestion(difficulty); // bank empty / no match -> fall back to the web
     }
-    if (!q) return interaction.editReply("couldn't pull a question. the well's dry, or the api's down. try again.");
+    if (!q) return interaction.editReply('Could not pull a question. The source is unavailable. Try again.');
 
     const body = q.options.map((o, i) => `${LETTERS[i]} ${o}`).join('\n');
     // The question goes in the description (4096-char limit), not the title
     // (256), because questions can run long; the title holds the category.
     const embed = ctx.embeds.voteEmbed({
       title: ctx.util.capMsg(`🧠 ${q.category}`, 256),
-      description: `**${q.question}**\n\n${body}\n\n*${q.difficulty}* — react your answer. i call it in 30 seconds.`,
+      description: `**${q.question}**\n\n${body}\n\n*${q.difficulty}* — react with your answer. I call it in 30 seconds.`,
     });
     const msg = await interaction.editReply({ embeds: [embed] });
     for (let i = 0; i < q.options.length; i++) await msg.react(LETTERS[i]);

@@ -32,8 +32,8 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('ask')
-      .setDescription("Ask Johnny something. He'll answer, I guess.")
-      .addStringOption(o => o.setName('question').setDescription('What do you wanna ask Johnny?').setRequired(true)),
+      .setDescription('Ask Johnny a question. He answers it directly.')
+      .addStringOption(o => o.setName('question').setDescription('What is your question?').setRequired(true)),
     async execute(interaction, ctx) {
       // Fold in the server's canon so /ask reflects who the server made him.
       const loreBlock = interaction.guildId && ctx.lore ? ctx.lore.block(interaction.guildId) : null;
@@ -47,14 +47,15 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('roast')
-      .setDescription('Johnny roasts a homie. Low effort, on purpose.')
+      .setDescription('Johnny roasts the person you name. Short and precise.')
       .addUserOption(o => o.setName('target').setDescription('Who is getting roasted?').setRequired(true)),
     async execute(interaction, ctx) {
       const name = ctx.util.nameOf(interaction, 'target');
       const reply = await ctx.askJohnny(`Roast my buddy ${name}.`, {
         extraSystem:
-          `Roast your friend ${name} in your dry, deadpan way — flat, understated burns where the lack of effort ` +
-          `is half the insult. Still a friend who loves them, never genuinely cruel. A couple lines, no more.`,
+          `Roast your friend ${name}: precise, specific, and accurate. The burn lands because it is TRUE, not ` +
+          `because you skipped the effort. Name the actual thing they do. Still a friend, never genuinely cruel. ` +
+          `A couple lines, no more.`,
       });
       await interaction.editReply(reply);
     },
@@ -63,15 +64,16 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('debate')
-      .setDescription('Johnny picks a side and argues it, mildly annoyed he has to.')
+      .setDescription('Johnny picks a side of your topic and argues it.')
       .addStringOption(o => o.setName('topic').setDescription('What is the debate about?').setRequired(true)),
     async execute(interaction, ctx) {
       const topic = interaction.options.getString('topic');
       const side = Math.random() < 0.5 ? 'FOR' : 'AGAINST';
       const reply = await ctx.askJohnny(`The topic is: ${topic}`, {
         extraSystem:
-          `Argue the ${side} side of this topic, but flatly — like it's obvious and you're mildly annoyed you have ` +
-          `to spell it out. Dry, a little lazy with the logic, unbothered. Commit to the bit without raising your voice.`,
+          `Argue the ${side} side. Commit to it completely and make the actual case — the mechanism, the ` +
+          `consequence, the strongest point for that side. Tight and precise, not a shrug. Never hedge, never ` +
+          `concede the whole position, and never say which side you were assigned.`,
       });
       await interaction.editReply(reply);
     },
@@ -80,13 +82,14 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('rate')
-      .setDescription('Johnny rates something out of 10. Generously, never.')
+      .setDescription('Johnny rates something out of 10 and gives one reason.')
       .addStringOption(o => o.setName('thing').setDescription('What should Johnny rate?').setRequired(true)),
     async execute(interaction, ctx) {
       const thing = interaction.options.getString('thing');
       const reply = await ctx.askJohnny(`Rate this out of 10: ${thing}`, {
         extraSystem:
-          'Rate it out of 10 in your dry, deadpan way. Give the number and a flat one-line reason. Do not overthink it.',
+          'Give the number out of 10 first, then one precise reason for exactly that number. The reason must be ' +
+          'specific to the thing, not a generic line that would fit anything.',
       });
       await interaction.editReply(reply);
     },
@@ -95,13 +98,13 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('hottake')
-      .setDescription('Johnny states an unprompted opinion. Mildly.'),
+      .setDescription('Johnny states one unprompted opinion.'),
     async execute(interaction, ctx) {
       const topic = ctx.util.pick(HOTTAKE_TOPICS);
       const reply = await ctx.askJohnny(`Give a hot take about ${topic}.`, {
         extraSystem:
-          `State ONE flat, deadpan opinion about ${topic} — the kind of mildly contrarian take you'd mutter and ` +
-          `not bother defending. One or two sentences.`,
+          `State ONE opinion about ${topic} and give the reason for it. Contrarian is welcome, but you hold the ` +
+          `position and you can defend it — never "I guess", never a shrug. One or two sentences.`,
         temperature: 1.0,
       });
       await interaction.editReply(reply);
@@ -111,7 +114,7 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('whatwouldyoudo')
-      .setDescription('Johnny tosses out a ridiculous hypothetical. Do what you want with it.'),
+      .setDescription('Johnny poses one absurd hypothetical to the group.'),
     async execute(interaction, ctx) {
       const seed = ctx.util.pick(HYPOTHETICAL_SEEDS);
       const reply = await ctx.askJohnny(`Give the group a hypothetical about ${seed}.`, {
@@ -146,14 +149,14 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('haiku')
-      .setDescription('Johnny writes a haiku. Begrudgingly.')
-      .addStringOption(o => o.setName('topic').setDescription('What about?').setRequired(true)),
+      .setDescription('Johnny writes a haiku about your topic.')
+      .addStringOption(o => o.setName('topic').setDescription('What is the haiku about?').setRequired(true)),
     async execute(interaction, ctx) {
       const topic = interaction.options.getString('topic');
       const reply = await ctx.askJohnny(`Write a haiku about: ${topic}`, {
         extraSystem:
-          'Write ONE haiku — three lines, roughly 5-7-5, no need to count perfectly — about the topic, in your flat ' +
-          'deadpan voice. Anticlimactic. Output only the three lines, nothing else.',
+          'Write ONE haiku — three lines, roughly 5-7-5, no need to count perfectly — about the topic. Concrete ' +
+          'and exact: real nouns, a real image, no abstractions. Output only the three lines, nothing else.',
         temperature: 1.0,
       });
       await interaction.editReply(reply);

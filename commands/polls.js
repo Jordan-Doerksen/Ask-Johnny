@@ -39,7 +39,7 @@ const DILEMMA_THEMES = [
 async function postVerdictPoll(interaction, ctx, { kind, title, scenario }) {
   const embed = ctx.embeds.voteEmbed({
     title,
-    description: `${scenario}\n\n✅ = yeah   ❌ = nah\nJohnny calls it in 60 seconds.`,
+    description: `${scenario}\n\n✅ = yes   ❌ = no\nJohnny calls it in 60 seconds.`,
   });
   const msg = await interaction.editReply({ embeds: [embed] });
   await msg.react('✅');
@@ -62,7 +62,7 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('judge')
-      .setDescription('Johnny poses a moral dilemma. Vote, then he shrugs out a verdict.'),
+      .setDescription('Johnny poses a moral dilemma. Vote, then he gives the verdict.'),
     async execute(interaction, ctx) {
       const theme = ctx.util.pick(DILEMMA_THEMES);
       const scenario = await ctx.askJohnny(`Pose a moral dilemma about ${theme}.`, {
@@ -78,7 +78,7 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('warcrime')
-      .setDescription('A dark historical event. Vote justified or not, then Johnny weighs in. Barely.'),
+      .setDescription('A dark historical event. Vote justified or not, then Johnny rules on it.'),
     async execute(interaction, ctx) {
       const angle = ctx.util.pick(WAR_ANGLES);
       const scenario = await ctx.askJohnny(`Name a real dark historical event from ${angle} to judge.`, {
@@ -95,10 +95,10 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('poll')
-      .setDescription('A real vote that survives restarts. Johnny tallies it later.')
+      .setDescription('A vote that survives restarts. Johnny tallies it at the deadline.')
       .addStringOption(o => o.setName('question').setDescription('The question').setRequired(true))
       .addStringOption(o => o.setName('options').setDescription('2-6 options, separated by |').setRequired(true))
-      .addStringOption(o => o.setName('duration').setDescription('optional, e.g. "2h" (default 1h)').setRequired(false)),
+      .addStringOption(o => o.setName('duration').setDescription('Optional, e.g. "2h" (default 1h)').setRequired(false)),
     async execute(interaction, ctx) {
       const question = interaction.options.getString('question');
       const raw = interaction.options.getString('options');
@@ -106,7 +106,7 @@ module.exports = [
 
       const options = raw.split('|').map(s => s.trim()).filter(Boolean).slice(0, 6);
       if (options.length < 2) {
-        return interaction.editReply("give me at least two options, split by | . one option isn't a poll, it's a decree.");
+        return interaction.editReply('Two options minimum, separated by | . One option is not a poll.');
       }
 
       const ms = Math.min(ctx.util.parseDuration(durStr) || POLL_DEFAULT_MS, POLL_MAX_MS);
@@ -114,7 +114,7 @@ module.exports = [
       const body = options.map((o, i) => `${LETTERS[i]} ${o}`).join('\n');
       const embed = ctx.embeds.voteEmbed({
         title: `📊 ${question}`,
-        description: `${body}\n\nvote with the letters. i'll tally it in ${ctx.util.humanizeMs(ms)}.`,
+        description: `${body}\n\nVote with the letters. I tally it in ${ctx.util.humanizeMs(ms)}.`,
       });
 
       const msg = await interaction.editReply({ embeds: [embed] });

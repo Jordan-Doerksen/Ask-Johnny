@@ -8,7 +8,7 @@ const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('disc
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('lore')
-    .setDescription('Canon about Johnny and this server. He keeps it in his head.')
+    .setDescription('Server canon. Johnny reads it on every mention and /ask.')
     .addSubcommand(s =>
       s.setName('add').setDescription('Add a piece of canon (Manage Server)')
         .addStringOption(o => o.setName('fact').setDescription('e.g. "Johnny hates Tuesdays"').setRequired(true)))
@@ -18,40 +18,40 @@ module.exports = {
         .addStringOption(o => o.setName('id').setDescription('The id from /lore list').setRequired(true))),
 
   async execute(interaction, ctx) {
-    if (!interaction.guildId) return interaction.editReply("that's a server thing. there's no canon in an empty room.");
+    if (!interaction.guildId) return interaction.editReply('This works in a server only. Canon is per-server.');
     const sub = interaction.options.getSubcommand();
     const g = interaction.guildId;
 
     if (sub === 'list') {
       const entries = ctx.lore.list(g);
       if (!entries.length) {
-        return interaction.editReply('no canon yet. someone with Manage Server can `/lore add` what i\'m supposed to know.');
+        return interaction.editReply('No canon yet. Anyone with Manage Server can add one with `/lore add`.');
       }
       const embed = new EmbedBuilder()
         .setColor(ctx.embeds.MAUVE)
-        .setTitle('What Johnny knows to be true')
+        .setTitle('Server canon')
         .setDescription(entries.map(e => `• ${e.text}  \`${e.id}\``).join('\n').slice(0, 4000))
-        .setFooter({ text: 'this is in my head whether i like it or not.' });
+        .setFooter({ text: 'I read this on every mention and /ask.' });
       return interaction.editReply({ embeds: [embed] });
     }
 
     // add / remove are Manage Server only, so the canon stays curated.
     if (!interaction.memberPermissions?.has(PermissionFlagsBits.ManageGuild)) {
-      return interaction.editReply("that's a Manage Server thing. not your call, or mine.");
+      return interaction.editReply('Negative. This requires Manage Server.');
     }
 
     if (sub === 'add') {
       const fact = interaction.options.getString('fact').trim().slice(0, 300);
-      if (!fact) return interaction.editReply('empty canon is just silence. give me something.');
+      if (!fact) return interaction.editReply('Nothing to add. Canon needs text.');
       const entry = ctx.lore.add(g, fact, interaction.user.id);
-      return interaction.editReply(`noted as canon: ${fact}. it's who i am now, apparently. \`${entry.id}\``);
+      return interaction.editReply(`Recorded as canon: ${fact}. Id \`${entry.id}\`.`);
     }
 
     // remove
     const id = interaction.options.getString('id').trim();
     if (!ctx.lore.remove(g, id)) {
-      return interaction.editReply(`no canon with id \`${id}\`. check \`/lore list\`.`);
+      return interaction.editReply(`No canon with id \`${id}\`. Check \`/lore list\`.`);
     }
-    return interaction.editReply('struck from the canon. i already forgot it.');
+    return interaction.editReply('Removed from the canon.');
   },
 };

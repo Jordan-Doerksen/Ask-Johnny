@@ -6,7 +6,7 @@ const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require('disco
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('starboard')
-    .setDescription('Pin the good messages. Johnny keeps a board.')
+    .setDescription('Starboard setup. Johnny reposts messages that hit a ⭐ count.')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .addSubcommand(s =>
       s.setName('set').setDescription('Set the starboard channel')
@@ -26,7 +26,7 @@ module.exports = {
       const channel = interaction.options.getChannel('channel');
       sb[g] = { channelId: channel.id, threshold: sb[g]?.threshold || 3 };
       ctx.db.flush();
-      return interaction.editReply(`fine. stars go to <#${channel.id}> once they hit ${sb[g].threshold}. i'll keep an eye on it. loosely.`);
+      return interaction.editReply(`Confirmed. Messages go to <#${channel.id}> at ${sb[g].threshold} ⭐.`);
     }
 
     if (sub === 'threshold') {
@@ -36,13 +36,13 @@ module.exports = {
       ctx.db.flush();
       return interaction.editReply(
         sb[g].channelId
-          ? `threshold's ${count} now.`
-          : `threshold's ${count}. point me at a channel with /starboard set and we're in business.`,
+          ? `Confirmed. Threshold is ${count} ⭐.`
+          : `Threshold is ${count} ⭐. Set a channel with /starboard set to turn it on.`,
       );
     }
 
     // off
     if (sb[g]) { delete sb[g]; ctx.db.flush(); }
-    return interaction.editReply("starboard's off. nothing was worth pinning anyway.");
+    return interaction.editReply('Starboard off.');
   },
 };

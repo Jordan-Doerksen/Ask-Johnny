@@ -20,29 +20,29 @@ const ONE_LINER =
 // falls into one default opening and never leaves it. Measured 2026-09-07 — seven /wiki
 // intros in a row began with the word "Fine". Rotating the angle breaks the tic.
 const WIKI_ANGLES = [
-  'sound mildly put upon that you had to look it up',
-  'make a flat remark about the person asking',
-  'note that the article is right there and they could have read it',
-  'sound like you already knew this and are unimpressed',
-  'be briefly, flatly curious about it despite yourself',
-  'treat the request as one more thing on a long list',
+  'note that you already know this one',
+  'say plainly that the text below is the accurate version, not your summary',
+  'give one precise reason the topic is worth knowing',
+  'be openly interested in it for exactly one line',
+  'note that this is a topic people usually state wrong',
+  'point out that the detail people actually want is in the text below',
 ];
 
 module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('weather')
-      .setDescription("Johnny tells you the weather. Like it's a chore.")
+      .setDescription('Current weather for a place. Live data, not a forecast.')
       .addStringOption(o => o.setName('place').setDescription('City or place').setRequired(true)),
     async execute(interaction, ctx) {
       const place = interaction.options.getString('place');
       const w = await ctx.weather.getWeather(place);
       if (!w) {
-        return interaction.editReply(`couldn't find "${place}" on the map. spell it like a place that exists.`);
+        return interaction.editReply(`No match for "${place}". Check the spelling, or name a larger nearby city.`);
       }
 
       const dataLine = `${w.label}: ${w.temp}°C, feels like ${w.feels}°C, ${w.desc}, wind ${w.wind} km/h.`;
-      const quip = await ctx.askJohnny(`The weather is: ${dataLine} Give ONE flat, deadpan reaction line. Don't repeat the numbers.`, {
+      const quip = await ctx.askJohnny(`The weather is: ${dataLine} Give ONE short, exact reaction line. Don't repeat the numbers.`, {
         extraSystem: ONE_LINER,
         maxTokens: 60,
       });
@@ -53,7 +53,7 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('convert')
-      .setDescription('Johnny converts units. Correctly, unfortunately.')
+      .setDescription('Convert a value from one unit to another.')
       .addNumberOption(o => o.setName('value').setDescription('The number').setRequired(true))
       .addStringOption(o => o.setName('from').setDescription('e.g. miles').setRequired(true))
       .addStringOption(o => o.setName('to').setDescription('e.g. km').setRequired(true)),
@@ -64,7 +64,7 @@ module.exports = [
 
       const res = ctx.convert.convert(value, from, to);
       if (!res.ok) {
-        return interaction.editReply(`i don't do "${from}" to "${to}". try real units from the same family.`);
+        return interaction.editReply(`Negative. "${from}" and "${to}" are not the same kind of unit.`);
       }
 
       const out = ctx.convert.round(res.value);
@@ -79,16 +79,16 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('wiki')
-      .setDescription('Johnny reads you the Wikipedia gist. Reluctantly.')
+      .setDescription('Look up a topic and get the Wikipedia summary, verbatim.')
       .addStringOption(o => o.setName('topic').setDescription('What to look up').setRequired(true)),
     async execute(interaction, ctx) {
       const topic = interaction.options.getString('topic');
       const result = await ctx.wiki.getWiki(topic);
       if (!result) {
-        return interaction.editReply(`couldn't find "${topic}" on wikipedia. either it doesn't exist or you spelled it creatively.`);
+        return interaction.editReply(`No Wikipedia article for "${topic}". Check the spelling, or use the exact title.`);
       }
       if (result.disambiguation) {
-        return interaction.editReply(`"${topic}" could be a bunch of things. be more specific. i'm not guessing.`);
+        return interaction.editReply(`"${topic}" matches several articles. Give me the exact title.`);
       }
       // The summary is shown verbatim (accurate); Johnny only voices the intro.
       // Asking for an "intro line" about a topic invites the model to define the topic,
@@ -107,17 +107,18 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('tldr')
-      .setDescription('Paste a link. Johnny reads it so you do not have to.')
+      .setDescription('Paste a link. Get the page summarized in a few sentences.')
       .addStringOption(o => o.setName('url').setDescription('The link').setRequired(true)),
     cooldownMs: 15_000, // fetches an external page + an LLM call — let it rest
     async execute(interaction, ctx) {
       const page = await ctx.tldr.fetchPageText(interaction.options.getString('url'));
-      if (page.error === 'badurl') return interaction.editReply("that's not a real link. give me an http or https url.");
-      if (page.error === 'blocked') return interaction.editReply("not fetching that. internal addresses are off limits.");
-      if (page.error === 'nottext') return interaction.editReply("that's not a webpage i can read. probably a file or an app.");
-      if (page.error) return interaction.editReply("couldn't read that page. it's down, it blocked me, or it's all javascript.");
+      if (page.error === 'badurl') return interaction.editReply('That is not a valid link. Give me an http or https URL.');
+      if (page.error === 'blocked') return interaction.editReply('Negative. Internal addresses are off limits.');
+      if (page.error === 'nottext') return interaction.editReply('That link serves a file, not a webpage I can read.');
+      if (page.error) return interaction.editReply('Could not read that page. It is down, it blocked me, or it is all JavaScript.');
       const summary = await ctx.askJohnny(`Summarize this webpage flatly for someone who won't read it.\n\nTitle: ${page.title}\n\n${page.text}`, {
-        extraSystem: 'Give the gist in 2-4 flat sentences. Deadpan, unbothered. No hype, no "this article is about". Just what it says.',
+        extraSystem: 'Give the gist in 2-4 exact sentences. Say what the page actually claims, in order. No hype, no '
+          + '"this article is about", no padding. Do not add anything the page does not say.',
         maxTokens: 300,
       });
       await interaction.editReply(`**${page.title || 'the link'}**\n${summary}`);
@@ -127,12 +128,12 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('define')
-      .setDescription('Johnny defines a word. From a real dictionary, unfortunately.')
+      .setDescription('Define a word from a real dictionary.')
       .addStringOption(o => o.setName('word').setDescription('The word').setRequired(true)),
     async execute(interaction, ctx) {
       const word = interaction.options.getString('word');
       const result = await ctx.define.getDefinition(word);
-      if (!result) return interaction.editReply(`"${word}" isn't in the dictionary. you made it up or spelled it wrong.`);
+      if (!result) return interaction.editReply(`"${word}" is not in the dictionary. Check the spelling.`);
       const body = result.meanings.map(m => `*${m.pos}* — ${m.def}`).join('\n');
       const quip = await ctx.askJohnny(`Someone looked up the word "${result.word}". Give ONE flat throwaway line. Don't define it yourself.`, {
         extraSystem: ONE_LINER,
@@ -145,16 +146,17 @@ module.exports = [
   {
     data: new SlashCommandBuilder()
       .setName('yt')
-      .setDescription('Johnny summarizes a YouTube video. If it has captions.')
+      .setDescription('Summarize a YouTube video from its captions.')
       .addStringOption(o => o.setName('url').setDescription('YouTube link or id').setRequired(true)),
     cooldownMs: 15_000, // fetches a transcript + an LLM call — let it rest
     async execute(interaction, ctx) {
       const r = await ctx.youtube.getTranscript(interaction.options.getString('url'));
-      if (r.error === 'badid') return interaction.editReply("that's not a youtube link i recognize. paste the actual url.");
-      if (r.error === 'fetchfail') return interaction.editReply("youtube wouldn't load for me. it does that, especially from a server.");
-      if (r.error === 'notranscript') return interaction.editReply(`no captions i can read on${r.title ? ` "${r.title}"` : ' that one'}. can't summarize what i can't read.`);
+      if (r.error === 'badid') return interaction.editReply('That is not a YouTube link I recognize. Paste the full URL.');
+      if (r.error === 'fetchfail') return interaction.editReply('YouTube did not respond. Try again in a minute.');
+      if (r.error === 'notranscript') return interaction.editReply(`No readable captions on${r.title ? ` "${r.title}"` : ' that one'}. I summarize from captions only.`);
       const summary = await ctx.askJohnny(`Summarize this YouTube video from its transcript, flatly.\n\nTitle: ${r.title}\n\nTranscript:\n${r.text}`, {
-        extraSystem: 'Give the gist in 3-5 flat sentences. Deadpan, unbothered. What the video actually covers, not hype. No "this video".',
+        extraSystem: 'Give the gist in 3-5 exact sentences. Say what the video actually covers, in order. No hype, no '
+          + '"this video", no padding. Do not add anything the captions do not say.',
         maxTokens: 350,
       });
       await interaction.editReply(`**${r.title || 'that video'}**\n${summary}`);
