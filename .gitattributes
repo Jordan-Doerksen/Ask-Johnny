@@ -1,0 +1,50 @@
+# Line endings belong to the repo, not to the machine.
+# core.autocrlf is true in the SYSTEM gitconfig on this box, so without this file the bytes on
+# disk are decided by a Git-for-Windows default instead of by this project. That silently breaks
+# `#!/bin/bash\r`, any recorded SHA-256 over a checked-in file, and any config hash printed at
+# build time - which will not match between machines.
+# Rule of thumb: if a program other than git reads the bytes, declare the file explicitly.
+# AI-Brain: integrity-law.md VCS-08 / LAW.md DES-09.
+
+* text=auto eol=lf
+
+# Must stay LF - a shell reads these bytes.
+*.sh      text eol=lf
+*.bash    text eol=lf
+
+# Must stay CRLF - cmd.exe and PowerShell read these bytes.
+*.bat     text eol=crlf
+*.cmd     text eol=crlf
+*.ps1     text eol=crlf
+*.psm1    text eol=crlf
+
+# Binary - never touch.
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.gif     binary
+*.webp    binary
+*.ico     binary
+*.zip     binary
+*.gz      binary
+*.exe     binary
+*.dll     binary
+*.pdf     binary
+*.ttf     binary
+*.otf     binary
+*.woff    binary
+*.woff2   binary
+*.wav     binary
+*.ogg     binary
+*.mp3     binary
+*.db      binary
+*.sqlite  binary
+*.sqlite3 binary
+
+# Godot export bundles.
+*.pck     binary
+
+# NOT marked -text, deliberately (checked 2026-09-22): .import, .uid, .tres and .tscn are already
+# stored and written as LF by the editor on this machine, so `* text=auto eol=lf` above already
+# produces the identical bytes. Marking them -text changes git's storage MODE, which restages every
+# one of them for no content change - 65 files in `fulfillment` alone. Churn, not a fix.
