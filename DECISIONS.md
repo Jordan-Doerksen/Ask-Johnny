@@ -92,6 +92,9 @@ paid features of the big moderation bots, built in, with no LLM in the path of a
    applies the top step again. **Johnny never kicks or bans on his own.** A timeout expires by
    itself, thus a false positive costs a member one hour, not their membership.
    Change rule: an automatic kick or ban is a new Change Request, not a config edit.
+   **Amended 2026-10-20 (chunk 2 interview):** Johnny's automatic actions are now timeouts, the
+   invite and DM pause (Decision 16), and the anti-nuke role strip (Decision 18). Each one can be
+   undone, and the timeout and the pause expire by themselves. **Never a kick or a ban** still stands.
 15. **Johnny's role has Administrator** (2026-10-20, owner choice, against the recommendation).
    The recommendation was the exact permissions that each chunk uses. The owner chose Administrator.
    **The recorded risk:** a leaked `BOT_TOKEN` gives total control of every server that Johnny is
@@ -100,10 +103,41 @@ paid features of the big moderation bots, built in, with no LLM in the path of a
    highest role that he has to act on.
    Change rule: revisit when Johnny joins a server that the owner does not own.
 
+*Decisions 16-19 are the chunk 2 interview (2026-10-20). They are decided; the build is next.
+The tuning values go in `config/security.json`, split from `config/moderation.json` because
+security is tuned on its own (DES-03).*
+
+16. **A raid gets an automatic response that expires by itself** (2026-10-20, owner choice). Two
+   detectors: Johnny's join counter (default: 8 joins inside 30 seconds), and Discord's own raid flag
+   (`incidentsData.raidDetectedAt` on a guild update). The join counter is the verified path. The
+   Discord flag is in discord-api-types and discord.js 14.27, but its arrival on a guild update is
+   not verified live. On either detector, Johnny does three things: (1) pauses invites and DMs
+   between non-friends (`guild.setIncidentActions`, default 1h, Discord maximum 24h); (2) times out
+   every member who joined inside the spike window (default 1h), one case each; (3) posts one alert
+   to the mod log. **The recorded cost:** a real member who joined during the spike is muted too.
+   `/timeout off` clears it.
+   Change rule: a raid response that does not expire by itself is a new Change Request.
+17. **`/lockdown` is server-level only** (2026-10-20, owner choice). `on` pauses invites and DMs
+   and raises the verification level to Highest (a verified phone is needed to talk). Johnny saves
+   the previous level in the store. `off` lifts the pause and restores that level exactly.
+   **`/lockdown` never edits a channel permission overwrite.** The channel-lock option was declined
+   because an exact restore of every overwrite is the riskiest code in the bot. Needs Manage Server.
+18. **Anti-nuke strips roles** (2026-10-20, owner choice). Johnny watches the audit log for channel
+   deletes, role deletes, bans, and kicks. At 3 inside 60 seconds by one executor (config), he
+   removes every role he can remove from that executor. He records the removed role IDs in a case
+   (type `strip`), posts an alert to the mod log, and DMs the server owner. `/restore <user>` gives
+   back exactly the roles in that member's latest strip case. Exempt: the server owner (out of
+   reach anyway) and Johnny. **The limits, stated:** a bot's managed integration role cannot be
+   removed, so a nuking bot gets an alert only. Johnny cannot stop himself, so a leaked Johnny
+   token is outside anti-nuke (the Decision 15 risk). A real admin who does a bulk cleanup gets
+   stripped too; raise the threshold, or have the owner do it.
+19. **New accounts are flagged, not punished** (2026-10-20, owner choice). A join from an account
+   younger than 7 days (config) posts one line to the mod log. Johnny takes no action.
+
 ## Open Questions
-- **Chunk 2, security:** raid detection by join rate, a one-command lockdown, invite pausing
-  (`guild.setIncidentActions`, at most 24h, verified in discord.js 14.27), and a watch on the audit
-  log for an admin who deletes in bulk. It needs the privileged GuildMembers intent.
+- **Chunk 2, security — interviewed 2026-10-20, build next.** Decisions 16-19. It needs two new
+  intents: GuildMembers (privileged: the owner turns on **Server Members Intent** in the Developer
+  Portal → Bot) and GuildModeration (audit log events, not privileged). No new package.
 - **Chunk 3, server management:** welcome message, autorole, reaction roles, an event log
   (edits, deletes, joins, leaves).
 - **Chunk 4, command hooks — not yet defined.** "Hook commands through him to do whatever I need"
@@ -119,6 +153,21 @@ paid features of the big moderation bots, built in, with no LLM in the path of a
   against, thus the provider chain has one untested link. Test it when an account exists.
 
 ## Change Log
+- **2026-10-20** — Change Request: chunk 2 interview, security (Decisions 16-19; Decision 14 amended).
+  Owner's words: "start the chunk 2 security interview".
+  - **Recon (rank HIGH: automatic actions on members, settings that cover the whole server).**
+    Discord already has Activity Alerts (a raid banner and a push notification, for all servers) and
+    Security Actions (pause invites and DMs). Johnny adds what Discord does not do by itself: the
+    automatic response to a raid, the joiner timeouts, anti-nuke, and a lockdown in one command. The
+    incident-action API is in discord.js 14.27 (`setIncidentActions`, at most 24h).
+  - **Verdicts.** APPROVE: raid detection, `/lockdown`, invite pausing, anti-nuke. FLAVOUR: the
+    raid detector also listens to Discord's own raid flag, so Johnny does not duplicate it. ADD: a
+    flag for new accounts; `/restore` for stripped roles. REDACT: the channel lock in `/lockdown`
+    (owner declined it); automatic action against new accounts (owner chose a flag only).
+  - **Owner choices.** Raid response = pause invites and DMs + time out recent joiners + alert.
+    Lockdown = server-level only. Anti-nuke = strip roles + alert. New accounts = flag only.
+  - **What it costs.** 2 intents (one privileged: a switch in the portal), 2 commands (`/lockdown`,
+    `/restore`), 1 config file, the store gains the saved verification level and the strip cases.
 - **2026-10-20** — Change Request: Johnny becomes the moderation bot for the owner's servers.
   Owner's words: "I want to make ask johnny my discord god bot, able to manage servers, act as
   security and a automod, and be able to hook commands through him to do basically whatever I need
