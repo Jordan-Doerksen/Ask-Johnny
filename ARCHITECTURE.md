@@ -24,6 +24,9 @@ commands/               one file per category; each exports { data, execute } (o
   starboard.js          starboard config (set / threshold / off)
   mod.js                ban, unban, kick, timeout, warn, purge, cases — ephemeral, no cooldown, no LLM
   automod.js            automod (setup / status / off / block / unblock), modlog (set / off)
+  security.js           lockdown (on / off / status), restore
+  _gate.js              the shared gate: guild only → Discord permission → run → one precise error
+                        line + a log event. Every mod and security command uses it
 lib/                    the engines the commands lean on
   johnny.js             the persona + an askJohnny() wrapper over lib/llm.js (temp ~0.95,
                         rate-limited) — it holds no model ID and no provider client
@@ -46,10 +49,13 @@ content/trivia.json     the committed trivia bank — 120 questions across his 1
                         post, Discord error → one precise line. No LLM call (Decision 12)
   automod.js            Discord's native AutoMod: builds the rules from config, creates/updates/
                         deletes only `Johnny · ` rules; an AutoMod block becomes a strike
+  security.js           raid watcher (join counter + Discord's raid flag), lockdown, anti-nuke,
+                        new-account flag. Join lists and action counts are in memory, on purpose
   cooldown.js           in-memory 4s per-user anti-spam
   embeds.js             shared colors + vote/verdict embed helpers
   weather / wiki / define / tldr / youtube / convert / util   small single-purpose helpers
 config/moderation.json  the strike ladder, DM on/off, purge cap, and the AutoMod rule set
+config/security.json    raid threshold and response, lockdown, anti-nuke threshold, new-account age
 config/llm.json         the provider chain — order, defaults, and per-provider baseUrl / apiKeyEnv /
                         model / modelEnv / tokenParam / extraBody
 scripts/probe-llm.js    `npm run probe` — an end-to-end test of the model path, without Discord
@@ -61,7 +67,7 @@ scripts/check-voice.js  `npm run lint:voice` — scans every string for the reje
 data/johnny.json        the whole persistent state (gitignored)
 ```
 
-## The four paths in
+## The paths in
 1. **Slash command** → `interactionCreate` (index.js) → cooldown gate → `defer` →
    `handlers[name].execute(interaction, ctx)`. `ctx` hands every command the shared engines so
    command files stay thin. Success bumps the stat counter and flushes the store.
@@ -78,6 +84,16 @@ data/johnny.json        the whole persistent state (gitignored)
    while Johnny is down) → `autoModerationActionExecution` (index.js) → `automod.handleExecution`
    counts the block action only → `mod.strikeAndEscalate` → at a ladder step, an automatic timeout
    with its own case. Never a kick, never a ban (Decision 14).
+5. **Join** → `guildMemberAdd` → `security.handleJoin`: the join counter (a raid → pause invites and
+   DMs, time out the spike's joiners, alert), the post-trigger sweep, or the new-account flag.
+   **Discord's raid flag** → `guildUpdate` → `security.handleGuildUpdate` → the same raid response.
+6. **Audit log entry** → `guildAuditLogEntryCreate` → `security.handleAuditEntry`: counts watched
+   actions per executor (owner and Johnny exempt); at the threshold, `strip` removes every role
+   Johnny can reach, records a `strip` case, alerts, and DMs the owner. `/restore` reads that case.
+
+**Boot order.** `registerCommands` → `resolveMembersIntent` → `login`. The middle step asks Discord
+whether the Server Members Intent is on; when it is off, it drops the intent before login, because
+a login that asks for a disallowed intent fails and Johnny goes silent everywhere.
 
 ## Time & persistence
 Nothing time-based uses `setTimeout` for delivery. Reminders and polls (incl. trivia questions) are DB

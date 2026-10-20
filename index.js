@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { Client, GatewayIntentBits, REST, Routes, MessageFlags, Partials } = require('discord.js');
+const { Client, GatewayIntentBits, REST, Routes, MessageFlags, Partials, ApplicationFlags } = require('discord.js');
 const { askJohnny } = require('./lib/johnny');
 const llm = require('./lib/llm');
 const log = require('./lib/log');
@@ -25,6 +25,7 @@ const starboard = require('./lib/starboard');
 const scheduler = require('./lib/scheduler');
 const mod = require('./lib/mod');
 const automod = require('./lib/automod');
+const security = require('./lib/security');
 const { check, mark } = require('./lib/cooldown');
 const { loadCommands } = require('./commands/_loader');
 
@@ -65,12 +66,14 @@ const client = new Client({
     GatewayIntentBits.GuildMessageReactions, // for the starboard
     GatewayIntentBits.MessageContent, // PRIVILEGED — must be enabled in the Discord Developer Portal
     GatewayIntentBits.AutoModerationExecution, // AutoMod blocks become strikes (not privileged)
+    GatewayIntentBits.GuildModeration, // audit log events, for anti-nuke (not privileged)
+    GatewayIntentBits.GuildMembers, // PRIVILEGED — joins, for raid detection. Checked before login, see below
   ],
   partials: [Partials.Message, Partials.Channel, Partials.Reaction], // see reactions on uncached messages
 });
 
 // Everything a command needs, handed in so command files stay thin.
-const ctx = { askJohnny, db, memory, embeds, util, convert, weather, wiki, tldr, youtube, define, activity, quotes, lore, trivia, birthdays, ratelimit, mod, automod, log, client, commands: commandData };
+const ctx = { askJohnny, db, memory, embeds, util, convert, weather, wiki, tldr, youtube, define, activity, quotes, lore, trivia, birthdays, ratelimit, mod, automod, security, log, client, commands: commandData };
 
 client.once('clientReady', () => {
   // Log the whole provider chain at boot. When Johnny goes quiet, the first question is
@@ -160,6 +163,37 @@ client.on('autoModerationActionExecution', execution => {
   automod.handleExecution(execution, client).catch(err => log.error('automod_execution_failed', { msg: err.message }));
 });
 
+// Security (DECISIONS.md, Decisions 16-19): the raid watcher and the new-account flag see joins;
+// the raid watcher also hears Discord's own raid flag; anti-nuke reads the audit log.
+client.on('guildMemberAdd', member => {
+  security.handleJoin(member, client).catch(err => log.error('security_join_failed', { msg: err.message }));
+});
+client.on('guildUpdate', (oldGuild, newGuild) => {
+  security.handleGuildUpdate(oldGuild, newGuild, client).catch(err => log.error('security_guild_update_failed', { msg: err.message }));
+});
+client.on('guildAuditLogEntryCreate', (entry, guild) => {
+  security.handleAuditEntry(entry, guild, client).catch(err => log.error('antinuke_failed', { msg: err.message }));
+});
+
+// The Server Members Intent is a switch in the Developer Portal. If it is off, a login that asks
+// for it fails, and Johnny goes silent everywhere — the August outage again. So ask Discord first:
+// when the switch is off, drop the intent, log the fix, and let /lockdown status say raid
+// detection is OFF. The intents are read at connect time, so this must run before login.
+async function resolveMembersIntent() {
+  try {
+    const app = await new REST({ version: '10' }).setToken(TOKEN).get(Routes.currentApplication());
+    const on = (app.flags & (ApplicationFlags.GatewayGuildMembers | ApplicationFlags.GatewayGuildMembersLimited)) !== 0;
+    if (!on) {
+      client.options.intents.remove(GatewayIntentBits.GuildMembers);
+      security.state.membersIntent = false;
+      log.warn('members_intent_off', { fix: 'Developer Portal → Bot → Server Members Intent. Raid detection and new-account flags are off until then.' });
+    }
+  } catch (err) {
+    // Could not ask. Keep the intent: a wrong guess here fails loud at login, never silent.
+    log.warn('members_intent_check_failed', { msg: err.message });
+  }
+}
+
 // Flush the store on shutdown so nothing in-flight is lost.
 for (const sig of ['SIGINT', 'SIGTERM']) {
   process.on(sig, () => {
@@ -174,6 +208,7 @@ for (const sig of ['SIGINT', 'SIGTERM']) {
 // own at github.com/Jordan-Doerksen/fun-police.)
 
 registerCommands()
+  .then(resolveMembersIntent)
   .then(() => client.login(TOKEN))
   .catch(err => {
     log.error('startup_failed', { msg: err.message });

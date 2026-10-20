@@ -1,32 +1,14 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ChannelType, InteractionContextType } = require('discord.js');
+const { gated } = require('./_gate');
 
 // Server setup for moderation: the mod-log channel and Discord's native AutoMod rules
-// (DECISIONS.md, Decision 13). Manage Server only. The rule engine is lib/automod.js.
-
-// The same gate as the mod core: guild only, then the Discord permission, then a precise
-// line for any Discord refusal.
-function setupCommand(data, run) {
-  return {
-    data,
-    ephemeral: true,
-    cooldown: false,
-    async execute(interaction, ctx) {
-      if (!interaction.inGuild()) return interaction.editReply('Negative. This works in a server only.');
-      const denied = ctx.mod.requirePerm(interaction, 'ManageGuild');
-      if (denied) return interaction.editReply(denied);
-      try {
-        await run(interaction, ctx);
-      } catch (err) {
-        ctx.log.error('mod_setup_failed', { command: data.name, guild: interaction.guildId, msg: err.message, code: err.code });
-        await interaction.editReply(ctx.mod.describeError(err));
-      }
-    },
-  };
-}
+// (DECISIONS.md, Decision 13). Manage Server only. The rule engine is lib/automod.js; the gate is
+// commands/_gate.js.
 
 module.exports = [
-  setupCommand(
-    new SlashCommandBuilder()
+  gated({
+    perm: 'ManageGuild',
+    data: new SlashCommandBuilder()
       .setName('modlog')
       .setDescription('Where Johnny posts every case and AutoMod alert.')
       .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
@@ -35,7 +17,7 @@ module.exports = [
         s.setName('set').setDescription('Set the mod-log channel')
           .addChannelOption(o => o.setName('channel').setDescription('A private staff channel').addChannelTypes(ChannelType.GuildText).setRequired(true)))
       .addSubcommand(s => s.setName('off').setDescription('Stop posting cases and alerts')),
-    async (interaction, ctx) => {
+    async run(interaction, ctx) {
       const s = ctx.mod.store(interaction.guildId);
       if (interaction.options.getSubcommand() === 'off') {
         s.modlogChannelId = null;
@@ -50,10 +32,11 @@ module.exports = [
       const alerts = n ? ` AutoMod alerts from ${n} rule${n === 1 ? '' : 's'} now go there too.` : '';
       return interaction.editReply(`Confirmed. Cases post to <#${channel.id}>.${alerts}`);
     },
-  ),
+  }),
 
-  setupCommand(
-    new SlashCommandBuilder()
+  gated({
+    perm: 'ManageGuild',
+    data: new SlashCommandBuilder()
       .setName('automod')
       .setDescription("Discord's own AutoMod, set up by Johnny. It works while he is offline.")
       .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
@@ -67,7 +50,7 @@ module.exports = [
       .addSubcommand(s =>
         s.setName('unblock').setDescription('Remove a word or phrase from the blocked list')
           .addStringOption(o => o.setName('word').setDescription('Exactly as it was added').setRequired(true).setMaxLength(60))),
-    async (interaction, ctx) => {
+    async run(interaction, ctx) {
       const { automod, mod } = ctx;
       const sub = interaction.options.getSubcommand();
       const guild = interaction.guild;
@@ -109,5 +92,5 @@ module.exports = [
       if (r === 'missing') return interaction.editReply('Negative. That entry is not on the blocked list. /automod status shows the count.');
       return interaction.editReply('Confirmed. Unblocked.');
     },
-  ),
+  }),
 ];

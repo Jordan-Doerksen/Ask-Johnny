@@ -2,7 +2,8 @@
 //
 // It needs no Discord connection and writes nothing: the store's flush is stubbed and the log
 // file is off. It proves the guard (Decision 11), the strike ladder (Decision 14), the duration
-// parser, the AutoMod rule builder (Decision 13), and that every command still registers.
+// parser, the AutoMod rule builder (Decision 13), the security helpers and config (Decisions
+// 16-19), and that every command still registers.
 //
 // Run: npm run check:mod   (exit 0 = pass)
 
@@ -13,8 +14,9 @@ db.flushNow = () => {};
 
 const mod = require('../lib/mod');
 const automod = require('../lib/automod');
+const security = require('../lib/security');
 const { loadCommands } = require('../commands/_loader');
-const { AutoModerationRuleTriggerType: Trigger, AutoModerationActionType: Action } = require('discord.js');
+const { AutoModerationRuleTriggerType: Trigger, AutoModerationActionType: Action, AuditLogEvent, GuildVerificationLevel } = require('discord.js');
 
 let failed = 0;
 let passed = 0;
@@ -94,12 +96,45 @@ const inviteRe = new RegExp(cfg.invitePatterns[0]);
 check('automod: invite pattern matches invites', ['discord.gg/abc', 'https://discord.com/invite/abc', 'discordapp.com/invite/x'].map(s => inviteRe.test(s)), [true, true, true]);
 check('automod: invite pattern leaves other links alone', ['https://discord.com/channels/1/2', 'https://github.com/x'].map(s => inviteRe.test(s)), [false, false]);
 
+// --- security (Decisions 16-19) ---
+const now = 2_000_000_000_000;
+const DAY = 86_400_000;
+check('pause: a raid never shortens a longer lockdown pause', security.pauseEnd(now + 20 * hour, now + hour, now), now + 20 * hour);
+check('pause: extends a shorter pause', security.pauseEnd(now + hour, now + 2 * hour, now), now + 2 * hour);
+check('pause: capped at Discord\'s 24h', security.pauseEnd(0, now + 30 * hour, now), now + security.MAX_PAUSE_MS);
+check('pause: no current pause', security.pauseEnd(undefined, now + hour, now), now + hour);
+check('window: keeps only recent joins', security.inWindow([{ ts: now - 40_000 }, { ts: now - 10_000 }], now, 30_000).length, 1);
+check('new account: 2 days old is new', security.isNewAccount(now - 2 * DAY, now, 7), true);
+check('new account: 30 days old is not', security.isNewAccount(now - 30 * DAY, now, 7), false);
+
+const roles = [
+  { id: 'a', name: 'Mod', editable: true, managed: false },
+  { id: 'b', name: 'Admin', editable: false, managed: false },
+  { id: 'c', name: 'SomeBot', editable: false, managed: true },
+  { id: 'd', name: 'Helper', editable: true, managed: false },
+];
+check('strip: removes only what Johnny can reach', security.stripPlan(roles), { remove: ['a', 'd'], managed: ['SomeBot'], aboveMe: ['Admin'] });
+check('strip: nothing reachable', security.stripPlan([roles[1]]).remove, []);
+
+const live = new Map([['a', { position: 3, editable: true }], ['b', { position: 9, editable: false }], ['d', { position: 1, editable: true }]]);
+check('restore: a mod gives back only roles below their own', security.restorePlan(['a', 'b', 'd', 'gone'], live, 3, false), { give: ['d'], missing: 1, aboveYou: 1, aboveMe: 1 });
+check('restore: the owner gives back anything Johnny reaches', security.restorePlan(['a', 'b', 'd'], live, 0, true), { give: ['a', 'd'], missing: 0, aboveYou: 0, aboveMe: 1 });
+
+const sc = security.CONFIG;
+check('config: raid joiner timeout parses', mod.parseTimeout(sc.raid.timeoutJoiners) > 0, true);
+check('config: raid pause within Discord\'s 24h', sc.raid.pauseMinutes > 0 && sc.raid.pauseMinutes <= 1440, true);
+check('config: lockdown pause within Discord\'s 24h', sc.lockdown.pauseMinutes > 0 && sc.lockdown.pauseMinutes <= 1440, true);
+check('config: lockdown level is a real level', GuildVerificationLevel[sc.lockdown.verificationLevel] != null, true);
+check('config: every anti-nuke action is a real audit event', sc.antinuke.actions.every(a => AuditLogEvent[a] != null), true);
+check('config: raid needs at least 2 joins', sc.raid.joins >= 2, true);
+check('levels: names round-trip', security.levelName(GuildVerificationLevel.VeryHigh), 'VeryHigh');
+
 // --- registration ---
 const { data, handlers } = loadCommands();
 const names = data.map(c => c.name);
 check('commands: names are unique', new Set(names).size, names.length);
 check('commands: under Discord\'s 100 limit', names.length <= 100, true);
-for (const n of ['ban', 'unban', 'kick', 'timeout', 'warn', 'purge', 'cases', 'modlog', 'automod']) {
+for (const n of ['ban', 'unban', 'kick', 'timeout', 'warn', 'purge', 'cases', 'modlog', 'automod', 'lockdown', 'restore']) {
   check(`commands: /${n} registers, guild only, permission-gated, no cooldown`,
     [!!handlers[n], JSON.stringify(data.find(c => c.name === n).contexts), !!data.find(c => c.name === n).default_member_permissions, handlers[n].cooldown],
     [true, '[0]', true, false]);

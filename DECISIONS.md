@@ -61,7 +61,7 @@ paid features of the big moderation bots, built in, with no LLM in the path of a
 10. **Johnny moderates the owner's servers** (2026-10-20). He is the moderation, security, and
    server-management bot for each server the owner runs, and not only a persona. The request is five
    systems in four chunks: (1) mod core + AutoMod, (2) security, (3) server management, (4) command
-   hooks. Chunk 1 is built. The rest are Open Questions.
+   hooks. Chunks 1 and 2 are built. The rest are Open Questions.
    Change rule: each chunk gets its own interview pass and its own entry in the Change Log.
 11. **Discord's own permissions are the gate** (2026-10-20, owner choice). Each mod command is a
    top-level command with `setDefaultMemberPermissions`, so Discord hides `/ban` from a member who
@@ -103,7 +103,7 @@ paid features of the big moderation bots, built in, with no LLM in the path of a
    highest role that he has to act on.
    Change rule: revisit when Johnny joins a server that the owner does not own.
 
-*Decisions 16-19 are the chunk 2 interview (2026-10-20). They are decided; the build is next.
+*Decisions 16-19 are the chunk 2 interview (2026-10-20). They are built.
 The tuning values go in `config/security.json`, split from `config/moderation.json` because
 security is tuned on its own (DES-03).*
 
@@ -135,9 +135,10 @@ security is tuned on its own (DES-03).*
    younger than 7 days (config) posts one line to the mod log. Johnny takes no action.
 
 ## Open Questions
-- **Chunk 2, security — interviewed 2026-10-20, build next.** Decisions 16-19. It needs two new
-  intents: GuildMembers (privileged: the owner turns on **Server Members Intent** in the Developer
-  Portal → Bot) and GuildModeration (audit log events, not privileged). No new package.
+- **Discord's raid flag is not verified live.** Decision 16 listens for it on a guild update. The
+  field exists in discord.js 14.27; whether Discord sends it to a bot is unproven. The join counter
+  is the verified detector. Check `raid_detected` log lines with `source` = Discord's raid flag
+  after the first real raid.
 - **Chunk 3, server management:** welcome message, autorole, reaction roles, an event log
   (edits, deletes, joins, leaves).
 - **Chunk 4, command hooks — not yet defined.** "Hook commands through him to do whatever I need"
@@ -153,6 +154,29 @@ security is tuned on its own (DES-03).*
   against, thus the provider chain has one untested link. Test it when an account exists.
 
 ## Change Log
+- **2026-10-20** — Chunk 2 built: security (Decisions 16-19). Owner's word: "go".
+  - **Built.** `lib/security.js` (raid watcher, lockdown, anti-nuke, new-account flag),
+    `commands/security.js` (`/lockdown`, `/restore`), `config/security.json`. Two intents:
+    GuildMembers (privileged) and GuildModeration.
+  - **Agent decision: the intent pre-check.** If the Server Members Intent is off in the Developer
+    Portal, a login that asks for it fails and Johnny goes silent everywhere — the August outage
+    again. `index.js` now asks Discord before login (`GET /applications/@me`, flags) and drops the
+    intent when it is off. `/lockdown status` then says raid detection is OFF (SAFE-04). A retry
+    after a failed login was rejected: discord.js reuses the first intents on a second login.
+  - **Agent decision: one gate.** The permission wrapper existed twice (mod core, AutoMod) and
+    would have been a third copy. It is now `commands/_gate.js`. The log event for a refused
+    command is `mod_command_failed` (it was `mod_action_failed` / `mod_setup_failed`).
+  - **Agent decision: `/restore` follows Discord's role rule.** A mod gives back only roles below
+    their own top role; the owner gives back any role Johnny can reach. Without this, `/restore`
+    would let a mod hand out a role they could not assign themselves.
+  - **Verified offline.** `npm run check:mod`: 72 checks pass, 48 commands register. A scenario
+    run against fake Discord objects covered the raid counter, the post-trigger sweep, the Discord
+    flag path, lockdown on/off with the exact level restore, anti-nuke (threshold, exemptions,
+    unwatched actions, a bot nuker, roles above Johnny), `/restore` by a mod and by the owner, and
+    the intent-off status. Not verified live: no bot token in the build session.
+  - **Found in self-review, fixed before commit.** When Discord refused the pause, `/lockdown on`
+    left its saved state behind, so the next `/lockdown on` said "already on" for a lockdown that
+    never happened. The state is now dropped on failure unless the level already changed.
 - **2026-10-20** — Change Request: chunk 2 interview, security (Decisions 16-19; Decision 14 amended).
   Owner's words: "start the chunk 2 security interview".
   - **Recon (rank HIGH: automatic actions on members, settings that cover the whole server).**

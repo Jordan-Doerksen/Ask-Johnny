@@ -1,35 +1,14 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ChannelType, InteractionContextType } = require('discord.js');
+const { gated } = require('./_gate');
 
 // The mod core: ban, unban, kick, timeout, purge, warn, cases. Every one is a top-level command
 // so Discord's own permission hides it from members who lack that permission (DECISIONS.md,
 // Decision 11), and every one re-checks the permission and runs the guard before it acts.
-// No LLM call anywhere (Decision 12). Replies are ephemeral: the public record is the mod log.
-// `cooldown: false` — the 1-second machine-gun guard is for the LLM; a raid is not the time to wait.
+// No LLM call anywhere (Decision 12). The gate they share is commands/_gate.js.
 
 const DELETE_WINDOWS = { none: 0, '1h': 3600, '1d': 86_400, '7d': 604_800 };
 
 const reasonOf = (interaction, mod) => interaction.options.getString('reason')?.trim().slice(0, 400) || mod.LINES.noReason;
-
-// One wrapper for the shared shape: the permission gate, then the action, then a precise
-// line for any Discord refusal. A failed mod action is logged, never silent (Decision 9).
-function modCommand(def) {
-  return {
-    data: def.data,
-    ephemeral: true,
-    cooldown: false,
-    async execute(interaction, ctx) {
-      if (!interaction.inGuild()) return interaction.editReply('Negative. Moderation works in a server only.');
-      const denied = ctx.mod.requirePerm(interaction, def.perm);
-      if (denied) return interaction.editReply(denied);
-      try {
-        await def.run(interaction, ctx);
-      } catch (err) {
-        ctx.log.error('mod_action_failed', { command: def.data.name, guild: interaction.guildId, msg: err.message, code: err.code });
-        await interaction.editReply(ctx.mod.describeError(err));
-      }
-    },
-  };
-}
 
 // Confirm to the mod. `dmed` is true or false when a DM was attempted, null when DMs are off
 // in config, undefined when none was due — only an attempted, failed DM is reported.
@@ -37,7 +16,7 @@ const confirm = (interaction, mod, text, dmed) =>
   interaction.editReply(dmed === false ? `${text}${mod.LINES.dmFailed}` : text);
 
 module.exports = [
-  modCommand({
+  gated({
     perm: 'BanMembers',
     data: new SlashCommandBuilder()
       .setName('ban')
@@ -74,7 +53,7 @@ module.exports = [
     },
   }),
 
-  modCommand({
+  gated({
     perm: 'BanMembers',
     data: new SlashCommandBuilder()
       .setName('unban')
@@ -95,7 +74,7 @@ module.exports = [
     },
   }),
 
-  modCommand({
+  gated({
     perm: 'KickMembers',
     data: new SlashCommandBuilder()
       .setName('kick')
@@ -126,7 +105,7 @@ module.exports = [
     },
   }),
 
-  modCommand({
+  gated({
     perm: 'ModerateMembers',
     data: new SlashCommandBuilder()
       .setName('timeout')
@@ -160,7 +139,7 @@ module.exports = [
     },
   }),
 
-  modCommand({
+  gated({
     perm: 'ModerateMembers',
     data: new SlashCommandBuilder()
       .setName('warn')
@@ -190,7 +169,7 @@ module.exports = [
     },
   }),
 
-  modCommand({
+  gated({
     perm: 'ManageMessages',
     data: new SlashCommandBuilder()
       .setName('purge')
@@ -225,7 +204,7 @@ module.exports = [
     },
   }),
 
-  modCommand({
+  gated({
     perm: 'ModerateMembers',
     data: new SlashCommandBuilder()
       .setName('cases')

@@ -1,0 +1,52 @@
+{
+  "_comment": [
+    "Security tuning: raids, lockdown, anti-nuke, new accounts. See DECISIONS.md, Decisions 16-19.",
+    "Every automatic action here is a timeout, a pause, or a role strip. Never a kick or a ban",
+    "(Decision 14). The model never reads this file (Decision 12)."
+  ],
+
+  "raid": {
+    "_comment": [
+      "Johnny's join counter: `joins` joins inside `windowSeconds` is a raid. Discord's own raid",
+      "flag also triggers it when listenToDiscordFlag is true; that path times out the joins from",
+      "the last discordFlagLookbackSeconds. Joiners who arrive up to windowSeconds after the",
+      "trigger are timed out too. pauseMinutes is how long invites and DMs stay paused (Discord",
+      "maximum: 1440). Needs Server Members Intent in the Developer Portal."
+    ],
+    "enabled": true,
+    "joins": 8,
+    "windowSeconds": 30,
+    "pauseMinutes": 60,
+    "timeoutJoiners": "1h",
+    "listenToDiscordFlag": true,
+    "discordFlagLookbackSeconds": 120
+  },
+
+  "lockdown": {
+    "_comment": [
+      "/lockdown on pauses invites and DMs for pauseMinutes (Discord maximum: 1440, after which",
+      "Discord lifts the pause by itself) and raises the verification level. It never edits a",
+      "channel permission (Decision 17). Levels: Low, Medium, High, VeryHigh (verified phone)."
+    ],
+    "pauseMinutes": 1440,
+    "verificationLevel": "VeryHigh"
+  },
+
+  "antinuke": {
+    "_comment": [
+      "`threshold` watched actions by one executor inside `windowSeconds` strips that executor's",
+      "roles. The server owner and Johnny are exempt. Actions are AuditLogEvent names.",
+      "Needs no portal switch: the GuildModeration intent is not privileged."
+    ],
+    "enabled": true,
+    "threshold": 3,
+    "windowSeconds": 60,
+    "actions": ["ChannelDelete", "RoleDelete", "MemberBanAdd", "MemberKick"]
+  },
+
+  "newAccount": {
+    "_comment": "A join from an account younger than `days` posts one line to the mod log. No action (Decision 19).",
+    "enabled": true,
+    "days": 7
+  }
+}

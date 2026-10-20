@@ -82,6 +82,32 @@ the server made by hand is never touched. The defaults are in `config/moderation
 1-hour timeout and 5 strikes give 1 day. Each strike after that applies 1 day again. **Johnny never
 kicks or bans on his own.** The ladder is in `config/moderation.json`.
 
+### Security
+Automatic, and every automatic action expires or can be undone. Never a kick or a ban
+(DECISIONS.md, Decisions 14 and 16-19).
+
+| Command | What it does | Needs |
+|---|---|---|
+| `/lockdown on·off·status` | `on` pauses invites and DMs (24h, Discord's maximum) and raises verification to Highest. `off` lifts any pause and restores the old verification level exactly. **It never edits a channel.** `status` shows lockdown, pauses, raid detection, anti-nuke, and the mod log. | Manage Server |
+| `/restore <user>` | Gives back the roles anti-nuke removed, from the latest strip case. A mod can only give back roles below their own top role. | Manage Roles |
+
+**Raids.** 8 joins inside 30 seconds, or Discord's own raid flag, is a raid. Johnny pauses invites
+and DMs for 1 hour, times out everyone who joined in the spike for 1 hour, times out anyone who
+joins in the next 30 seconds, and posts one alert. A real member who joined during the spike is
+muted too; `/timeout off` clears them. `/lockdown off` lifts the pause early.
+
+**Anti-nuke.** 3 channel deletes, role deletes, bans, or kicks inside 60 seconds by one person
+(not the owner, not Johnny) is a nuke. Johnny removes every role he can reach from that person,
+records them in a case, alerts the mod log, and DMs the server owner. `/restore` undoes it. The
+limits: roles above Johnny's role stay (move his role to the top); a bot's own integration role
+cannot be removed by anyone (kick the bot by hand); and Johnny cannot stop himself, so a leaked
+Johnny token is outside anti-nuke.
+
+**New accounts.** A join from an account younger than 7 days posts one line to the mod log. No
+action.
+
+All the numbers are in `config/security.json`.
+
 ### Server & meta
 | Command | What it does |
 |---|---|
@@ -106,6 +132,7 @@ index.js          boot, client, interaction router, @mention + AFK + reaction ha
 config/
   llm.json        the provider chain — order, defaults, and one block for each provider
   moderation.json the strike ladder, DM on/off, and the AutoMod rules /automod setup creates
+  security.json   raid threshold and response, lockdown, anti-nuke threshold, new-account age
 commands/         one file per category — each exports { data, execute } commands
   _loader.js      discovers and registers every command
   fun.js          ask, roast, debate, haiku, roll, … the chaos
@@ -123,6 +150,8 @@ commands/         one file per category — each exports { data, execute } comma
   starboard.js    starboard config
   mod.js          ban, unban, kick, timeout, warn, purge, cases — the mod core
   automod.js      automod (setup / status / off / block / unblock), modlog (set / off)
+  security.js     lockdown (on / off / status), restore
+  _gate.js        the shared gate for every mod and security command (not a command itself)
 lib/
   johnny.js       the persona + the askJohnny() wrapper over lib/llm.js (rate-limited)
   llm.js          the provider client — reads config/llm.json, retries, falls over, strips <think>
@@ -149,6 +178,7 @@ lib/
   util.js         small shared helpers (duration parsing, etc.)
   mod.js          the guard, the case log, strikes + the timeout ladder, the mod-log post
   automod.js      Discord's native AutoMod rules: create, update, delete; AutoMod blocks → strikes
+  security.js     raid watcher, lockdown, anti-nuke, new-account flag
 scripts/
   probe-llm.js    the `npm run probe` model test — 4 prompts, no Discord connection
   check-mod.js    the `npm run check:mod` moderation test — offline, writes nothing
@@ -286,11 +316,13 @@ Developer Portal first, then remove it from wherever it leaked.
 3. `/modlog set #channel` — a private staff channel.
 4. `/automod setup` — run it after step 3, so the AutoMod alerts go to the mod log.
 
-No new intent needs a switch in the Developer Portal. AutoMod events use the
-`AutoModerationExecution` intent, which is not privileged.
+5. **Developer Portal → Bot → Server Members Intent: on.** Raid detection and new-account flags
+   need it. If it is off, Johnny still starts: he asks Discord before login, drops the intent,
+   logs `members_intent_off`, and `/lockdown status` says raid detection is OFF. Anti-nuke and
+   AutoMod need no switch (their intents are not privileged).
 
-`npm run check:mod` tests the guard, the strike ladder, and the AutoMod rule builder offline. It
-needs no Discord connection, and it writes nothing.
+`npm run check:mod` tests the guard, the strike ladder, the AutoMod rule builder, and the
+security helpers and config offline. It needs no Discord connection, and it writes nothing.
 
 ## Deploy to Wispbyte (free)
 
