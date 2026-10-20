@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "probe": "node scripts/probe-llm.js",
-    "lint:voice": "node scripts/check-voice.js"
+    "lint:voice": "node scripts/check-voice.js",
+    "check:mod": "node scripts/check-mod.js"
   },
   "engines": {
     "node": ">=18"

@@ -23,6 +23,8 @@ const birthdays = require('./lib/birthdays');
 const ratelimit = require('./lib/ratelimit');
 const starboard = require('./lib/starboard');
 const scheduler = require('./lib/scheduler');
+const mod = require('./lib/mod');
+const automod = require('./lib/automod');
 const { check, mark } = require('./lib/cooldown');
 const { loadCommands } = require('./commands/_loader');
 
@@ -62,12 +64,13 @@ const client = new Client({
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildMessageReactions, // for the starboard
     GatewayIntentBits.MessageContent, // PRIVILEGED — must be enabled in the Discord Developer Portal
+    GatewayIntentBits.AutoModerationExecution, // AutoMod blocks become strikes (not privileged)
   ],
   partials: [Partials.Message, Partials.Channel, Partials.Reaction], // see reactions on uncached messages
 });
 
 // Everything a command needs, handed in so command files stay thin.
-const ctx = { askJohnny, db, memory, embeds, util, convert, weather, wiki, tldr, youtube, define, activity, quotes, lore, trivia, birthdays, ratelimit, client, commands: commandData };
+const ctx = { askJohnny, db, memory, embeds, util, convert, weather, wiki, tldr, youtube, define, activity, quotes, lore, trivia, birthdays, ratelimit, mod, automod, log, client, commands: commandData };
 
 client.once('clientReady', () => {
   // Log the whole provider chain at boot. When Johnny goes quiet, the first question is
@@ -149,6 +152,12 @@ client.on('messageCreate', async message => {
 // Starboard: watch ⭐ reactions and mirror popular messages to the board.
 client.on('messageReactionAdd', reaction => {
   starboard.handleStar(client, reaction).catch(err => log.error('starboard_failed', { msg: err.message }));
+});
+
+// AutoMod: Discord blocked a message. Each block is one strike toward the timeout ladder
+// (DECISIONS.md, Decision 14). Discord did the blocking already; this only counts.
+client.on('autoModerationActionExecution', execution => {
+  automod.handleExecution(execution, client).catch(err => log.error('automod_execution_failed', { msg: err.message }));
 });
 
 // Flush the store on shutdown so nothing in-flight is lost.

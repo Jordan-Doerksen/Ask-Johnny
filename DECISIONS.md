@@ -8,12 +8,16 @@ here only via the Change Log at the bottom.
 A dry, deadpan Discord bot for a friends' server — Johnny — that is *grudgingly competent*:
 he jokes, but he also remembers things, sets reminders, settles arguments, and gives real
 data. The fun is the contrast between a guy who can't be bothered and a bot that gets it right.
+Since 2026-10-20 he is also the moderation bot for every server the owner runs (Decision 10): the
+paid features of the big moderation bots, built in, with no LLM in the path of a mod action.
 
 ## Non-Negotiable Constraints
 - **Real data is always real.** Weather, conversions, dictionary, Wikipedia, poll tallies,
   reminders — fetched or computed, never invented by the model. Johnny only voices the wrapper.
 - **Secrets live in a gitignored `.env`.** Never a committed token. The fun-police leak lesson stands.
 - **In character, always.** Johnny never admits he's an AI, never lectures, never refuses.
+  One exception (2026-10-20, Decision 12): a moderation command refuses an action that the
+  invoker has no permission for, or that the guard forbids. The refusal is a fixed line in his voice.
 - **No native modules, no build step.** `npm install && npm start` must stay green on a free host
   (Wispbyte). Persistence is one JSON file with atomic, debounced writes.
 - **Friends'-server scale.** Simplicity beats robustness theatre; don't add a real DB.
@@ -54,13 +58,86 @@ data. The fun is the contrast between a guy who can't be bothered and a bot that
    outage, and it brings the bot into agreement with the observability law, which it did not meet
    before. Change rule: each new failure path gets a log event. A silent failure is a defect.
 
+10. **Johnny moderates the owner's servers** (2026-10-20). He is the moderation, security, and
+   server-management bot for each server the owner runs, and not only a persona. The request is five
+   systems in four chunks: (1) mod core + AutoMod, (2) security, (3) server management, (4) command
+   hooks. Chunk 1 is built. The rest are Open Questions.
+   Change rule: each chunk gets its own interview pass and its own entry in the Change Log.
+11. **Discord's own permissions are the gate** (2026-10-20, owner choice). Each mod command is a
+   top-level command with `setDefaultMemberPermissions`, so Discord hides `/ban` from a member who
+   has no Ban Members. The command checks the permission again when it runs, because a server admin
+   can change the default in Integrations. **The guard:** Johnny never acts on the invoker, on
+   himself, on the server owner, or on a member whose highest role is equal to or above the
+   invoker's (the server owner is exempt from the last rule). A target that Johnny's own role cannot
+   reach is refused before the call.
+   Change rule: the guard lives in one function (`lib/mod.js`, `guard`). Every mod action calls it.
+12. **The model never holds a moderation tool** (2026-10-20). No LLM call is in the path of a mod
+   action, an AutoMod hit, or an escalation. All moderation output is fixed text in the military
+   register of persona 3.0 ("Confirmed. ... Case 14."), from `lib/mod.js` `LINES`. Thus an @mention
+   cannot talk Johnny into a ban, an outage at the LLM provider cannot stop a ban, and moderation
+   costs none of the daily LLM budget. Change rule: a mod feature that wants a model goes through an
+   interview first, with this decision named as the conflict.
+13. **AutoMod is Discord's native AutoMod, set up by Johnny** (2026-10-20). Johnny does not scan
+   messages himself. `/automod setup` creates or updates his rules on Discord. The rule names start
+   with `Johnny · `, and Johnny never edits a rule that does not carry that prefix. Discord blocks a
+   message before it posts, and the rules continue to work when Johnny is offline. This is the main
+   defence against the free-tier host stopping him. Discord is the source of truth for the rules:
+   Johnny stores no copy of a rule or of its word list. The defaults are in
+   `config/moderation.json`. Discord's limits (verified in discord-api-types): 6 keyword rules,
+   1 spam rule, 1 preset rule, and 1 mention-spam rule per server.
+   Change rule: a new filter is a field in `config/moderation.json` first, not a new scanner.
+14. **Escalation is automatic timeouts only** (2026-10-20, owner choice). A warn or an AutoMod block
+   is a strike. Strikes count inside a window (24h by default). The ladder in
+   `config/moderation.json` maps a strike count to a timeout. Above the top step, each new strike
+   applies the top step again. **Johnny never kicks or bans on his own.** A timeout expires by
+   itself, thus a false positive costs a member one hour, not their membership.
+   Change rule: an automatic kick or ban is a new Change Request, not a config edit.
+15. **Johnny's role has Administrator** (2026-10-20, owner choice, against the recommendation).
+   The recommendation was the exact permissions that each chunk uses. The owner chose Administrator.
+   **The recorded risk:** a leaked `BOT_TOKEN` gives total control of every server that Johnny is
+   in. fun-police already had a token committed once. The mitigation is SAFE-01: rotate the token
+   first, then remove it. Administrator does not bypass the role order: Johnny's role must be the
+   highest role that he has to act on.
+   Change rule: revisit when Johnny joins a server that the owner does not own.
+
 ## Open Questions
+- **Chunk 2, security:** raid detection by join rate, a one-command lockdown, invite pausing
+  (`guild.setIncidentActions`, at most 24h, verified in discord.js 14.27), and a watch on the audit
+  log for an admin who deletes in bulk. It needs the privileged GuildMembers intent.
+- **Chunk 3, server management:** welcome message, autorole, reaction roles, an event log
+  (edits, deletes, joins, leaves).
+- **Chunk 4, command hooks — not yet defined.** "Hook commands through him to do whatever I need"
+  has four readings: macros in JSON, natural-language admin through the model (conflicts with
+  Decision 12), command files dropped into `commands/` (true already, through `_loader.js`), or an
+  HTTP endpoint for the owner's other tools. Interview it before chunk 4.
+- **The host is a risk for a security bot.** Wispbyte's free tier stops a server after two weeks
+  without a panel login, and the shared IP address can slow Johnny during a raid. Decision 13 keeps
+  AutoMod alive while he is down. Mod commands, cases, and escalation stop until he is back.
 - Recurring / "remind @someone-else" reminders are wanted but blocked on the no-timezone constraint.
 - Voice is one flat note across every command; a mood/voice pass is deferred (chose awareness first).
 - The Cloudflare Workers AI fallback is not verified. There is no Cloudflare account to test it
   against, thus the provider chain has one untested link. Test it when an account exists.
 
 ## Change Log
+- **2026-10-20** — Change Request: Johnny becomes the moderation bot for the owner's servers.
+  Owner's words: "I want to make ask johnny my discord god bot, able to manage servers, act as
+  security and a automod, and be able to hook commands through him to do basically whatever I need
+  in the servers I own."
+  - **Interview pass (rank HIGH: real bans, Administrator, every server).** APPROVE: mod commands
+    with a case log; security; server management. FLAVOUR: automod uses Discord's native AutoMod,
+    not a scanner (Decision 13). ADD: the model never holds a mod tool (Decision 12); the guard
+    (Decision 11). OPEN: command hooks (Open Questions). No new package: discord.js 14.27 covers
+    AutoMod and incident actions.
+  - **Owner choices.** V1 = mod core + AutoMod. The gate = Discord's own permissions. Johnny's
+    permissions = Administrator (Decision 15, risk recorded). Mod voice = fixed lines, military
+    register. Escalation = automatic timeouts only.
+  - **Agent defaults, reversible in config.** Mod replies are ephemeral; the public record is the
+    mod-log channel. The default AutoMod set is the slurs preset, spam, mention spam at 5 with raid
+    protection, and Discord invite links. Profanity is off, because these are friends' servers.
+    Mod commands skip the 1-second cooldown: a raid is not the time to wait.
+  - **What it costs.** 9 new commands (ban, unban, kick, timeout, purge, warn, cases, modlog,
+    automod). The `AutoModerationExecution` intent, which is not privileged. One new store key,
+    `mod`, inside `data/johnny.json`, so the daily backup carries the case log.
 - **2026-09-07** — Change Request: persona 3.0 — precise and literal, not deadpan and avoidant.
   Owner's words: "I don't like the nonchalant like avoidant attitude. I want my bot to be nerdy
   precise and literal, militaristic language at times."

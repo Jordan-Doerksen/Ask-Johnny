@@ -4,7 +4,7 @@ The map. How a message becomes a Johnny reply. See `DECISIONS.md` for *why*.
 
 ## Shape
 ```
-index.js                boot + client + the two event routers (interactions, messages)
+index.js                boot + client + the event routers (interactions, messages, reactions, AutoMod)
                         — thin: it dispatches, it doesn't implement
 commands/               one file per category; each exports { data, execute } (or an array)
   _loader.js            discovers every command/*.js and builds the registration + handler map
@@ -22,6 +22,8 @@ commands/               one file per category; each exports { data, execute } (o
   meta.js               help, stats, activity
   links.js              links (show / add / remove)
   starboard.js          starboard config (set / threshold / off)
+  mod.js                ban, unban, kick, timeout, warn, purge, cases — ephemeral, no cooldown, no LLM
+  automod.js            automod (setup / status / off / block / unblock), modlog (set / off)
 lib/                    the engines the commands lean on
   johnny.js             the persona + an askJohnny() wrapper over lib/llm.js (temp ~0.95,
                         rate-limited) — it holds no model ID and no provider client
@@ -40,25 +42,42 @@ content/trivia.json     the committed trivia bank — 120 questions across his 1
   scheduler.js          20s poll — fires due reminders, closes polls, daily backup
   starboard.js          the ⭐ reaction watcher → board post
   activity.js           per-guild message tallies (counts only, never content)
+  mod.js                the moderation engine: guard, case log, strikes + timeout ladder, mod-log
+                        post, Discord error → one precise line. No LLM call (Decision 12)
+  automod.js            Discord's native AutoMod: builds the rules from config, creates/updates/
+                        deletes only `Johnny · ` rules; an AutoMod block becomes a strike
   cooldown.js           in-memory 4s per-user anti-spam
   embeds.js             shared colors + vote/verdict embed helpers
   weather / wiki / define / tldr / youtube / convert / util   small single-purpose helpers
+config/moderation.json  the strike ladder, DM on/off, purge cap, and the AutoMod rule set
 config/llm.json         the provider chain — order, defaults, and per-provider baseUrl / apiKeyEnv /
                         model / modelEnv / tokenParam / extraBody
 scripts/probe-llm.js    `npm run probe` — an end-to-end test of the model path, without Discord
+scripts/check-mod.js    `npm run check:mod` — offline test of the guard, the ladder, the AutoMod
+                        rule builder and command registration (no Discord, writes nothing)
 scripts/check-voice.js  `npm run lint:voice` — scans every string for the rejected voice. Johnny's
                         voice lives in THREE places (the persona, ~44 canned replies, ~15 per-command
                         extraSystem prompts); this catches the two that are easy to forget
 data/johnny.json        the whole persistent state (gitignored)
 ```
 
-## The two paths in
+## The four paths in
 1. **Slash command** → `interactionCreate` (index.js) → cooldown gate → `defer` →
    `handlers[name].execute(interaction, ctx)`. `ctx` hands every command the shared engines so
    command files stay thin. Success bumps the stat counter and flushes the store.
 2. **@mention** → `messageCreate` (index.js) does the passive bookkeeping (last-seen, activity,
    AFK clear/notify), then hands off to `lib/mention.js`, which assembles Johnny's *awareness*
    (recent messages + what he knows about the speaker + who's away) and calls `askJohnny`.
+
+3. **Mod command** → the same `interactionCreate` path, but the command is `ephemeral` and has
+   `cooldown: false`. `execute` checks the guild, then Discord's permission, then `mod.guard`
+   (never the invoker, the bot, the owner, or an equal-or-higher role), then acts. Every action
+   writes a case to `data/johnny.json` (`mod.<guildId>`) and posts it to the mod-log channel. A
+   Discord refusal becomes one precise line (`mod.describeError`) and a log event.
+4. **AutoMod block** → Discord blocks the message itself (the rule lives on Discord, so it works
+   while Johnny is down) → `autoModerationActionExecution` (index.js) → `automod.handleExecution`
+   counts the block action only → `mod.strikeAndEscalate` → at a ladder step, an automatic timeout
+   with its own case. Never a kick, never a ban (Decision 14).
 
 ## Time & persistence
 Nothing time-based uses `setTimeout` for delivery. Reminders and polls (incl. trivia questions) are DB

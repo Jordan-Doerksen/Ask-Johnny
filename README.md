@@ -50,6 +50,38 @@ bothered, who nonetheless gets it right.
 | `/quote add·random·search·authors·remove` | The quote book — save the dumb things people say, pull them back later. |
 | `/links show·add·remove` | Jordan's links & projects; editable in Discord (add/remove need Manage Server). |
 
+### Moderation
+Real Discord actions. No model is in the path of any of them (DECISIONS.md, Decision 12). Each
+command needs the matching Discord permission, and Discord hides it from members who do not have
+it. Replies are private to the mod; the public record is the mod-log channel.
+
+| Command | What it does | Needs |
+|---|---|---|
+| `/ban <user> [reason] [delete]` | Bans a member, or a user who already left. Optionally deletes their last hour, day, or 7 days of messages. | Ban Members |
+| `/unban <user_id> [reason]` | Lifts a ban by user ID. | Ban Members |
+| `/kick <user> [reason]` | Kicks a member. | Kick Members |
+| `/timeout <user> <duration> [reason]` | Times a member out: `10m`, `2h`, `1d`, `1w`, up to `28d`. `off` clears it. | Timeout Members |
+| `/warn <user> <reason>` | Warns a member. A warn is a strike (see below). | Timeout Members |
+| `/purge <count> [user]` | Deletes up to 100 recent messages in the channel, optionally from one member. Discord refuses messages older than 14 days. | Manage Messages |
+| `/cases [id] [user]` | One case by number, one member's history, or the latest cases. | Timeout Members |
+| `/modlog set·off` | The channel that gets every case and every AutoMod alert. | Manage Server |
+| `/automod setup·status·off·block·unblock` | Sets up Discord's own AutoMod (below). | Manage Server |
+
+**The guard.** Johnny refuses to act on the person who runs the command, on himself, on the server
+owner, or on a member whose highest role is equal to or above the mod's. The server owner can act
+on any role. Every action gets a numbered case, is sent to the member by DM (when their DMs are
+open), and posts to the mod log.
+
+**AutoMod.** `/automod setup` creates Discord's native AutoMod rules: the slurs preset, spam,
+mention spam (5 or more mentions, with raid protection), and Discord invite links. `/automod block`
+adds a word to a blocked list. Discord blocks the message before it posts, **and the rules keep
+working when Johnny is offline.** Johnny only edits rules whose name starts with `Johnny · `. A rule
+the server made by hand is never touched. The defaults are in `config/moderation.json`.
+
+**Strikes.** A warn or an AutoMod block is one strike. Inside 24 hours, 3 strikes give an automatic
+1-hour timeout and 5 strikes give 1 day. Each strike after that applies 1 day again. **Johnny never
+kicks or bans on his own.** The ladder is in `config/moderation.json`.
+
 ### Server & meta
 | Command | What it does |
 |---|---|
@@ -73,6 +105,7 @@ as **canon** with `/lore` is always in his head too, so the people who run the s
 index.js          boot, client, interaction router, @mention + AFK + reaction handling
 config/
   llm.json        the provider chain — order, defaults, and one block for each provider
+  moderation.json the strike ladder, DM on/off, and the AutoMod rules /automod setup creates
 commands/         one file per category — each exports { data, execute } commands
   _loader.js      discovers and registers every command
   fun.js          ask, roast, debate, haiku, roll, … the chaos
@@ -88,6 +121,8 @@ commands/         one file per category — each exports { data, execute } comma
   birthday.js     birthday (set / remove / list / channel)
   meta.js         help, stats, activity
   starboard.js    starboard config
+  mod.js          ban, unban, kick, timeout, warn, purge, cases — the mod core
+  automod.js      automod (setup / status / off / block / unblock), modlog (set / off)
 lib/
   johnny.js       the persona + the askJohnny() wrapper over lib/llm.js (rate-limited)
   llm.js          the provider client — reads config/llm.json, retries, falls over, strips <think>
@@ -112,8 +147,11 @@ lib/
   youtube.js      best-effort YouTube transcript fetch
   convert.js      local unit conversion tables
   util.js         small shared helpers (duration parsing, etc.)
+  mod.js          the guard, the case log, strikes + the timeout ladder, the mod-log post
+  automod.js      Discord's native AutoMod rules: create, update, delete; AutoMod blocks → strikes
 scripts/
   probe-llm.js    the `npm run probe` model test — 4 prompts, no Discord connection
+  check-mod.js    the `npm run check:mod` moderation test — offline, writes nothing
 ```
 
 Persistence is a single JSON file at `data/johnny.json` (gitignored, created on first run) — no database
@@ -231,8 +269,28 @@ starts. The boot line writes the full provider chain to the log.
 
 ### Inviting the bot
 
-Developer Portal → **OAuth2 → URL Generator** → scopes `bot` + `applications.commands`,
-then open the generated URL and add it to your server.
+Developer Portal → **OAuth2 → URL Generator** → scopes `bot` + `applications.commands`, bot
+permission **Administrator**, then open the generated URL and add it to your server.
+
+**Administrator is the owner's choice (DECISIONS.md, Decision 15).** It has one cost: a leaked
+`BOT_TOKEN` gives total control of every server Johnny is in. If the token leaks, reset it in the
+Developer Portal first, then remove it from wherever it leaked.
+
+### Turning on moderation in a server
+
+1. **Server Settings → Roles:** drag Johnny's role above every role he must act on. Administrator
+   does not bypass the role order. A member above Johnny's role is out of his reach.
+2. If the server requires 2FA for moderation (**Server Settings → Safety Setup**), the account that
+   owns the bot application needs 2FA turned on. Without it, Discord refuses every ban, kick, and
+   timeout.
+3. `/modlog set #channel` — a private staff channel.
+4. `/automod setup` — run it after step 3, so the AutoMod alerts go to the mod log.
+
+No new intent needs a switch in the Developer Portal. AutoMod events use the
+`AutoModerationExecution` intent, which is not privileged.
+
+`npm run check:mod` tests the guard, the strike ladder, and the AutoMod rule builder offline. It
+needs no Discord connection, and it writes nothing.
 
 ## Deploy to Wispbyte (free)
 

@@ -1,0 +1,44 @@
+{
+  "_comment": [
+    "Moderation tuning. Every value here changes behaviour without a code edit.",
+    "See DECISIONS.md, Decisions 10-15. The model never reads this file: no LLM call is",
+    "in the path of a mod action (Decision 12)."
+  ],
+
+  "dmTarget": true,
+  "purgeMax": 100,
+  "casesPerPage": 10,
+
+  "strikes": {
+    "_comment": [
+      "A warn or an AutoMod block is one strike. Strikes count inside windowHours.",
+      "When the count reaches a step's `at`, Johnny applies that timeout. Above the top step,",
+      "each new strike applies the top step again. Timeouts only: Johnny never kicks or bans",
+      "on his own (Decision 14). An empty ladder turns escalation off."
+    ],
+    "windowHours": 24,
+    "countAutomodBlocks": true,
+    "ladder": [
+      { "at": 3, "timeout": "1h" },
+      { "at": 5, "timeout": "1d" }
+    ]
+  },
+
+  "automod": {
+    "_comment": [
+      "What /automod setup puts on Discord. Each rule is Discord's own AutoMod rule, so it",
+      "keeps working when Johnny is offline (Decision 13). Johnny only edits rules whose name",
+      "starts with rulePrefix. Presets: profanity, sexual_content, slurs.",
+      "Limits per server (Discord): 6 keyword rules, 1 spam, 1 preset, 1 mention-spam.",
+      "blockMessage is shown to the member (150 characters at most)."
+    ],
+    "rulePrefix": "Johnny · ",
+    "blockMessage": "Blocked by AutoMod. That message breaks a rule on this server.",
+    "presets": ["slurs"],
+    "spam": true,
+    "mentionSpam": { "enabled": true, "limit": 5, "raidProtection": true },
+    "blockInvites": true,
+    "invitePatterns": ["discord(?:app)?\\.(?:gg|com/invite|me)/\\S+"],
+    "keywords": []
+  }
+}
